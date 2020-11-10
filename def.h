@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 14:54:24 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/10 18:17:11 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@
 # include "bufferedio.h"
 # include "colors.h"
 # include "cursor.h"
+# include "commandid.h"
 
 #endif

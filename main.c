@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 16:47:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/10 18:40:27 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,53 +28,87 @@
 
 #include <stdio.h>
 
-void	check_command()
+void	bash_error()
 {
-
+	if (g_bash_errno == E_SYNTAX)
+	{
+		PRINTS("minishell: syntax error near unexpected token `");
+		PRINT(g_bash_error);
+		PRINTS("'\n");
+	}
+	else if (g_bash_errno == E_MULTILINE)
+	{
+		PRINTS("minishell: multiline is not supported\n");
+	}
+	else if (g_bash_errno == E_ERRNO)
+	{
+		PRINTS("minishell: ");
+		PRINT(g_bash_error);
+		PRINTS(": command not found\n");
+	}
+	else if (g_bash_errno == E_ERRNO)
+	{
+		PRINT(g_bash_command[g_bash_commandid]);
+		PRINT(g_bash_error);
+		PRINTS(": ");
+		PRINT(strerror(errno));
+	}
 }
 
-void	check_redir()
+int		check_s_bashsyn(t_bm p)
 {
+	t_bm	tmp;
 
+	tmp = p;
+	tmp = previous_word(tmp, g_line->rd);
+	if (!tmp.msk || tmp.msk[0] == ';' || tmp.msk[0] == '|')
+	{
+		g_bash_errno = E_SYNTAX;
+		if (!tmp.msk)
+			ft_strncpy(g_bash_error, p.msk, 1);
+		else
+			ft_strncpy(g_bash_error, tmp.msk, 1);
+		return (1);
+	}
+	return (0);
 }
 
-void	check_syntax()
+int		check_s_redir(t_bm p)
+{
+	t_bm	tmp;
+
+	tmp = p;
+	tmp.buf += tmp.cnt;
+	tmp.msk += tmp.cnt;
+	tmp = next_word(tmp);
+	if (!tmp.msk || STR_IS_REDIR(tmp) || BASHSYN(tmp.msk[0]))
+	{
+		g_bash_errno = E_SYNTAX;
+		if (!tmp.msk)
+			ft_strncpy(g_bash_error, "newline", 7);
+		else
+			ft_strncpy(g_bash_error, tmp.msk, tmp.cnt);
+		return (1);
+	}
+	return (0);
+}
+
+int		check_syntax()
 {
 	t_bm	p;
-	t_bm	tmp;
-	int		i;
-	char	c;
 
-	i = -1;
 	p = next_word(g_line->rd);
 	while (p.msk)
 	{
-		if (STR_IS_REDIR(p))
-		{
-			tmp = p;
-			tmp.buf += tmp.cnt;
-			tmp.msk += tmp.cnt;
-			if (!tmp.msk || STR_IS_REDIR(tmp) || BASHSYN(tmp.msk[0]))
-			{
-				g_bash_errno = ESYNTAX;
-				return ;
-			}
-		}
-		else if (BASHSYN(p.msk[0]))
-		{
-			c = '|' + ';' - p.msk[0];
-			tmp = p;
-			tmp = previous_word(tmp, g_line->rd);
-			if (!tmp.msk || tmp.msk[0] == c)
-			{
-				g_bash_errno = ESYNTAX;
-				return ;
-			}
-		}
+		if (STR_IS_REDIR(p) && check_s_redir(p))
+			return (1);
+		else if (BASHSYN(p.msk[0]) && check_s_bashsyn(p))
+			return (1);
 		p.buf += p.cnt;
 		p.msk += p.cnt;
 		p = next_word(p);
 	}
+	return (0);
 }
 
 int		count_quote(char c)
@@ -92,7 +126,7 @@ int		count_quote(char c)
 	return (ret);
 }
 
-void	check_multiline()
+int		check_multiline()
 {
 	char	*p;
 
@@ -104,19 +138,13 @@ void	check_multiline()
 	if (count_quote('\'') % 2 || count_quote('"') % 2 ||
 	(g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
 	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
-		g_bash_errno = EMULTILINE;
+		return (1 + 0 * (g_bash_errno = E_MULTILINE));
+	return (0);
 }
 
 void	initial_error_check()
 {
-	check_multiline();
-	if (g_bash_errno)
-		return ;
-	check_syntax();
-	if (g_bash_errno)
-		return ;
-	check_redir();
-	if (g_bash_errno)
+	if (check_multiline() || check_syntax())
 		return ;
 }
 
@@ -206,24 +234,24 @@ t_bm	previous_word(t_bm rd, t_bm ref)
 		rd.msk--;
 		rd.buf--;
 	}
-	if (rd.msk[-1] == WHTSPC)
+	if (ref.msk >= rd.msk || rd.msk[-1] == WHTSPC)
 	{
 		rd.msk = NULL;
 		return (rd);
 	}
 	if (BASHSYN(rd.msk[-1]))
 	{
-		rd.cnt = 1;
+		rd.cnt = 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
 		return (rd);
 	}
 	else if (rd.msk[-1] == '2')
 	{
-		rd.cnt = 2;
+		rd.cnt = 2 + 0 * ((int)rd.buf-- + (int)rd.msk--);
 		return (rd);
 	}
-	rd.cnt = 0 * (int)rd.msk-- * 0 * (int)rd.buf--;
-	while (rd.msk < ref.msk && rd.msk[0] != WHTSPC &&
-	!BASHSYN(rd.msk[0]))
+	rd.cnt = 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
+	while (ref.msk < rd.msk && rd.msk[-1] != WHTSPC &&
+	!BASHSYN(rd.msk[-1]))
 		rd.cnt += 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
 	return (rd);
 }
@@ -538,7 +566,7 @@ void	squote(size_t *ref)
 		g_line->rd.msk[i] = '\'';
 	else
 	{
-		g_bash_errno = EMULTILINE;
+		g_bash_errno = E_MULTILINE;
 		i--;
 	}
 	*ref = i;
@@ -563,7 +591,7 @@ void	dquote(size_t *ref)
 		g_line->rd.msk[i] = '"';
 	else
 	{
-		g_bash_errno = EMULTILINE;
+		g_bash_errno = E_MULTILINE;
 		i--;
 	}
 	*ref = i;
@@ -577,7 +605,7 @@ void	backslash(size_t *ref, char lit_type)
 		if (g_line->rd.buf[I + 1])
 			g_line->rd.msk[PPI] = LITERAL;
 		else
-			g_bash_errno = EMULTILINE;
+			g_bash_errno = E_MULTILINE;
 	}
 	else if (lit_type == SEMILIT)
 	{
@@ -591,7 +619,7 @@ void	backslash(size_t *ref, char lit_type)
 				A(g_line->rd.msk[I], SEMILIT);
 		}
 		else
-			g_bash_errno = EMULTILINE;
+			g_bash_errno = E_MULTILINE;
 	}
 }
 
@@ -630,13 +658,13 @@ int		set_mask()
 
 // void	bash_error(int er, char *error)
 // {
-// 	if (er == ESYNTAX)
+// 	if (er == E_SYNTAX)
 // 		syntax_error(error);
 // 	else if (er == ECOMMAND)
 // 		command_not_found(error);
 // 	else if (er == EERRNO)
 // 		errno_has_awaken(error);
-// 	else if (er == EMULTILINE)
+// 	else if (er == E_MULTILINE)
 // 		multiline(error);
 // }
 
@@ -721,6 +749,7 @@ void	free_envar()
 
 int		cleanup(int ex)
 {
+	free(g_bash_error);
 	free(g_line->rd.buf);
 	free(g_line->rd.msk);
 	free(g_line->env.buf);////
@@ -826,21 +855,21 @@ int		format_string()
 	g_line->pipe[g_line->env.cnt] = NULL;
 	split_pipe();
 	split_redirects();
-	for (int i = 0; g_line->scol[i].buf; i++)
-	{
-		printf("scol[%d].buf = |%s|\n", i, g_line->scol[i].buf);
-		printf("scol[%d].msk = |%s|\n", i, g_line->scol[i].msk);
-		for (int j = 0; g_line->pipe[i][j].buf; j++)
-		{
-			printf("pipe[%d][%d].buf = |%s|\n", i, j, g_line->pipe[i][j].buf);
-			printf("pipe[%d][%d].msk = |%s|\n", i, j, g_line->pipe[i][j].msk);
-			for (int k = 0; g_line->redir[i][j][k].buf; k++)
-			{
-				printf("buf[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].buf);
-				printf("msk[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].msk);
-			}
-		}
-	}
+	// for (int i = 0; g_line->scol[i].buf; i++)
+	// {
+	// 	printf("scol[%d].buf = |%s|\n", i, g_line->scol[i].buf);
+	// 	printf("scol[%d].msk = |%s|\n", i, g_line->scol[i].msk);
+	// 	for (int j = 0; g_line->pipe[i][j].buf; j++)
+	// 	{
+	// 		printf("pipe[%d][%d].buf = |%s|\n", i, j, g_line->pipe[i][j].buf);
+	// 		printf("pipe[%d][%d].msk = |%s|\n", i, j, g_line->pipe[i][j].msk);
+	// 		for (int k = 0; g_line->redir[i][j][k].buf; k++)
+	// 		{
+	// 			printf("buf[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].buf);
+	// 			printf("msk[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].msk);
+	// 		}
+	// 	}
+	// }
 	initial_error_check();
 	// else if (check_command())
 	// 	ret = ECOMMAND;
@@ -930,6 +959,9 @@ void	init_read()
 	user = find_env("USER");
 	ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
 	ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
+	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
+	g_bash_errno = 0;
+	g_bash_commandid = 0;
 	skittles(user.value);
 	skittles("@minishell");
 	BPRINTS(ESC_RESET ":");
@@ -991,11 +1023,13 @@ void	init_env()
 
 void	init_buf()
 {
-	if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)))
-		handle_error();
-	if (!(MALLOC(g_line->rd.msk, ARG_MAX + 3)))
+	if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
+	!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
+	!(MALLOC(g_bash_error, ARG_MAX + 2)))
 	{
 		free(g_line->rd.buf);
+		free(g_line->rd.msk);
+		free(g_bash_error);
 		handle_error();
 	}
 }
@@ -1017,10 +1051,22 @@ void	init_globals(t_line *ref)
 	g_line = ref;
 	g_bw.buf = NULL;
 	g_bw.buf_i = NULL;
+	g_bash_errno = 0;
+	g_bash_commandid = 0;
+	g_bash_error = NULL;
 }
 
 void	init(t_line *ref)
 {
+	g_bash_command = (char*[]){	"minishell",
+								"echo",
+								"cd",
+								"pwd",
+								"export",
+								"unset",
+								"env",
+								"exit",
+								NULL };
 	init_globals(ref);
 	init_line();
 	init_buf();
@@ -1055,9 +1101,7 @@ int		main(int ac, char **av, char **envp)
 					return (cleanup(RETURN));
 			}
 			else
-			{
-				printf("error\n");
-			}
+				bash_error();
 		}
 	}
 }
