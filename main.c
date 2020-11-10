@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 18:40:27 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/10 19:06:45 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@
 #include "errors.h"
 
 #include <stdio.h>
+
+void	exec()
+{
+
+}
 
 void	bash_error()
 {
@@ -1097,6 +1102,7 @@ int		main(int ac, char **av, char **envp)
 		{
 			if (!format_string())
 			{
+				exec();
 				if (!CMP(line.rd.buf, "exit"))
 					return (cleanup(RETURN));
 			}
