@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/09 20:48:02 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/10 16:47:07 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,40 @@ void	check_redir()
 
 void	check_syntax()
 {
-	return ;
-	int	i;
-	int	j;
-	int	k;
+	t_bm	p;
+	t_bm	tmp;
+	int		i;
+	char	c;
 
 	i = -1;
-	while (g_line->redir[++i])
+	p = next_word(g_line->rd);
+	while (p.msk)
 	{
-		j = -1;
-		while (g_line->redir[i][++j])
+		if (STR_IS_REDIR(p))
 		{
-			k = -1;
-			while (g_line->redir[i][j][++k].buf)
-			{}
+			tmp = p;
+			tmp.buf += tmp.cnt;
+			tmp.msk += tmp.cnt;
+			if (!tmp.msk || STR_IS_REDIR(tmp) || BASHSYN(tmp.msk[0]))
+			{
+				g_bash_errno = ESYNTAX;
+				return ;
+			}
 		}
+		else if (BASHSYN(p.msk[0]))
+		{
+			c = '|' + ';' - p.msk[0];
+			tmp = p;
+			tmp = previous_word(tmp, g_line->rd);
+			if (!tmp.msk || tmp.msk[0] == c)
+			{
+				g_bash_errno = ESYNTAX;
+				return ;
+			}
+		}
+		p.buf += p.cnt;
+		p.msk += p.cnt;
+		p = next_word(p);
 	}
 }
 
@@ -180,6 +199,35 @@ void	continue_split_redirects(t_bm *rd, t_bm **wr, size_t wc)
 	}
 }
 
+t_bm	previous_word(t_bm rd, t_bm ref)
+{
+	while (ref.msk < (rd.msk - 1) && rd.msk[-1] == WHTSPC)
+	{
+		rd.msk--;
+		rd.buf--;
+	}
+	if (rd.msk[-1] == WHTSPC)
+	{
+		rd.msk = NULL;
+		return (rd);
+	}
+	if (BASHSYN(rd.msk[-1]))
+	{
+		rd.cnt = 1;
+		return (rd);
+	}
+	else if (rd.msk[-1] == '2')
+	{
+		rd.cnt = 2;
+		return (rd);
+	}
+	rd.cnt = 0 * (int)rd.msk-- * 0 * (int)rd.buf--;
+	while (rd.msk < ref.msk && rd.msk[0] != WHTSPC &&
+	!BASHSYN(rd.msk[0]))
+		rd.cnt += 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
+	return (rd);
+}
+
 t_bm	next_word(t_bm rd)
 {
 	while (rd.msk[0] == WHTSPC && rd.buf[0])
@@ -187,7 +235,7 @@ t_bm	next_word(t_bm rd)
 		rd.msk++;
 		rd.buf++;
 	}
-	if (IS_REDIR(rd.msk[0]))
+	if (BASHSYN(rd.msk[0]))
 	{
 		rd.cnt = 1;
 		return (rd);
@@ -204,7 +252,7 @@ t_bm	next_word(t_bm rd)
 	}
 	rd.cnt = 0;
 	while (rd.msk[rd.cnt] != WHTSPC &&
-	!IS_REDIR(rd.msk[rd.cnt]) && rd.buf[rd.cnt])
+	!BASHSYN(rd.msk[rd.cnt]) && rd.buf[rd.cnt])
 		rd.cnt++;
 	return (rd);
 }
