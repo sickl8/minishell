@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 19:06:45 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/11 03:40:27 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1078,6 +1078,33 @@ void	init(t_line *ref)
 	init_env();
 }
 
+char	**copy_envp(char **envp)
+{
+	char	**ret;
+	int		i;
+	int		len;
+
+	if (!envp)
+		return (NULL);
+	i = 0;
+	while (envp[i])
+		i++;
+	if (!(MALLOC(ret, i + 1)))
+		return (NULL);
+	ret[i] = NULL;
+	i = -1;
+	while (envp[i])
+	{
+		len = ft_strlen(envp[i]);
+		ret[i] = NULL;
+		if (!(MALLOC(ret[i], len + 1)))
+			return (NULL);
+		ft_strncpy(ret[i], envp[i], len + 1);
+		i++;
+	}
+	return (ret);
+}
+
 int		main(int ac, char **av, char **envp)
 {
 	t_line	line;
@@ -1085,7 +1112,7 @@ int		main(int ac, char **av, char **envp)
 
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
-	line.envp = envp;
+	line.envp = copy_envp(envp);
 	init(&line);
 	backup_stdin(&stdin_bak);
 	while (1)
