@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/11 03:40:27 by sickl8           ###   ########.fr       */
+/*   Updated: 2020/11/12 01:10:36 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,18 +246,18 @@ t_bm	previous_word(t_bm rd, t_bm ref)
 	}
 	if (BASHSYN(rd.msk[-1]))
 	{
-		rd.cnt = 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
+		rd.cnt = 1 + 0 * ((size_t)rd.buf-- + (size_t)rd.msk--);
 		return (rd);
 	}
 	else if (rd.msk[-1] == '2')
 	{
-		rd.cnt = 2 + 0 * ((int)rd.buf-- + (int)rd.msk--);
+		rd.cnt = 2 + 0 * ((size_t)rd.buf-- + (size_t)rd.msk--);
 		return (rd);
 	}
-	rd.cnt = 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
+	rd.cnt = 1 + 0 * ((size_t)rd.buf-- + (size_t)rd.msk--);
 	while (ref.msk < rd.msk && rd.msk[-1] != WHTSPC &&
 	!BASHSYN(rd.msk[-1]))
-		rd.cnt += 1 + 0 * ((int)rd.buf-- + (int)rd.msk--);
+		rd.cnt += 1 + 0 * ((size_t)rd.buf-- + (size_t)rd.msk--);
 	return (rd);
 }
 
@@ -673,6 +673,16 @@ int		set_mask()
 // 		multiline(error);
 // }
 
+void	free_envp()
+{
+	int		i;
+
+	i = -1;
+	while (g_line->envp[++i])
+		free(g_line->envp[i]);
+	free(g_line->envp);
+}
+
 void	free_redir()
 {
 	size_t	i;
@@ -770,6 +780,8 @@ int		cleanup(int ex)
 		free_g_bw();
 	if (g_line->redir)
 		free_redir();
+	if (g_line->envp)
+		free_envp();
 	if (ex)
 		handle_error();
 	return (0);
@@ -1006,6 +1018,8 @@ void	init_env()
 {
 	int		i;
 
+	if (!g_line->envp)
+		cleanup(EXIT);
 	i = 0;
 	while (g_line->envp[i])
 		i++;
@@ -1024,6 +1038,30 @@ void	init_env()
 		cleanup(EXIT);
 	g_line->env_var[i].value[0] = '\0';
 	continue_init_env();
+}
+
+void	init_envp(char **envp)
+{
+	int		i;
+	int		len;
+
+	if (!envp)
+		cleanup(EXIT);
+	i = 0;
+	while (envp[i])
+		i++;
+	if (!(MALLOC(g_line->envp, i + 1)))
+		cleanup(EXIT);
+	g_line->envp[i] = NULL;
+	i = -1;
+	while (envp[++i])
+	{
+		len = ft_strlen(envp[i]);
+		g_line->envp[i] = NULL;
+		if (!(MALLOC(g_line->envp[i], len + 1)))
+			cleanup(EXIT);
+		ft_strncpy(g_line->envp[i], envp[i], len + 1);
+	}
 }
 
 void	init_buf()
@@ -1049,6 +1087,7 @@ void	init_line()
 	g_line->scol = NULL;
 	g_line->pipe = NULL;
 	g_line->redir = NULL;
+	g_line->envp = NULL;
 }
 
 void	init_globals(t_line *ref)
@@ -1061,7 +1100,7 @@ void	init_globals(t_line *ref)
 	g_bash_error = NULL;
 }
 
-void	init(t_line *ref)
+void	init(t_line *ref, char **envp)
 {
 	g_bash_command = (char*[]){	"minishell",
 								"echo",
@@ -1075,35 +1114,10 @@ void	init(t_line *ref)
 	init_globals(ref);
 	init_line();
 	init_buf();
+	init_envp(envp);
 	init_env();
 }
 
-char	**copy_envp(char **envp)
-{
-	char	**ret;
-	int		i;
-	int		len;
-
-	if (!envp)
-		return (NULL);
-	i = 0;
-	while (envp[i])
-		i++;
-	if (!(MALLOC(ret, i + 1)))
-		return (NULL);
-	ret[i] = NULL;
-	i = -1;
-	while (envp[i])
-	{
-		len = ft_strlen(envp[i]);
-		ret[i] = NULL;
-		if (!(MALLOC(ret[i], len + 1)))
-			return (NULL);
-		ft_strncpy(ret[i], envp[i], len + 1);
-		i++;
-	}
-	return (ret);
-}
 
 int		main(int ac, char **av, char **envp)
 {
@@ -1112,8 +1126,7 @@ int		main(int ac, char **av, char **envp)
 
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
-	line.envp = copy_envp(envp);
-	init(&line);
+	init(&line, envp);
 	backup_stdin(&stdin_bak);
 	while (1)
 	{
