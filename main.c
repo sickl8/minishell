@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/16 18:11:23 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/19 13:50:45 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		check_s_redir(t_bm p)
 		if (!tmp.msk)
 			ft_strncpy(g_bash_error, "newline", 7);
 		else
-			ft_strncpy(g_bash_error, tmp.msk, tmp.cnt);
+			ft_strncpy(g_bash_error, tmp.buf, tmp.cnt);
 		return (1);
 	}
 	return (0);

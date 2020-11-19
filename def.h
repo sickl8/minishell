@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 18:17:11 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/19 13:49:06 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define BWR(fd, string) bwrite(fd, string, ft_strlen(string))
 # define IS_REDIR(x) (x == '<' || x == '>')
 # define STR_IS_REDIR(x) (STR_IS_RRR(x) || STR_IS_RR(x) || STR_IS_RL(x))
-# define STR_IS_RRR(x) (!NCMP(x.buf, x.msk, 2) && !NCMP(x.buf, ">>", 2))
+# define STR_IS_RRR(x) (!NCMP(x.msk, "22", 2) && !NCMP(x.buf, ">>", 2))
 # define STR_IS_RR(x) (!NCMP(x.buf, x.msk, 1) && !NCMP(x.buf, ">", 1))
 # define STR_IS_RL(x) (!NCMP(x.buf, x.msk, 1) && !NCMP(x.buf, "<", 1))
 # define EXIT 1
