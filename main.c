@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/20 14:51:42 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/20 17:46:12 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -752,6 +752,28 @@ int		set_mask()
 // 		multiline(error);
 // }
 
+void	free_loc()
+{
+	void	*tmp;
+
+	while (g_list_of_commands)
+	{
+		while (g_list_of_commands->cmd_and_args)
+		{
+			if (g_list_of_commands->cmd_and_args->args)
+				free(&(g_list_of_commands->cmd_and_args->args[-1]));
+			free(g_list_of_commands->cmd_and_args->redir);
+			tmp = g_list_of_commands->cmd_and_args;
+			g_list_of_commands->cmd_and_args =
+			g_list_of_commands->cmd_and_args->next;
+			free(tmp);
+		}
+		tmp = g_list_of_commands;
+		g_list_of_commands = g_list_of_commands->next;
+		free(tmp);
+	}
+}
+
 void	free_envp()
 {
 	int		i;
@@ -861,6 +883,8 @@ int		cleanup(int ex)
 		free_redir();
 	if (g_line->envp)
 		free_envp();
+	if (g_list_of_commands)
+		free_loc();
 	if (ex)
 		handle_error();
 	return (0);
@@ -877,11 +901,29 @@ void	free_and_set_to_null(void *adr)
 
 void	fastn()
 {
+	void	*tmp;
+
 	free_and_set_to_null(&g_line->redir);
 	free_and_set_to_null(&g_line->scol);
 	free_and_set_to_null(&g_line->pipe);
 	free_and_set_to_null(&g_line->env.buf);
 	free_and_set_to_null(&g_line->env.msk);
+	while (g_list_of_commands)
+	{
+		while (g_list_of_commands->cmd_and_args)
+		{
+			if (g_list_of_commands->cmd_and_args->args)
+				free(&(g_list_of_commands->cmd_and_args->args[-1]));
+			free(g_list_of_commands->cmd_and_args->redir);
+			tmp = g_list_of_commands->cmd_and_args;
+			g_list_of_commands->cmd_and_args =
+			g_list_of_commands->cmd_and_args->next;
+			free(tmp);
+		}
+		tmp = g_list_of_commands;
+		g_list_of_commands = g_list_of_commands->next;
+		free(tmp);
+	}
 }
 
 void	free_buf_and_mask(t_bm s)
@@ -953,8 +995,8 @@ int		format_string()
 	g_line->pipe[g_line->env.cnt] = NULL;
 	split_pipe();
 	split_redirects();
-	printf("rdbuf = |%s|\n", g_line->rd.buf);
-	printf("rdmsk = |%s|\n", g_line->rd.msk);
+	// printf("rdbuf = |%s|\n", g_line->rd.buf);
+	// printf("rdmsk = |%s|\n", g_line->rd.msk);
 	// for (int i = 0; g_line->scol[i].buf; i++)
 	// {
 	// 	printf("scol[%d].buf = |%s|\n", i, g_line->scol[i].buf);
@@ -1005,7 +1047,6 @@ int		format_string()
 	}
 	// else if (check_command())
 	// 	ret = ECOMMAND;
-	free_tmp();
 	return (g_bash_errno);
 }
 
@@ -1087,7 +1128,8 @@ void	init_read()
 	t_evar	user;
 
 	home = find_env("HOME");
-	pwd = find_env("PWD");
+	pwd.name = "PWD";
+	pwd.value = getcwd(NULL, 0);
 	user = find_env("USER");
 	ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
 	ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
@@ -1260,6 +1302,7 @@ int		main(int ac, char **av, char **envp)
 				exec();
 				if (!CMP(line.rd.buf, "exit"))
 					return (cleanup(RETURN));
+				free_tmp();
 			}
 			else
 				bash_error();

@@ -82,4 +82,6 @@
 		char		d_name[__DARWIN_MAXPATHLEN];	// entry name (up to MAXPATHLEN bytes)
 	}
 *********************************************************************************************
+
+bash: ./mini: cannot execute binary file
 */
