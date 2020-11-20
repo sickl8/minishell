@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/19 13:50:45 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/20 14:51:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,14 @@
 
 void	exec()
 {
-
+	
 }
+
+// int		*get_g_bash_errno(const char *fn)
+// {
+// 	printf("g_bash_errno read or written from function: %s\n", fn);
+// 	return (&g_g_bash_errno);
+// }
 
 void	bash_error()
 {
@@ -147,10 +153,83 @@ int		check_multiline()
 	return (0);
 }
 
-void	initial_error_check()
+void	continue_get_cmd_p_args(char **ret, t_bm *redir, t_rdr **rdr)
+{
+	int		i;
+	int		j;
+
+	j = 0;
+	i = -1;
+	while (redir[++i].buf)
+	{
+		if (STR_IS_REDIR(redir[i]))
+		{
+			rdr[0][j].file_name = redir[i + 1].buf;
+			if (STR_IS_RL(redir[i]))
+				rdr[0][j].type = RL;
+			else if (STR_IS_RR(redir[i]))
+				rdr[0][j].type = RR;
+			else
+				rdr[0][j].type = RRR;
+			j++;
+			i++;
+		}
+		else
+			ret[i - 2 * j] = redir[i].buf;
+	}
+}
+
+char	**get_cmd_p_args(t_bm *redir, t_rdr **rdr)
+{
+	char	**ret;
+	int		cnt;
+	int		total;
+
+	cnt = 0;
+	total = -1;
+	while (redir[++total].buf)
+		if (STR_IS_REDIR(redir[total]))
+			cnt++;
+	if (!(MALLOC(ret, total - 2 * cnt + 1)) || !(MALLOC(*rdr, cnt + 1)))
+	{
+		free(ret);
+		cleanup(EXIT);
+	}
+	ret[total - 2 * cnt] = NULL;
+	rdr[0][cnt].file_name = NULL;
+	continue_get_cmd_p_args(ret, redir, rdr);
+	return (ret);
+}
+
+t_cmd	*get_cmd(t_bm **redir)
+{
+	t_cmd	*ret;
+	t_cmd	**tracer;
+	char	**tmp;
+	int		i;
+
+	i = -1;
+	tracer = &ret;
+	while (redir[++i])
+	{
+		if (!(MALLOC(*tracer, 1)))
+			cleanup(EXIT);
+		(*tracer)->next = NULL;
+		(*tracer)->fd_read = 0;
+		(*tracer)->fd_write = 1;
+		tmp = get_cmd_p_args(redir[i], &((*tracer)->redir));
+		(*tracer)->find = tmp[0];
+		(*tracer)->args = tmp && tmp[0] ? &(tmp[1]) : NULL;
+		tracer = &(*tracer)->next;
+	}
+	return (ret);
+}
+
+int		initial_error_check()
 {
 	if (check_multiline() || check_syntax())
-		return ;
+		return (0);
+	return (1);
 }
 
 int		assign(void *p, unsigned long long v, int size)
@@ -163,7 +242,7 @@ int		assign(void *p, unsigned long long v, int size)
 		*((int*)(p)) = (int)v;
 	else if (size == 8)
 		*((long*)(p)) = (long)v;
-	return (0);
+	return (1);
 }
 
 void	copy_valid_chars(char *dst, char *src, char *msk, size_t tr_ln)
@@ -857,6 +936,8 @@ int		format_string()
 	// }
 	char	*tmp;
 	int		ret;
+	int		i;
+	t_fnl	**tracer;
 
 	g_bash_errno = 0;
 	if ((tmp = ft_strchr(g_line->rd.buf, '\n')))
@@ -872,22 +953,56 @@ int		format_string()
 	g_line->pipe[g_line->env.cnt] = NULL;
 	split_pipe();
 	split_redirects();
+	printf("rdbuf = |%s|\n", g_line->rd.buf);
+	printf("rdmsk = |%s|\n", g_line->rd.msk);
 	// for (int i = 0; g_line->scol[i].buf; i++)
 	// {
 	// 	printf("scol[%d].buf = |%s|\n", i, g_line->scol[i].buf);
 	// 	printf("scol[%d].msk = |%s|\n", i, g_line->scol[i].msk);
-	// 	for (int j = 0; g_line->pipe[i][j].buf; j++)
-	// 	{
-	// 		printf("pipe[%d][%d].buf = |%s|\n", i, j, g_line->pipe[i][j].buf);
-	// 		printf("pipe[%d][%d].msk = |%s|\n", i, j, g_line->pipe[i][j].msk);
-	// 		for (int k = 0; g_line->redir[i][j][k].buf; k++)
-	// 		{
-	// 			printf("buf[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].buf);
-	// 			printf("msk[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].msk);
-	// 		}
-	// 	}
+		// for (int j = 0; g_line->pipe[i][j].buf; j++)
+		// {
+		// 	printf("pipe[%d][%d].buf = |%s|\n", i, j, g_line->pipe[i][j].buf);
+		// 	printf("pipe[%d][%d].msk = |%s|\n", i, j, g_line->pipe[i][j].msk);
+		// 	for (int k = 0; g_line->redir[i][j][k].buf; k++)
+		// 	{
+		// 		printf("buf[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].buf);
+		// 		printf("msk[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].msk);
+		// 	}
+		// }
 	// }
-	initial_error_check();
+	if (!initial_error_check())
+		return (g_bash_errno);
+	i = -1;
+	g_list_of_commands = NULL;
+	tracer = &g_list_of_commands;
+	while (++i < g_line->env.cnt)
+	{
+		if (!(MALLOC(*tracer, 1)))
+			cleanup(EXIT);
+		(*tracer)->cmd_and_args = get_cmd(g_line->redir[i]);
+		(*tracer)->next = NULL;
+		tracer = &(*tracer)->next;
+	}
+	t_fnl *tmmp = g_list_of_commands;
+	t_cmd *tmpp;
+	while (tmmp)
+	{
+		tmpp = tmmp->cmd_and_args;
+		while (tmpp)
+		{
+			if (tmpp->find)
+				printf("cmd = |%s|\n", tmpp->find);
+			if (tmpp->args)
+				for (int i = 0; tmpp->args[i]; i++)
+					printf("arg[%d] = |%s|\n", i, tmpp->args[i]);
+			if (tmpp->redir)
+				for (int i = 0; tmpp->redir[i].file_name; i++)
+					printf("redir[%d].type = %s, redir[%d].file_name = |%s|\n",
+					i, tmpp->redir[i].type == RL ? "RL" : (tmpp->redir[i].type == RR ? "RR" : "RRR"), i, tmpp->redir[i].file_name);
+			tmpp = tmpp->next;
+		}
+		tmmp = tmmp->next;
+	}
 	// else if (check_command())
 	// 	ret = ECOMMAND;
 	free_tmp();

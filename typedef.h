@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:33:39 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/09 18:45:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/19 20:23:25 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,21 @@
 
 # include <stdlib.h>
 
+typedef struct	s_rdr
+{
+	int		type;
+	char	*file_name;
+}				t_rdr;
+
 typedef struct	s_cmd
 {
-	int		fd_read;
-	int		fd_write;
-	char	*path2exec;
-	char	**args;
+	int				fd_read;
+	int				fd_write;
+	char			*find;
+	char			*path2exec;
+	char			**args;
+	t_rdr			*redir;
+	struct s_cmd	*next;
 }				t_cmd;
 
 typedef struct	s_evar
@@ -42,13 +51,13 @@ typedef struct	s_line
 {
 	char	**envp;
 	t_evar	*env_var;
+	t_bm	rd;
 	t_bm	env;
 	t_bm	*scol;
 	t_bm	**pipe;
 	t_bm	***redir;
 	long	rd_ret;
 	size_t	rd_len;
-	t_bm	rd;
 }				t_line;
 
 typedef struct	s_bw
@@ -70,5 +79,11 @@ typedef	struct	s_ep
 	char	**envp;
 	int		n;
 }				t_ep;
+
+typedef struct	s_fnl
+{
+	t_cmd			*cmd_and_args;
+	struct s_fnl	*next;
+}				t_fnl;
 
 #endif

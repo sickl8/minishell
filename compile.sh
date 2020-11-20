@@ -18,9 +18,9 @@ else
 	MAIN_T=$1
 	LEAK=$2
 	MAIN=$3
-	gcc -c $MAIN -include xmalloc.h -D MAIN_TYPE=$MAIN_T
-	gcc -c malloc.c -D MAIN_TYPE=$MAIN_T -D $LEAK
+	gcc -c $MAIN -include xmalloc.h -D MAIN_TYPE=$MAIN_T -g -fsanitize=address
+	gcc -c malloc.c -D MAIN_TYPE=$MAIN_T -D $LEAK -g -fsanitize=address
 	shift 3
-	$* "${MAIN//.c/.o}" malloc_main.c malloc.o -include inc.h -D MAIN_TYPE=$MAIN_T
+	$* "${MAIN//.c/.o}" malloc_main.c malloc.o -include inc.h -g -fsanitize=address -D MAIN_TYPE=$MAIN_T
 	rm -rf "${MAIN//.c/.o}" malloc.o
 fi

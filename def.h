@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/19 13:49:06 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/20 14:50:26 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,18 @@
 # define STR_IS_RRR(x) (!NCMP(x.msk, "22", 2) && !NCMP(x.buf, ">>", 2))
 # define STR_IS_RR(x) (!NCMP(x.buf, x.msk, 1) && !NCMP(x.buf, ">", 1))
 # define STR_IS_RL(x) (!NCMP(x.buf, x.msk, 1) && !NCMP(x.buf, "<", 1))
+# define RL 2
+# define RR 1
+# define RRR 0
 # define EXIT 1
 # define RETURN 0
 # define A(x, y) assign(&x, y, sizeof(x))
 # define I *ref
 # define IPP (*ref)++
 # define PPI ++(*ref)
+# define PV(x, y) printf(#x " = " y, x)
+
+// #define g_bash_errno *get_g_bash_errno(__func__)
 
 # include "bufferedio.h"
 # include "colors.h"
