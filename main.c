@@ -6,7 +6,11 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/11/21 20:07:16 by aamzouar         ###   ########.fr       */
+=======
+/*   Updated: 2020/11/16 18:15:28 by isaadi           ###   ########.fr       */
+>>>>>>> 0dfe991ea38de28fa76c5cac4bf421f89c42ccb0
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +34,11 @@
 
 void	exec()
 {
+<<<<<<< HEAD
 	print_data();
+=======
+	__asm__ ()
+>>>>>>> 0dfe991ea38de28fa76c5cac4bf421f89c42ccb0
 }
 
 // int		*get_g_bash_errno(const char *fn)
