@@ -16,10 +16,27 @@
 
 #include <stdio.h>
 
+void	print_data()
+{
+	t_cmd	*tmp;
 
-:xa
-
-
-
-
-
+	while (g_list_of_commands)
+	{
+		tmp = g_list_of_commands->cmd_and_args;
+		while (tmp)
+		{
+			if (tmp->find)
+			   printf("cmd - [%s]\n", tmp->find);
+			/*if (tmp->path2exec)
+			   printf("path:cmd - [%s]\n", tmp->path2exec);*/
+			if (tmp->args)
+				for (int i = 0; tmp->args[i]; i++)
+					printf("args[%d] - [%s]\n", i, tmp->args[i]);
+			if (tmp->redir)
+				for (int i = 0; tmp->redir[i].file_name; i++)
+					printf("type - [%d]; filename - [%s]\n", tmp->redir[i].type, tmp->redir[i].file_name);
+			tmp = tmp->next;
+		}
+		g_list_of_commands = g_list_of_commands->next;
+	}
+}

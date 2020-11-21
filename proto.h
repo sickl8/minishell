@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 16:58:40 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/21 16:45:52 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ t_bm	next_word(t_bm rd);
 size_t	true_len(t_bm p);
 void	free_buf_and_mask(t_bm s);
 t_bm	previous_word(t_bm rd, t_bm ref);
+void	print_data();
 
 #endif

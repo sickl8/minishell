@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/21 16:38:08 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/11/21 16:45:55 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 
 void	exec()
 {
-	
+	print_data();
 }
 
 // int		*get_g_bash_errno(const char *fn)
