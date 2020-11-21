@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:33:39 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/19 20:23:25 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/21 18:08:17 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct	s_cmd
 {
 	int				fd_read;
 	int				fd_write;
+	char			**cpa;
 	char			*find;
 	char			*path2exec;
 	char			**args;

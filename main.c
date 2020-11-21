@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/20 17:46:12 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/21 18:21:25 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	exec()
 // int		*get_g_bash_errno(const char *fn)
 // {
 // 	printf("g_bash_errno read or written from function: %s\n", fn);
+// 	printf("current value = %d\n", g_g_bash_errno);
 // 	return (&g_g_bash_errno);
 // }
 
@@ -113,7 +114,7 @@ int		check_syntax()
 	{
 		if (STR_IS_REDIR(p) && check_s_redir(p))
 			return (1);
-		else if (BASHSYN(p.msk[0]) && check_s_bashsyn(p))
+		else if (!STR_IS_REDIR(p) && BASHSYN(p.msk[0]) && check_s_bashsyn(p))
 			return (1);
 		p.buf += p.cnt;
 		p.msk += p.cnt;
@@ -191,14 +192,19 @@ char	**get_cmd_p_args(t_bm *redir, t_rdr **rdr)
 		if (STR_IS_REDIR(redir[total]))
 			cnt++;
 	if (!(MALLOC(ret, total - 2 * cnt + 1)) || !(MALLOC(*rdr, cnt + 1)))
-	{
-		free(ret);
 		cleanup(EXIT);
-	}
 	ret[total - 2 * cnt] = NULL;
 	rdr[0][cnt].file_name = NULL;
 	continue_get_cmd_p_args(ret, redir, rdr);
 	return (ret);
+}
+
+void	set_cmd_2_null(t_cmd *t)
+{
+	t->cpa = NULL;
+	t->find = NULL;
+	t->args = NULL;
+	t->path2exec = NULL;
 }
 
 t_cmd	*get_cmd(t_bm **redir)
@@ -214,12 +220,14 @@ t_cmd	*get_cmd(t_bm **redir)
 	{
 		if (!(MALLOC(*tracer, 1)))
 			cleanup(EXIT);
+		set_cmd_2_null(*tracer);
 		(*tracer)->next = NULL;
 		(*tracer)->fd_read = 0;
 		(*tracer)->fd_write = 1;
-		tmp = get_cmd_p_args(redir[i], &((*tracer)->redir));
-		(*tracer)->find = tmp[0];
-		(*tracer)->args = tmp && tmp[0] ? &(tmp[1]) : NULL;
+		(*tracer)->cpa = get_cmd_p_args(redir[i], &((*tracer)->redir));
+		(*tracer)->find = (*tracer)->cpa[0];
+		(*tracer)->args = (*tracer)->cpa && (*tracer)->cpa[0] ?
+		&((*tracer)->cpa[1]) : NULL;
 		tracer = &(*tracer)->next;
 	}
 	return (ret);
@@ -760,8 +768,7 @@ void	free_loc()
 	{
 		while (g_list_of_commands->cmd_and_args)
 		{
-			if (g_list_of_commands->cmd_and_args->args)
-				free(&(g_list_of_commands->cmd_and_args->args[-1]));
+			free(g_list_of_commands->cmd_and_args->cpa);
 			free(g_list_of_commands->cmd_and_args->redir);
 			tmp = g_list_of_commands->cmd_and_args;
 			g_list_of_commands->cmd_and_args =
@@ -912,8 +919,7 @@ void	fastn()
 	{
 		while (g_list_of_commands->cmd_and_args)
 		{
-			if (g_list_of_commands->cmd_and_args->args)
-				free(&(g_list_of_commands->cmd_and_args->args[-1]));
+			free(g_list_of_commands->cmd_and_args->cpa);
 			free(g_list_of_commands->cmd_and_args->redir);
 			tmp = g_list_of_commands->cmd_and_args;
 			g_list_of_commands->cmd_and_args =
@@ -957,7 +963,7 @@ void	free_tmp()
 	fastn();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int		format_string()
 {
@@ -1021,8 +1027,9 @@ int		format_string()
 	{
 		if (!(MALLOC(*tracer, 1)))
 			cleanup(EXIT);
-		(*tracer)->cmd_and_args = get_cmd(g_line->redir[i]);
+		(*tracer)->cmd_and_args = NULL;
 		(*tracer)->next = NULL;
+		(*tracer)->cmd_and_args = get_cmd(g_line->redir[i]);
 		tracer = &(*tracer)->next;
 	}
 	t_fnl *tmmp = g_list_of_commands;

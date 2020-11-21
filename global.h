@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/20 16:50:15 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/21 18:00:51 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 t_bw	g_bw;
 t_line	*g_line;
+// int		g_g_bash_errno;
 int		g_bash_errno;
 int		g_dollar_qm;
 char	*g_bash_error;
