@@ -19,10 +19,12 @@
 void	print_data()
 {
 	t_cmd	*tmp;
-
-	while (g_list_of_commands)
+	t_fnl	*test;
+	
+	test = g_list_of_commands;
+	while (test)
 	{
-		tmp = g_list_of_commands->cmd_and_args;
+		tmp = test->cmd_and_args;
 		while (tmp)
 		{
 			if (tmp->find)
@@ -37,6 +39,6 @@ void	print_data()
 					printf("type - [%d]; filename - [%s]\n", tmp->redir[i].type, tmp->redir[i].file_name);
 			tmp = tmp->next;
 		}
-		g_list_of_commands = g_list_of_commands->next;
+		test = test->next;
 	}
 }
