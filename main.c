@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/20 17:46:12 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/21 16:38:08 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1025,7 +1025,7 @@ int		format_string()
 		(*tracer)->next = NULL;
 		tracer = &(*tracer)->next;
 	}
-	t_fnl *tmmp = g_list_of_commands;
+	/*t_fnl *tmmp = g_list_of_commands;
 	t_cmd *tmpp;
 	while (tmmp)
 	{
@@ -1044,7 +1044,7 @@ int		format_string()
 			tmpp = tmpp->next;
 		}
 		tmmp = tmmp->next;
-	}
+	}*/
 	// else if (check_command())
 	// 	ret = ECOMMAND;
 	return (g_bash_errno);
