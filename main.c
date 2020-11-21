@@ -6,11 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2020/11/21 16:45:55 by aamzouar         ###   ########.fr       */
-=======
-/*   Updated: 2020/11/21 18:22:44 by isaadi           ###   ########.fr       */
->>>>>>> 40986628142703a4c63d9edb7202cfda1c7d7d9c
+/*   Updated: 2020/11/21 20:07:16 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +36,6 @@ void	exec()
 // int		*get_g_bash_errno(const char *fn)
 // {
 // 	printf("g_bash_errno read or written from function: %s\n", fn);
-// 	printf("current value = %d\n", g_g_bash_errno);
 // 	return (&g_g_bash_errno);
 // }
 
@@ -118,7 +113,7 @@ int		check_syntax()
 	{
 		if (STR_IS_REDIR(p) && check_s_redir(p))
 			return (1);
-		else if (!STR_IS_REDIR(p) && BASHSYN(p.msk[0]) && check_s_bashsyn(p))
+		else if (BASHSYN(p.msk[0]) && check_s_bashsyn(p))
 			return (1);
 		p.buf += p.cnt;
 		p.msk += p.cnt;
@@ -153,6 +148,11 @@ int		check_multiline()
 				break ;
 	if (count_quote('\'') % 2 || count_quote('"') % 2 ||
 	(g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
+	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
+		return (1 + 0 * (g_bash_errno = E_MULTILINE));
+	return (0);
+}
+
 	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
 		return (1 + 0 * (g_bash_errno = E_MULTILINE));
 	return (0);
@@ -1211,17 +1211,6 @@ void	init_env()
 void	init_envp(char **envp)
 {
 	int		i;
-	int		len;
-
-	if (!envp)
-		cleanup(EXIT);
-	i = 0;
-	while (envp[i])
-		i++;
-	if (!(MALLOC(g_line->envp, i + 1)))
-		cleanup(EXIT);
-	g_line->envp[i] = NULL;
-	i = -1;
 	while (envp[++i])
 	{
 		len = ft_strlen(envp[i]);
