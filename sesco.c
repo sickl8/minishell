@@ -16,21 +16,66 @@
 
 #include <stdio.h>
 
-void	loop_in_data_two(t_cmd *data, int check)
+/*
+** This function does two redirections or execute
+** as a normal command no pipes are used
+*/
+
+void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i)
+{
+	if (fork() == 0)
+	{
+		if (data->next != NULL)
+		{
+		}
+		else if (i == 1)
+			dup2(fd[1], 1);
+		else if (i != 1)
+			dup2(fd[0], 0);
+	}
+	else
+		wait(NULL);
+}
+
+/*
+** This function redirects both input & output file descriptor
+** for the commands in the middle
+*/
+
+void	redirect_to_pipe_two(t_cmd *data, int fd[2])
+{
+	if (fork() == 0)
+	{
+		dup2(fd[0], 0);
+		dup2(fd[1], 1);
+		// execute commands here
+	}
+	else
+		wait(NULL);
+}
+
+/*
+** Most Of This Code Is Just To Make Piping Works
+*/
+
+void	loop_in_data_two(t_cmd *data)
 {
 	int		fd[2];
 	int		i;
 
-	i = 1;
 	pipe(fd);
+	i = 1;
 	while (data)
 	{
-		if (g_reset_fd == 1)
-			pipe(fd);
-		if (g_reset_fd == 1 || data->next)
+		if (i != 1 && data->next != NULL)
+			redirect_to_pipe_two(data, fd);
+		else
+			redirect_to_pipe_one(data, fd, i);
 		i++;
 		data = data->next;
 	}
+	close(fd[0]);
+	close(fd[1]);
 }
 
 void	loop_in_data()
@@ -42,10 +87,7 @@ void	loop_in_data()
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
-		if (data->next != NULL)
-			loop_in_data_two(data, 1);
-		else
-			loop_in_data_two(data, 0);
+		loop_in_data_two(data);
 		/*if (data->find)
 		   printf("cmd - [%s]\n", data->find);
 		if (tmp->path2exec)

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/24 12:02:14 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/11/24 13:35:42 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int		g_dollar_qm;
 char	*g_bash_error;
 char	**g_bash_command;
 int		g_bash_commandid;
-int		g_reset_fd;
 t_fnl	*g_list_of_commands;
 
 #endif
