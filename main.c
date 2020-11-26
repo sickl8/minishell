@@ -226,8 +226,7 @@ t_cmd	*get_cmd(t_bm **redir)
 		(*tracer)->fd_write = 1;
 		(*tracer)->cpa = get_cmd_p_args(redir[i], &((*tracer)->redir));
 		(*tracer)->find = (*tracer)->cpa[0];
-		(*tracer)->args = (*tracer)->cpa && (*tracer)->cpa[0] ?
-		&((*tracer)->cpa[1]) : NULL;
+		(*tracer)->args = (*tracer)->cpa;
 		tracer = &(*tracer)->next;
 	}
 	return (ret);
