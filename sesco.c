@@ -21,17 +21,28 @@
 ** as a normal command no pipes are used
 */
 
-void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i)
+void	execute_cmd(t_cmd *data, int prev_pipe)
 {
-	if (fork() == 0)
+	char	*arg[] = {"/usr/bin/ls", "-la", NULL};
+	execve("/usr/bin/ls", arg, NULL);
+}
+
+void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i, int prev_pipe)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < -1)
+		cleanup(EXIT);
+	if (pid == 0)
 	{
 		if (data->next != NULL)
-		{
-		}
+			execute_cmd(data, prev_pipe);
 		else if (i == 1)
 			dup2(fd[1], 1);
 		else if (i != 1)
-			dup2(fd[0], 0);
+			dup2(prev_pipe, 0);
+		execute_cmd(data, prev_pipe);
 	}
 	else
 		wait(NULL);
@@ -42,13 +53,18 @@ void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i)
 ** for the commands in the middle
 */
 
-void	redirect_to_pipe_two(t_cmd *data, int fd[2])
+void	redirect_to_pipe_two(t_cmd *data, int fd[2], int prev_pipe)
 {
-	if (fork() == 0)
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < -1)
+		cleanup(EXIT);
+	if (pid == 0)
 	{
-		dup2(fd[0], 0);
+		dup2(prev_pipe, 0);
 		dup2(fd[1], 1);
-		// execute commands here
+		execute_cmd(data, prev_pipe);
 	}
 	else
 		wait(NULL);
@@ -61,21 +77,26 @@ void	redirect_to_pipe_two(t_cmd *data, int fd[2])
 void	loop_in_data_two(t_cmd *data)
 {
 	int		fd[2];
+	int		prev_pipe;
 	int		i;
 
-	pipe(fd);
 	i = 1;
+	prev_pipe = STDIN_FILENO;
 	while (data)
 	{
+		if (pipe(fd) < 0)
+			cleanup(EXIT);
 		if (i != 1 && data->next != NULL)
-			redirect_to_pipe_two(data, fd);
+			redirect_to_pipe_two(data, fd, prev_pipe);
 		else
-			redirect_to_pipe_one(data, fd, i);
+			redirect_to_pipe_one(data, fd, i, prev_pipe);
+		close(fd[1]);
+		close(prev_pipe);
+		prev_pipe = fd[0];
 		i++;
 		data = data->next;
 	}
-	close(fd[0]);
-	close(fd[1]);
+	close(prev_pipe);
 }
 
 void	loop_in_data()

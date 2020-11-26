@@ -1157,6 +1157,7 @@ void	init_read()
 		BPRINT(pwd.value);
 	BPRINTS(ESC_RESET "$ ");
 	bflush(STDOUT_FILENO);
+	free(pwd.value);
 }
 
 void	continue_init_env()
