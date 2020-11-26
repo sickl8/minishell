@@ -119,11 +119,11 @@ char	*find_in_path(char *tofind)
 void	execute_cmd(t_cmd *data, int prev_pipe)
 {
 	if (ft_strchr(data->find, '/') != NULL)
-		execve(data->find, data->args, NULL);
+		execve(data->find, data->args, g_line->envp);
 	else
 	{
 		data->path2exec = find_in_path(data->find);
-		execve(data->path2exec, data->args, NULL);
+		execve(data->path2exec, data->args, g_line->envp);
 	}
 }
 
