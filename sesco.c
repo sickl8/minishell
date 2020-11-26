@@ -16,6 +16,10 @@
 
 #include <stdio.h>
 
+/*
+** this function frees double pointer
+*/
+
 void	free_path(char **paths)
 {
 	int	i;
@@ -25,6 +29,11 @@ void	free_path(char **paths)
 		free(paths[i++]);
 	free(paths);
 }
+
+/*
+** Adding a slash [/] to the end of a path
+** if there's none
+*/
 
 char	*fix_path(char **paths, int i)
 {
@@ -49,8 +58,7 @@ char	*fix_path(char **paths, int i)
 }
 
 /*
-** This function does two redirections or execute
-** as a normal command no pipes are used
+** Find command in $PATH
 */
 
 char	*find_in_path(char *tofind)
@@ -102,17 +110,20 @@ char	*find_in_path(char *tofind)
 	return (NULL);
 }
 
+/*
+** here we check if it's a path or just a command
+** path -> [/]
+** command -> [no slash]
+*/
+
 void	execute_cmd(t_cmd *data, int prev_pipe)
 {
-	char	*arg[] = {"/usr/bin/ls", "-la", NULL};
-
 	if (ft_strchr(data->find, '/') != NULL)
-		execve(data->find, arg, NULL);
+		execve(data->find, data->args, NULL);
 	else
 	{
 		data->path2exec = find_in_path(data->find);
-		printf("path2exec: %s\n", data->path2exec);
-		execve(data->path2exec, NULL, NULL);
+		execve(data->path2exec, data->args, NULL);
 	}
 }
 
