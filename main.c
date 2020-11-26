@@ -922,6 +922,7 @@ void	fastn()
 		{
 			free(g_list_of_commands->cmd_and_args->cpa);
 			free(g_list_of_commands->cmd_and_args->redir);
+			free(g_list_of_commands->cmd_and_args->path2exec);
 			tmp = g_list_of_commands->cmd_and_args;
 			g_list_of_commands->cmd_and_args =
 			g_list_of_commands->cmd_and_args->next;

@@ -16,15 +16,104 @@
 
 #include <stdio.h>
 
+void	free_path(char **paths)
+{
+	int	i;
+
+	i = 0;
+	while (paths[i])
+		free(paths[i++]);
+	free(paths);
+}
+
+char	*fix_path(char **paths, int i)
+{
+	size_t	len;
+	char	*ret;
+
+	len = ft_strlen(paths[i]);
+	if (paths[i][len - 1] != '/')
+	{
+		if (!(MALLOC(ret, len + 2)))
+		{
+			free_path(paths);
+			cleanup(EXIT);
+		}
+		ft_strncpy(ret, paths[i], len);
+		ret[len] = '/';
+		ret[len + 1] = '\0';
+		free(paths[i]);
+		return (ret);
+	}
+	return (paths[i]);
+}
+
 /*
 ** This function does two redirections or execute
 ** as a normal command no pipes are used
 */
 
+char	*find_in_path(char *tofind)
+{
+	t_evar		path;
+	char		**paths;
+	int		i;
+	DIR		*dir;
+	struct dirent	*file;
+	struct stat	f_inf;
+	char		*tmp;
+
+	i = 0;
+	path = find_env("PATH");
+	paths = ft_split(path.value, ':');
+	while(paths[i])
+	{
+		dir = opendir(paths[i]);
+		if (dir)
+		{
+			while ((file = readdir(dir)))
+			{
+				if (!CMP(tofind, file->d_name))
+				{
+					paths[i] = fix_path(paths, i);
+					if (!(tmp = ft_strjoin(paths[i], file->d_name)))
+					{
+						free_path(paths);
+						cleanup(EXIT);
+					}
+					if (stat(tmp,&f_inf) != -1)
+					{
+						if (f_inf.st_mode & S_IXUSR)
+						{
+							free_path(paths);
+							closedir(dir);
+							return (tmp);
+						}
+					
+					}
+					free(tmp);
+				}
+			}
+		}
+		closedir(dir);
+		i++;
+	}
+	free_path(paths);
+	return (NULL);
+}
+
 void	execute_cmd(t_cmd *data, int prev_pipe)
 {
 	char	*arg[] = {"/usr/bin/ls", "-la", NULL};
-	execve("/usr/bin/ls", arg, NULL);
+
+	if (ft_strchr(data->find, '/') != NULL)
+		execve(data->find, arg, NULL);
+	else
+	{
+		data->path2exec = find_in_path(data->find);
+		printf("path2exec: %s\n", data->path2exec);
+		execve(data->path2exec, NULL, NULL);
+	}
 }
 
 void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i, int prev_pipe)
@@ -32,16 +121,18 @@ void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i, int prev_pipe)
 	pid_t	pid;
 
 	pid = fork();
-	if (pid < -1)
+	if (pid == -1)
 		cleanup(EXIT);
 	if (pid == 0)
 	{
-		if (data->next != NULL)
+		if (i == 1 && data->next == NULL)
 			execute_cmd(data, prev_pipe);
 		else if (i == 1)
 			dup2(fd[1], 1);
 		else if (i != 1)
 			dup2(prev_pipe, 0);
+		close(fd[1]);
+		close(prev_pipe);
 		execute_cmd(data, prev_pipe);
 	}
 	else
@@ -58,13 +149,15 @@ void	redirect_to_pipe_two(t_cmd *data, int fd[2], int prev_pipe)
 	pid_t	pid;
 
 	pid = fork();
-	if (pid < -1)
+	if (pid == -1)
 		cleanup(EXIT);
 	if (pid == 0)
 	{
 		dup2(prev_pipe, 0);
 		dup2(fd[1], 1);
 		execute_cmd(data, prev_pipe);
+		close(fd[1]);
+		close(prev_pipe);
 	}
 	else
 		wait(NULL);
@@ -78,13 +171,16 @@ void	loop_in_data_two(t_cmd *data)
 {
 	int		fd[2];
 	int		prev_pipe;
+	int		bk[2];
 	int		i;
 
 	i = 1;
 	prev_pipe = STDIN_FILENO;
+	bk[0] = dup(0);
+	bk[1] = dup(1);
 	while (data)
 	{
-		if (pipe(fd) < 0)
+		if (pipe(fd) == -1)
 			cleanup(EXIT);
 		if (i != 1 && data->next != NULL)
 			redirect_to_pipe_two(data, fd, prev_pipe);
@@ -97,6 +193,10 @@ void	loop_in_data_two(t_cmd *data)
 		data = data->next;
 	}
 	close(prev_pipe);
+	dup2(bk[0], 0);
+	dup2(bk[1], 1);
+	close(bk[0]);
+	close(bk[1]);
 }
 
 void	loop_in_data()
