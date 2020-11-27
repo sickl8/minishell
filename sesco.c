@@ -263,6 +263,21 @@ int		*open_pipes(t_cmd *data)
 	return (pipes_fd);
 }
 
+void	free_pfd(int *pfd, int sig)
+{
+	int		i;
+
+	i = 1;
+	while (pfd[i] != 1)
+	{
+		close(pfd[i]);
+		i++;
+	}
+	free(pfd);
+	if (sig == 1)
+		cleanup(EXIT);
+}
+
 /*
 ** Sesco: Here I simply open a certain amount
 ** of pipes then start executing the line of
@@ -273,14 +288,25 @@ void	open_pipes_and_execute(t_cmd *data)
 {
 	int		*pfd;
 	int		i;
-	int		j;
 	int		bk[2];
+	pid_t	pid;
 
+	i = 0;
 	pfd = open_pipes(data);	
+	bk[0] = dup(0);
+	bk[1] = dup(1);
 	while (data)
 	{
+		pid = fork();
+		if (pid == -1)
+			free_pfd(pfd, 1);
 		data = data->next;
 	}
+	free_pfd(pfd, 0);
+	dup2(bk[0], 0);
+	dup2(bk[1], 1);
+	close(bk[0]);
+	close(bk[1]);
 }
 
 void	loop_in_data()
