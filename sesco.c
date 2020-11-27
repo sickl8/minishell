@@ -58,7 +58,8 @@ char	*fix_path(char **paths, int i)
 }
 
 /*
-** Find command in $PATH
+** Find the command in $PATH
+** also we check if the command is executable
 */
 
 char	*find_in_path(char *tofind)
@@ -110,105 +111,6 @@ char	*find_in_path(char *tofind)
 	return (NULL);
 }
 
-/*
-** here we check if it's a path or just a command
-** path -> [/]
-** command -> [no slash]
-*/
-
-void	execute_cmd(t_cmd *data, int prev_pipe)
-{
-	if (ft_strchr(data->find, '/') != NULL)
-		execve(data->find, data->args, g_line->envp);
-	else
-	{
-		data->path2exec = find_in_path(data->find);
-		execve(data->path2exec, data->args, g_line->envp);
-	}
-}
-
-void	redirect_to_pipe_one(t_cmd *data, int fd[2], int i, int prev_pipe)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		cleanup(EXIT);
-	if (pid == 0)
-	{
-		if (i == 1 && data->next == NULL)
-			execute_cmd(data, prev_pipe);
-		else if (i == 1)
-			dup2(fd[1], 1);
-		else if (i != 1)
-			dup2(prev_pipe, 0);
-		close(fd[1]);
-		close(prev_pipe);
-		execute_cmd(data, prev_pipe);
-	}
-	else
-		wait(NULL);
-}
-
-/*
-** This function redirects both input & output file descriptor
-** for the commands in the middle
-*/
-
-void	redirect_to_pipe_two(t_cmd *data, int fd[2], int prev_pipe)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		cleanup(EXIT);
-	if (pid == 0)
-	{
-		dup2(prev_pipe, 0);
-		dup2(fd[1], 1);
-		execute_cmd(data, prev_pipe);
-		close(fd[1]);
-		close(prev_pipe);
-	}
-	else
-		wait(NULL);
-}
-
-/*
-** Most Of This Code Is Just To Make Piping Works
-*/
-
-void	loop_in_data_two(t_cmd *data)
-{
-	int		fd[2];
-	int		prev_pipe;
-	int		bk[2];
-	int		i;
-
-	i = 1;
-	prev_pipe = STDIN_FILENO;
-	bk[0] = dup(0);
-	bk[1] = dup(1);
-	while (data)
-	{
-		if (pipe(fd) == -1)
-			cleanup(EXIT);
-		if (i != 1 && data->next != NULL)
-			redirect_to_pipe_two(data, fd, prev_pipe);
-		else
-			redirect_to_pipe_one(data, fd, i, prev_pipe);
-		close(fd[1]);
-		close(prev_pipe);
-		prev_pipe = fd[0];
-		i++;
-		data = data->next;
-	}
-	close(prev_pipe);
-	dup2(bk[0], 0);
-	dup2(bk[1], 1);
-	close(bk[0]);
-	close(bk[1]);
-}
 
 /*
 ** This function counts how many cmds
@@ -225,7 +127,7 @@ int		*count_cmds(t_cmd *data, int *i)
 		(*i)++;
 		data = data->next;
 	}
-	if (!(MALLOC(pipes_fd, (i * 2))))
+	if (!(MALLOC(pipes_fd, *i * 2)))
 		cleanup(EXIT);
 	return (pipes_fd);
 }
@@ -247,8 +149,8 @@ int		*open_pipes(t_cmd *data)
 	i = 0;
 	pipes_fd = count_cmds(data, &i);
 	j = 1;
-	pipes_fd[0] = 0;
-	pipes_fd[(i * 2) - 1] = 1;
+	pipes_fd[0] = dup(0);
+	pipes_fd[(i * 2) - 1] = dup(1);
 	while (--i)
 	{
 		if (pipe(pfd) == -1)
@@ -263,19 +165,36 @@ int		*open_pipes(t_cmd *data)
 	return (pipes_fd);
 }
 
-void	free_pfd(int *pfd, int sig)
-{
-	int		i;
+/*
+** here we check if it's a path or just a command
+** path -> [/]
+** command -> [no slash]
+** also it redirects pipes
+*/
 
-	i = 1;
-	while (pfd[i] != 1)
+void	execute_cmd(t_cmd *data, int *pfd, int j)
+{
+	dup2(pfd[j - 1], 0);
+	close(pfd[j - 1]);
+	dup2(pfd[j], 1);
+	close(pfd[j]);
+	if (ft_strchr(data->find, '/') != NULL)
 	{
-		close(pfd[i]);
-		i++;
+		execve(data->find, data->args, g_line->envp);
+		PRINTS("minishell: ");
+		PRINT(data->find);
+		strerror(errno);
 	}
-	free(pfd);
-	if (sig == 1)
-		cleanup(EXIT);
+	else
+	{
+		data->path2exec = find_in_path(data->find);
+		execve(data->path2exec, data->args, g_line->envp);
+		PRINTS("minishell: ");
+		PRINT(data->find);
+		PRINTS(": command not found");
+	}
+	PRINTS("\n");
+	cleanup(RETURN);
 }
 
 /*
@@ -287,26 +206,31 @@ void	free_pfd(int *pfd, int sig)
 void	open_pipes_and_execute(t_cmd *data)
 {
 	int		*pfd;
-	int		i;
-	int		bk[2];
+	int		j;
 	pid_t	pid;
 
-	i = 0;
+	j = 1;
 	pfd = open_pipes(data);	
-	bk[0] = dup(0);
-	bk[1] = dup(1);
 	while (data)
 	{
 		pid = fork();
 		if (pid == -1)
-			free_pfd(pfd, 1);
+		{
+			free(pfd);
+			cleanup(EXIT);
+		}
+		if (pid == 0)
+			execute_cmd(data, pfd, j);
+		else
+		{
+			wait(NULL);
+			close(pfd[j - 1]);
+			close(pfd[j]);
+		}
+		j += 2;
 		data = data->next;
 	}
-	free_pfd(pfd, 0);
-	dup2(bk[0], 0);
-	dup2(bk[1], 1);
-	close(bk[0]);
-	close(bk[1]);
+	free(pfd);
 }
 
 void	loop_in_data()
@@ -319,7 +243,6 @@ void	loop_in_data()
 	{
 		data = tmp->cmd_and_args;
 		open_pipes_and_execute(data);
-		//loop_in_data_two(data);
 		/*if (data->find)
 		   printf("cmd - [%s]\n", data->find);
 		if (tmp->path2exec)
