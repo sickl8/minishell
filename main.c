@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/23 11:37:33 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/11/27 19:47:46 by aamzouar         ###   ########.fr       */
 /*   Updated: 2020/11/16 18:15:28 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -31,7 +31,7 @@
 
 void	exec()
 {
-	loop_in_cmd();
+	loop_in_data();
 }
 
 // int		*get_g_bash_errno(const char *fn)
@@ -47,25 +47,27 @@ void	bash_error()
 	{
 		PRINTS("minishell: syntax error near unexpected token `");
 		PRINT(g_bash_error);
-		PRINTS("'\n");
+		PRINTS("'");
 	}
 	else if (g_bash_errno == E_MULTILINE)
 	{
-		PRINTS("minishell: multiline is not supported\n");
+		PRINTS("minishell: multiline is not supported");
 	}
 	else if (g_bash_errno == E_COMMAND)
 	{
 		PRINTS("minishell: ");
 		PRINT(g_bash_error);
-		PRINTS(": command not found\n");
+		PRINTS(": command not found");
 	}
 	else if (g_bash_errno == E_ERRNO)
 	{
 		PRINT(g_bash_command[g_bash_commandid]);
+		PRINTS(": ");
 		PRINT(g_bash_error);
 		PRINTS(": ");
 		PRINT(strerror(errno));
 	}
+	PRINTS("\n");
 }
 
 int		check_s_bashsyn(t_bm p)

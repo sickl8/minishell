@@ -165,6 +165,121 @@ int		*open_pipes(t_cmd *data)
 	return (pipes_fd);
 }
 
+// this is sickl_'s code please review it
+
+
+
+
+int		cd(t_cmd *data)
+{
+	return (0);
+}
+
+int		export(t_cmd *data)
+{
+	return (0);
+}
+
+int		env(void)
+{
+	int		i;
+
+	i = 0;
+	while (g_line->env_var[i].name)
+	{
+		PRINT(g_line->env_var[i].name);
+		PRINTS("=");
+		PRINT(g_line->env_var[i].value);
+		i++;
+	}
+	return (0);
+}
+
+int		echo(t_cmd *data)
+{
+	int		i;
+	int		pn;
+
+	pn = 1;
+	i = 1;
+	if (data->args[i] && !CMP(data->args[i], "-n"))
+	{
+		pn = 0;
+		i++;
+	}
+	while (data->args[i] && data->args[i + 1])
+	{
+		PRINT(data->args[i]);
+		i++;
+		PRINTS(" ");
+	}
+	if (data->args[i])
+		PRINT(data->args[i]);
+	if (pn)
+		PRINTS("\n");
+	return (0);
+}
+
+int		pwd(t_cmd *data)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (-1);
+	PRINT(cwd);
+	PRINTS("\n");
+	return (0);
+}
+
+int		unset(t_cmd *data)
+{
+	return (0);
+}
+
+int		builtin(t_cmd *data, int cmd)
+{
+	int		ret;
+
+	if (cmd == BC_CD)
+		ret = cd(data);
+	else if (cmd == BC_ECHO)
+		ret = echo(data);
+	else if (cmd == BC_ENV)
+		ret = env();
+	else if (cmd == BC_EXIT)
+	{
+		cleanup(RETURN);
+		exit(0);
+	}
+	else if (cmd == BC_EXPORT)
+		ret = export(data);
+	else if (cmd == BC_PWD)
+		ret = pwd(data);
+	else if (cmd == BC_UNSET)
+		ret = unset(data);
+	if (!ret)
+		exit(0);
+	return (ret);
+}
+
+int		is_builtin(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (g_bash_command[++i])
+	{
+		if (!CMP(str, g_bash_command[i]))
+			return (i);
+	}
+	return (0);
+}
+
+
+
+// end of the sickl_'s code
+
 /*
 ** here we check if it's a path or just a command
 ** path -> [/]
@@ -174,27 +289,37 @@ int		*open_pipes(t_cmd *data)
 
 void	execute_cmd(t_cmd *data, int *pfd, int j)
 {
+	int		cmd;
+
 	dup2(pfd[j - 1], 0);
 	close(pfd[j - 1]);
 	dup2(pfd[j], 1);
 	close(pfd[j]);
-	if (ft_strchr(data->find, '/') != NULL)
+	data->path2exec = data->find;
+	if ((cmd = is_builtin(data->find)))
 	{
-		execve(data->find, data->args, g_line->envp);
-		PRINTS("minishell: ");
-		PRINT(data->find);
-		strerror(errno);
+		builtin(data, cmd);
 	}
 	else
 	{
-		data->path2exec = find_in_path(data->find);
+		if (!ft_strchr(data->find, '/'))
+		{
+			data->path2exec = find_in_path(data->find);
+			if (!data->path2exec)
+			{
+				g_bash_errno = E_COMMAND;
+				ft_strncpy(g_bash_error, data->find, -1);
+				bash_error();
+				exit(g_bash_errno);
+			}
+		}
 		execve(data->path2exec, data->args, g_line->envp);
-		PRINTS("minishell: ");
-		PRINT(data->find);
-		PRINTS(": command not found");
+		g_bash_errno = E_ERRNO;
+		ft_strncpy(g_bash_error, data->path2exec, -1);
+		bash_error();
+		exit(errno == 8 ? 126 : g_bash_errno);
 	}
-	PRINTS("\n");
-	cleanup(RETURN);
+	exit(0);
 }
 
 /*
@@ -224,6 +349,16 @@ void	open_pipes_and_execute(t_cmd *data)
 		else
 		{
 			wait(NULL);
+			if (!CMP(data->find, "cd"))
+			{
+				if (chdir(data->args[1]) < 0)
+				{
+					g_bash_errno = E_ERRNO;
+					ft_strncpy(g_bash_error, data->args[1], -1);
+					g_bash_commandid = BC_CD; // BASH COMMAND CD
+					bash_error();
+				}
+			}
 			close(pfd[j - 1]);
 			close(pfd[j]);
 		}
