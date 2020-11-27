@@ -22,7 +22,7 @@
 
 void	free_path(char **paths)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (paths[i])
@@ -63,13 +63,13 @@ char	*fix_path(char **paths, int i)
 
 char	*find_in_path(char *tofind)
 {
-	t_evar		path;
-	char		**paths;
-	int		i;
-	DIR		*dir;
+	t_evar			path;
+	char			**paths;
+	int				i;
+	DIR				*dir;
 	struct dirent	*file;
-	struct stat	f_inf;
-	char		*tmp;
+	struct stat		f_inf;
+	char			*tmp;
 
 	i = 0;
 	path = find_env("PATH");
@@ -210,6 +210,79 @@ void	loop_in_data_two(t_cmd *data)
 	close(bk[1]);
 }
 
+/*
+** This function counts how many cmds
+** are exist and also allocates enough
+** memory to the holding array
+*/
+
+int		*count_cmds(t_cmd *data, int *i)
+{
+	int		*pipes_fd;
+
+	while (data)
+	{
+		(*i)++;
+		data = data->next;
+	}
+	if (!(MALLOC(pipes_fd, (i * 2))))
+		cleanup(EXIT);
+	return (pipes_fd);
+}
+
+/*
+** This function opens a certain amount of pipes
+** then initialize the holding array in reverse
+** pipes_fd[1] = pipe[1];
+** pipes_fd[2] = pipe[0];
+*/
+
+int		*open_pipes(t_cmd *data)
+{
+	int		*pipes_fd;
+	int		i;
+	int		j;
+	int		pfd[2];
+
+	i = 0;
+	pipes_fd = count_cmds(data, &i);
+	j = 1;
+	pipes_fd[0] = 0;
+	pipes_fd[(i * 2) - 1] = 1;
+	while (--i)
+	{
+		if (pipe(pfd) == -1)
+		{
+			free(pfd);
+			cleanup(EXIT);
+		}
+		pipes_fd[j] = pfd[1];
+		pipes_fd[j + 1] = pfd[0];
+		j += 2;
+	}
+	return (pipes_fd);
+}
+
+/*
+** Sesco: Here I simply open a certain amount
+** of pipes then start executing the line of
+** command/commands
+*/
+
+void	open_pipes_and_execute(t_cmd *data)
+{
+	int		*pfd;
+	int		i;
+	int		j;
+	int		bk[2];
+
+	pfd = open_pipes(data);	
+	while (data)
+	{
+		data = data->next;
+	}
+}
+
 void	loop_in_data()
 {
 	t_cmd	*data;
@@ -219,7 +292,8 @@ void	loop_in_data()
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
-		loop_in_data_two(data);
+		open_pipes_and_execute(data);
+		//loop_in_data_two(data);
 		/*if (data->find)
 		   printf("cmd - [%s]\n", data->find);
 		if (tmp->path2exec)
