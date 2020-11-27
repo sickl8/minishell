@@ -102,8 +102,8 @@ char	*find_in_path(char *tofind)
 					free(tmp);
 				}
 			}
+			closedir(dir);
 		}
-		closedir(dir);
 		i++;
 	}
 	free_path(paths);
