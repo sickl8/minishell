@@ -31,6 +31,7 @@ t_bm	next_word(t_bm rd);
 size_t	true_len(t_bm p);
 void	free_buf_and_mask(t_bm s);
 t_bm	previous_word(t_bm rd, t_bm ref);
-void	loop_in_data();
+void	loop_in_cmd();
+void	bash_error();
 
 #endif

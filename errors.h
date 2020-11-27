@@ -13,9 +13,11 @@
 #ifndef ERRORS_H
 # define ERRORS_H
 
-# define E_SYNTAX 1
-# define E_COMMAND 2
-# define E_ERRNO 3
-# define E_MULTILINE 4
+# define E_ERRNO 1
+# define E_SYNTAX 2
+# define E_MULTILINE 3
+# define E_CNTEXEC 126
+# define E_COMMAND 127
+# define E_SIG(x) 128 + x
 
 #endif
