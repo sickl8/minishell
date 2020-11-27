@@ -59,6 +59,7 @@ typedef struct	s_line
 	t_bm	***redir;
 	long	rd_ret;
 	size_t	rd_len;
+	int		*fd;
 }				t_line;
 
 typedef struct	s_bw

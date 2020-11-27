@@ -31,7 +31,7 @@
 
 void	exec()
 {
-	loop_in_data();
+	loop_in_cmd();
 }
 
 // int		*get_g_bash_errno(const char *fn)
@@ -53,7 +53,7 @@ void	bash_error()
 	{
 		PRINTS("minishell: multiline is not supported\n");
 	}
-	else if (g_bash_errno == E_ERRNO)
+	else if (g_bash_errno == E_COMMAND)
 	{
 		PRINTS("minishell: ");
 		PRINT(g_bash_error);
@@ -1254,6 +1254,7 @@ void	init_line()
 	g_line->pipe = NULL;
 	g_line->redir = NULL;
 	g_line->envp = NULL;
+	g_line->fd = NULL;
 }
 
 void	init_globals(t_line *ref)
@@ -1268,15 +1269,17 @@ void	init_globals(t_line *ref)
 
 void	init(t_line *ref, char **envp)
 {
-	g_bash_command = (char*[]){	"minishell",
-								"echo",
-								"cd",
-								"pwd",
-								"export",
-								"unset",
-								"env",
-								"exit",
-								NULL };
+	MALLOC(g_bash_command, 9);
+	g_bash_command[0] = ft_strdup("minishell");
+	g_bash_command[1] = ft_strdup("echo");
+	g_bash_command[2] = ft_strdup("cd");
+	g_bash_command[3] = ft_strdup("pwd");
+	g_bash_command[4] = ft_strdup("export");
+	g_bash_command[5] = ft_strdup("unset");
+	g_bash_command[6] = ft_strdup("env");
+	g_bash_command[7] = ft_strdup("exit");
+	g_bash_command[8] = NULL;
+	
 	init_globals(ref);
 	init_line();
 	init_buf();
