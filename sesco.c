@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 12:29:19 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/11/28 14:10:10 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/11/28 17:17:16 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ int		bc_echo(t_cmd *data)
 	if (data->args[i])
 		PRINT(data->args[i]);
 	if (pn)
-		PRINTS("\n");
+		PRINT("\n");
 	return (0);
 }
 
