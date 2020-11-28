@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 12:29:19 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/11/28 12:29:20 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/11/28 14:10:10 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <sys/errno.h>
 #include <signal.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
@@ -292,6 +293,52 @@ int		is_builtin(char *str)
 
 // end of the sickl_'s code
 
+void	make_a_redirection(t_rdr *redir)
+{
+	int		i;
+	int		fd[2];
+	int		index[2];
+	mode_t	mode;
+
+	i = 0;
+	index[0] = -1;
+	index[1] = -1;
+	fd[0] = -1;
+	fd[1] = -1;
+	mode = S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	while (redir[i].file_name)
+	{
+		if (redir[i].type == 0 || redir[i].type == 1)
+		{
+			index[1] = i;
+			if (fd[1] != -1)
+				close(fd[1]);
+			if (redir[index[1]].type == 0)
+				fd[1] = open(redir[index[1]].file_name, O_WRONLY | O_CREAT | O_APPEND, mode);
+			else if (redir[index[1]].type == 1)
+				fd[1] = open(redir[index[1]].file_name, O_WRONLY | O_CREAT | O_TRUNC, mode);
+		}
+		else if (redir[i].type == 2)
+		{
+			index[0] = i;
+			if (fd[0] != -1)
+				close(fd[0]);
+			fd[0] = open(redir[index[0]].file_name, O_RDONLY);
+		}
+		i++;
+	}
+	if (fd[0] > -1)
+	{
+		dup2(fd[0], 0);
+		close(fd[0]);
+	}
+	if (fd[1] > -1)
+	{
+		dup2(fd[1], 1);
+		close(fd[1]);
+	}
+}
+
 /*
 ** here we check if it's a path or just a command
 ** path -> [/]
@@ -310,6 +357,7 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 	close(pfd[j - 1]);
 	dup2(pfd[j], 1);
 	close(pfd[j]);
+	make_a_redirection(data->redir);
 	data->path2exec = data->find;
 	if ((cmd = is_builtin(data->find)))
 	{
