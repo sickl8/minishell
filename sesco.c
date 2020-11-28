@@ -75,7 +75,7 @@ char	*find_in_path(char *tofind)
 	i = 0;
 	path = find_env("PATH");
 	paths = ft_split(path.value, ':');
-	while(paths[i])
+	while(paths && paths[i])
 	{
 		dir = opendir(paths[i]);
 		if (dir)
@@ -155,7 +155,7 @@ int		*open_pipes(t_cmd *data)
 	{
 		if (pipe(pfd) == -1)
 		{
-			free(pfd);
+			free(pipes_fd);
 			cleanup(EXIT);
 		}
 		pipes_fd[j] = pfd[1];
@@ -170,17 +170,17 @@ int		*open_pipes(t_cmd *data)
 
 
 
-int		cd(t_cmd *data)
+int		bc_cd(t_cmd *data)
 {
 	return (0);
 }
 
-int		export(t_cmd *data)
+int		bc_export(t_cmd *data)
 {
 	return (0);
 }
 
-int		env(void)
+int		bc_env(void)
 {
 	int		i;
 
@@ -195,7 +195,7 @@ int		env(void)
 	return (0);
 }
 
-int		echo(t_cmd *data)
+int		bc_echo(t_cmd *data)
 {
 	int		i;
 	int		pn;
@@ -220,7 +220,7 @@ int		echo(t_cmd *data)
 	return (0);
 }
 
-int		pwd(t_cmd *data)
+int		bc_pwd(t_cmd *data)
 {
 	char	*cwd;
 
@@ -232,7 +232,7 @@ int		pwd(t_cmd *data)
 	return (0);
 }
 
-int		unset(t_cmd *data)
+int		bc_unset(t_cmd *data)
 {
 	return (0);
 }
@@ -242,22 +242,22 @@ int		builtin(t_cmd *data, int cmd)
 	int		ret;
 
 	if (cmd == BC_CD)
-		ret = cd(data);
+		ret = bc_cd(data);
 	else if (cmd == BC_ECHO)
-		ret = echo(data);
+		ret = bc_echo(data);
 	else if (cmd == BC_ENV)
-		ret = env();
+		ret = bc_env();
 	else if (cmd == BC_EXIT)
 	{
 		cleanup(RETURN);
 		exit(0);
 	}
 	else if (cmd == BC_EXPORT)
-		ret = export(data);
+		ret = bc_export(data);
 	else if (cmd == BC_PWD)
-		ret = pwd(data);
+		ret = bc_pwd(data);
 	else if (cmd == BC_UNSET)
-		ret = unset(data);
+		ret = bc_unset(data);
 	if (!ret)
 		exit(0);
 	return (ret);
