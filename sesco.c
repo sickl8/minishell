@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sesco.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/28 12:29:19 by aamzouar          #+#    #+#             */
+/*   Updated: 2020/11/28 12:29:20 by aamzouar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -290,7 +302,10 @@ int		is_builtin(char *str)
 void	execute_cmd(t_cmd *data, int *pfd, int j)
 {
 	int		cmd;
+	int		bk[2];
 
+	bk[0] = dup(0);
+	bk[1] = dup(1);
 	dup2(pfd[j - 1], 0);
 	close(pfd[j - 1]);
 	dup2(pfd[j], 1);
@@ -307,6 +322,10 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 			data->path2exec = find_in_path(data->find);
 			if (!data->path2exec)
 			{
+				dup2(bk[0], 0);
+				close(bk[0]);
+				dup2(bk[1], 1);
+				close(bk[1]);
 				g_bash_errno = E_COMMAND;
 				ft_strncpy(g_bash_error, data->find, -1);
 				bash_error();
@@ -314,6 +333,10 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 			}
 		}
 		execve(data->path2exec, data->args, g_line->envp);
+		dup2(bk[0], 0);
+		close(bk[0]);
+		dup2(bk[1], 1);
+		close(bk[1]);
 		g_bash_errno = E_ERRNO;
 		ft_strncpy(g_bash_error, data->path2exec, -1);
 		bash_error();
