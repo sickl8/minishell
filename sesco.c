@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 12:29:19 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/11/28 17:17:16 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/11/29 19:19:54 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,8 +289,6 @@ int		is_builtin(char *str)
 	return (0);
 }
 
-
-
 // end of the sickl_'s code
 
 void	make_a_redirection(t_rdr *redir)
@@ -409,29 +407,32 @@ void	open_pipes_and_execute(t_cmd *data)
 	pfd = open_pipes(data);	
 	while (data)
 	{
-		pid = fork();
-		if (pid == -1)
+		if (data->find)
 		{
-			free(pfd);
-			cleanup(EXIT);
-		}
-		if (pid == 0)
-			execute_cmd(data, pfd, j);
-		else
-		{
-			wait(NULL);
-			if (!CMP(data->find, "cd"))
+			pid = fork();
+			if (pid == -1)
 			{
-				if (chdir(data->args[1]) < 0)
-				{
-					g_bash_errno = E_ERRNO;
-					ft_strncpy(g_bash_error, data->args[1], -1);
-					g_bash_commandid = BC_CD; // BASH COMMAND CD
-					bash_error();
-				}
+				free(pfd);
+				cleanup(EXIT);
 			}
-			close(pfd[j - 1]);
-			close(pfd[j]);
+			if (pid == 0)
+				execute_cmd(data, pfd, j);
+			else
+			{
+				wait(NULL);
+				if (!CMP(data->find, "cd"))
+				{
+					if (chdir(data->args[1]) < 0)
+					{
+						g_bash_errno = E_ERRNO;
+						ft_strncpy(g_bash_error, data->args[1], -1);
+						g_bash_commandid = BC_CD; // BASH COMMAND CD
+						bash_error();
+					}
+				}
+				close(pfd[j - 1]);
+				close(pfd[j]);
+			}
 		}
 		j += 2;
 		data = data->next;

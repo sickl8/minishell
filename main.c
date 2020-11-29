@@ -6,10 +6,10 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/27 19:47:46 by aamzouar         ###   ########.fr       */
-/*   Updated: 2020/11/16 18:15:28 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/11/29 19:17:38 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <unistd.h>
 #include <sys/wait.h>
@@ -150,8 +150,8 @@ int		check_multiline()
 		while (*(++p))
 			if (*p != WHTSPC)
 				break ;
-	if (count_quote('\'') % 2 || count_quote('"') % 2 ||
-	(g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
+	if (count_quote('\'') % 2 || count_quote('"') % 2 || (g_line->rd_len > 0 &&
+	g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
 	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
 		return (1 + 0 * (g_bash_errno = E_MULTILINE));
 	return (0);
