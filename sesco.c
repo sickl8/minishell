@@ -203,6 +203,7 @@ int		bc_env(void)
 		PRINT(g_line->env_var[i].name);
 		PRINTS("=");
 		PRINT(g_line->env_var[i].value);
+		PRINTS("\n");
 		i++;
 	}
 	return (0);
