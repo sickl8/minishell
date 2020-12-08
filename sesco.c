@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 12:29:19 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/11/29 19:19:54 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/08 13:06:29 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,10 +251,18 @@ int		bc_unset(t_cmd *data)
 	return (0);
 }
 
+void	bc_program_return(void)
+{
+	PRINT("minishell: ");
+	ft_putnbr_fd(g_program_return, 1);
+	PRINT(": command not found\n");
+	exit(127);
+}
+
 int		builtin(t_cmd *data, int cmd)
 {
 	int		ret;
-
+	
 	if (cmd == BC_CD)
 		ret = bc_cd(data);
 	else if (cmd == BC_ECHO)
@@ -272,6 +280,8 @@ int		builtin(t_cmd *data, int cmd)
 		ret = bc_pwd(data);
 	else if (cmd == BC_UNSET)
 		ret = bc_unset(data);
+	else if (cmd == 1337)
+		bc_program_return();
 	if (!ret)
 		exit(0);
 	return (ret);
@@ -282,6 +292,8 @@ int		is_builtin(char *str)
 	int		i;
 
 	i = 0;
+	if (!CMP(str, "?"))
+		return (1337);
 	while (g_bash_command[++i])
 	{
 		if (!CMP(str, g_bash_command[i]))
@@ -393,6 +405,23 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 }
 
 /*
+** This function gives g_program_return exit status
+** of the last executed program so we can use it
+** with $?
+*/
+
+void	put_exit_status(void)
+{
+	int		status;
+
+	wait(&status);
+	if (WIFEXITED(status))
+		g_program_return = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_program_return = WTERMSIG(status);
+}
+
+/*
 ** Sesco: Here I simply open a certain amount
 ** of pipes then start executing the line of
 ** command/commands
@@ -420,11 +449,12 @@ void	open_pipes_and_execute(t_cmd *data)
 				execute_cmd(data, pfd, j);
 			else
 			{
-				wait(NULL);
+				put_exit_status();
 				if (!CMP(data->find, "cd"))
 				{
 					if (chdir(data->args[1]) < 0)
 					{
+						g_program_return = 1;
 						g_bash_errno = E_ERRNO;
 						ft_strncpy(g_bash_error, data->args[1], -1);
 						g_bash_commandid = BC_CD; // BASH COMMAND CD
