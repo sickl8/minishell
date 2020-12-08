@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 13:30:07 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/08 13:30:09 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/08 19:33:16 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,8 +188,62 @@ int		bc_cd(t_cmd *data)
 	return (0);
 }
 
+void	ft_strcpy(char *dst, char *src)
+{
+	int		i;
+
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+}
+
 int		bc_export(t_cmd *data)
 {
+	int		i;
+	int		len;
+	t_evar	*tmp;
+	char	**var_val;
+
+	len = 0;
+	while (g_line->env_var[len].name != NULL)
+		len++;
+	len += 2;
+	if (!(MALLOC(tmp, len)))
+		cleanup(EXIT);
+	i = 0;
+	while (i < (len - 2))
+	{
+		if (!(MALLOC(tmp[i].name, (ft_strlen(g_line->env_var[i].name) + 1))))
+			cleanup(EXIT);
+		ft_strcpy(tmp[i].name, g_line->env_var[i].name);
+		if (!(MALLOC(tmp[i].value, (ft_strlen(g_line->env_var[i].value) + 1))))
+			cleanup(EXIT);
+		ft_strcpy(tmp[i].value, g_line->env_var[i].value);
+		tmp[i].name_len = g_line->env_var[i].name_len;
+		tmp[i].value_len = g_line->env_var[i].value_len;
+		i++;
+	}
+	var_val = ft_split(data->args[1], '=');
+	if (!(MALLOC(tmp[i].name, (ft_strlen(var_val[0]) + 1))))
+		cleanup(EXIT);
+	ft_strcpy(tmp[i].name, var_val[0]);
+	if (!(MALLOC(tmp[i].value, (ft_strlen(var_val[1]) + 1))))
+		cleanup(EXIT);
+	ft_strcpy(tmp[i].value, var_val[1]);
+	tmp[i].name_len = ft_strlen(var_val[0]);
+	tmp[i].value_len = ft_strlen(var_val[1]);
+	i++;
+	tmp[i].name = NULL;
+	tmp[i].value = NULL;
+	tmp[i].name_len = -1;
+	tmp[i].value_len = -1;
+	free_path(var_val);
+	free(g_line->env_var);
+	g_line->env_var = tmp;
 	return (0);
 }
 
@@ -248,6 +302,40 @@ int		bc_pwd(t_cmd *data)
 
 int		bc_unset(t_cmd *data)
 {
+	int		i;
+	int		j;
+	int		len;
+	t_evar	*tmp;
+	
+	len = 0;
+	while (g_line->env_var[len].name != NULL)
+		len++;
+	if (!(MALLOC(tmp, len)))
+		cleanup(EXIT);
+	i = 0;
+	j = 0;
+	while (i < len)
+	{
+		if (CMP(g_line->env_var[i].name, data->args[1]))
+		{
+			if (!(MALLOC(tmp[j].name, (ft_strlen(g_line->env_var[i].name) + 1))))
+				cleanup(EXIT);
+			ft_strcpy(tmp[j].name, g_line->env_var[i].name);
+			if (!(MALLOC(tmp[j].value, (ft_strlen(g_line->env_var[i].value) + 1))))
+				cleanup(EXIT);
+			ft_strcpy(tmp[j].value, g_line->env_var[i].value);
+			tmp[j].name_len = g_line->env_var[i].name_len;
+			tmp[j].value_len = g_line->env_var[i].value_len;
+			j++;
+		}
+		i++;
+	}
+	tmp[j].name = NULL;
+	tmp[j].value = NULL;
+	tmp[j].name_len = -1;
+	tmp[j].value_len = -1;
+	free(g_line->env_var);
+	g_line->env_var = tmp;
 	return (0);
 }
 
@@ -275,11 +363,11 @@ int		builtin(t_cmd *data, int cmd)
 		exit(0);
 	}
 	else if (cmd == BC_EXPORT)
-		ret = bc_export(data);
+		ret = 0;
 	else if (cmd == BC_PWD)
 		ret = bc_pwd(data);
 	else if (cmd == BC_UNSET)
-		ret = bc_unset(data);
+		ret = 0;
 	else if (cmd == 1337)
 		bc_program_return();
 	if (!ret)
@@ -450,17 +538,18 @@ void	open_pipes_and_execute(t_cmd *data)
 			else
 			{
 				put_exit_status();
-				if (!CMP(data->find, "cd"))
+				if (!CMP(data->find, "cd") && chdir(data->args[1]) < 0)
 				{
-					if (chdir(data->args[1]) < 0)
-					{
-						g_program_return = 1;
-						g_bash_errno = E_ERRNO;
-						ft_strncpy(g_bash_error, data->args[1], -1);
-						g_bash_commandid = BC_CD; // BASH COMMAND CD
-						bash_error();
-					}
+					g_program_return = 1;
+					g_bash_errno = E_ERRNO;
+					ft_strncpy(g_bash_error, data->args[1], -1);
+					g_bash_commandid = BC_CD; // BASH COMMAND CD
+					bash_error();
 				}
+				else if (!CMP(data->find, "export"))
+					bc_export(data);
+				else if (!CMP(data->find, "unset"))
+					bc_unset(data);
 				close(pfd[j - 1]);
 				close(pfd[j]);
 			}
