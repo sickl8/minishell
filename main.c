@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/29 19:17:38 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/08 20:20:07 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -538,8 +538,23 @@ void	continue_rplc_env_var()
 t_evar	find_env(char *s)
 {
 	size_t	j;
+	t_evar	ret;
+	char	*tmp;
 
 	j = 0;
+	if (!CMP(s, "?"))
+	{
+		ret.name = s;
+		ret.name_len = 1;
+		if (!(tmp = ft_itoa(g_program_return)))
+			cleanup(EXIT);
+		ft_memset(g_s_program_return, 0, 100);
+		ft_strncpy(g_s_program_return, tmp, -1);
+		free(tmp);
+		ret.value = g_s_program_return;
+		ret.value_len = ft_strlen(ret.value);
+		return (ret);
+	}
 	while (g_line->env_var[j].name)
 	{
 		if (!ft_strcmp(g_line->env_var[j].name, s))
@@ -620,7 +635,12 @@ void	env_var(size_t *ref)
 
 	i = *ref;
 	g_line->rd.msk[i] = '$';
-	if (g_line->rd.buf[++i] && env_var_comp(g_line->rd.buf[i]) &&
+	if (g_line->rd.buf[i + 1] && g_line->rd.buf[i + 1] == '?')
+	{
+		g_line->rd.msk[i + 1] = ENVVAR;
+		i += 2;
+	}
+	else if (g_line->rd.buf[++i] && env_var_comp(g_line->rd.buf[i]) &&
 	!(g_line->rd.buf[i] >= '0' && g_line->rd.buf[i] <= '9'))
 	{
 		*ref = i;
@@ -995,6 +1015,7 @@ int		format_string()
 		*tmp = '\0' * g_line->rd_ret--;
 	g_line->rd_len = ft_strlen(g_line->rd.buf);
 	set_mask();
+	// PV(g_line->rd.msk, "%s\n");
 	if (g_bash_errno)
 		return (g_bash_errno);
 	rplc_env_var();
@@ -1136,8 +1157,10 @@ void	init_read()
 	t_evar	home;
 	t_evar	pwd;
 	t_evar	user;
+	t_evar return_status;
 
 	home = find_env("HOME");
+	return_status = find_env("?");
 	pwd.name = "PWD";
 	pwd.value = getcwd(NULL, 0);
 	user = find_env("USER");
