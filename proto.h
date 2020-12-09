@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/27 19:00:05 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/09 17:17:45 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,18 @@ void	free_buf_and_mask(t_bm s);
 t_bm	previous_word(t_bm rd, t_bm ref);
 void	loop_in_data();
 void	bash_error();
+void	free_path(char **paths);
+int		*count_cmds(t_cmd *data, int *i);
+void	execute_cmd(t_cmd *data, int *pfd, int j);
+void	make_a_redirection(t_rdr *redir);
+char	*fix_path(char **paths, int i);
+void	ft_strcpy(char *dst, char *src);
+int		bc_pwd(t_cmd *data);
+int		bc_echo(t_cmd *data);
+int		bc_env(void);
+int		bc_export(t_cmd *data);
+int		is_builtin(char *str);
+int		builtin(t_cmd *data, int cmd);
+int		bc_unset(t_cmd *data);
 
 #endif
