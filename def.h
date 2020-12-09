@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/21 18:00:41 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/09 12:32:16 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@
 # define IPP (*ref)++
 # define PPI ++(*ref)
 # define PV(x, y) printf(#x " = " y, x)
+# define APPND O_WRONLY | O_CREAT | O_APPEND, mode
+# define TRNCT O_WRONLY | O_CREAT | O_TRUNC, mode
 
 // #define g_bash_errno *get_g_bash_errno(__func__)
 

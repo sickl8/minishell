@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 13:30:07 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/08 19:33:16 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/09 14:40:23 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,53 +75,66 @@ char	*fix_path(char **paths, int i)
 ** also we check if the command is executable
 */
 
+char	*the_right_path(char **paths, int i, struct dirent *file, DIR *dir)
+{
+	struct stat	f_inf;
+	char		*tmp;
+
+	if (!(tmp = ft_strjoin(paths[i], file->d_name)))
+	{
+		free_path(paths);
+		cleanup(EXIT);
+	}
+	if (stat(tmp,&f_inf) != -1)
+	{
+		if (f_inf.st_mode & S_IXUSR)
+			return (tmp);
+	}
+	free(tmp);
+	return (NULL);
+}
+
+char	*find_in_single_path(char *tofind, char **paths, int i)
+{
+	DIR				*dir;
+	struct dirent	*file;
+	char			*ret;
+
+	ret = NULL;
+	dir = opendir(paths[i]);
+	if (dir)
+	{
+		while ((file = readdir(dir)) && ret == NULL)
+		{
+			if (!CMP(tofind, file->d_name))
+			{
+				paths[i] = fix_path(paths, i);
+				ret = the_right_path(paths, i, file, dir);
+			}
+		}
+		closedir(dir);
+	}
+	return (ret);
+}
+
 char	*find_in_path(char *tofind)
 {
 	t_evar			path;
 	char			**paths;
 	int				i;
-	DIR				*dir;
-	struct dirent	*file;
-	struct stat		f_inf;
-	char			*tmp;
+	char			*ret;
 
 	i = 0;
 	path = find_env("PATH");
 	paths = ft_split(path.value, ':');
-	while(paths && paths[i])
+	ret = NULL;
+	while(paths && paths[i] && ret == NULL)
 	{
-		dir = opendir(paths[i]);
-		if (dir)
-		{
-			while ((file = readdir(dir)))
-			{
-				if (!CMP(tofind, file->d_name))
-				{
-					paths[i] = fix_path(paths, i);
-					if (!(tmp = ft_strjoin(paths[i], file->d_name)))
-					{
-						free_path(paths);
-						cleanup(EXIT);
-					}
-					if (stat(tmp,&f_inf) != -1)
-					{
-						if (f_inf.st_mode & S_IXUSR)
-						{
-							free_path(paths);
-							closedir(dir);
-							return (tmp);
-						}
-					
-					}
-					free(tmp);
-				}
-			}
-			closedir(dir);
-		}
+		ret = find_in_single_path(tofind, paths, i);
 		i++;
 	}
 	free_path(paths);
-	return (NULL);
+	return (ret);
 }
 
 
@@ -201,19 +214,10 @@ void	ft_strcpy(char *dst, char *src)
 	dst[i] = '\0';
 }
 
-int		bc_export(t_cmd *data)
+int		bc_export_continue(t_cmd *data, int len, t_evar *tmp, char **var_val)
 {
 	int		i;
-	int		len;
-	t_evar	*tmp;
-	char	**var_val;
 
-	len = 0;
-	while (g_line->env_var[len].name != NULL)
-		len++;
-	len += 2;
-	if (!(MALLOC(tmp, len)))
-		cleanup(EXIT);
 	i = 0;
 	while (i < (len - 2))
 	{
@@ -227,7 +231,6 @@ int		bc_export(t_cmd *data)
 		tmp[i].value_len = g_line->env_var[i].value_len;
 		i++;
 	}
-	var_val = ft_split(data->args[1], '=');
 	if (!(MALLOC(tmp[i].name, (ft_strlen(var_val[0]) + 1))))
 		cleanup(EXIT);
 	ft_strcpy(tmp[i].name, var_val[0]);
@@ -236,7 +239,24 @@ int		bc_export(t_cmd *data)
 	ft_strcpy(tmp[i].value, var_val[1]);
 	tmp[i].name_len = ft_strlen(var_val[0]);
 	tmp[i].value_len = ft_strlen(var_val[1]);
-	i++;
+	return (++i);
+}
+
+int		bc_export(t_cmd *data)
+{
+	int		i;
+	int		len;
+	t_evar	*tmp;
+	char	**var_val;
+
+	len = 0;
+	while (g_line->env_var[len].name != NULL)
+		len++;
+	len += 2;
+	if (!(MALLOC(tmp, len)))
+		cleanup(EXIT);
+	var_val = ft_split(data->args[1], '=');
+	i = bc_export_continue(data, len, tmp, var_val);
 	tmp[i].name = NULL;
 	tmp[i].value = NULL;
 	tmp[i].name_len = -1;
@@ -300,28 +320,23 @@ int		bc_pwd(t_cmd *data)
 	return (0);
 }
 
-int		bc_unset(t_cmd *data)
+int		bc_unset_continue(t_cmd *data, t_evar *tmp, int len)
 {
 	int		i;
 	int		j;
-	int		len;
-	t_evar	*tmp;
-	
-	len = 0;
-	while (g_line->env_var[len].name != NULL)
-		len++;
-	if (!(MALLOC(tmp, len)))
-		cleanup(EXIT);
-	i = 0;
+
 	j = 0;
+	i = 0;
 	while (i < len)
 	{
 		if (CMP(g_line->env_var[i].name, data->args[1]))
 		{
-			if (!(MALLOC(tmp[j].name, (ft_strlen(g_line->env_var[i].name) + 1))))
+			if (!(MALLOC(tmp[j].name,
+							(ft_strlen(g_line->env_var[i].name) + 1))))
 				cleanup(EXIT);
 			ft_strcpy(tmp[j].name, g_line->env_var[i].name);
-			if (!(MALLOC(tmp[j].value, (ft_strlen(g_line->env_var[i].value) + 1))))
+			if (!(MALLOC(tmp[j].value,
+							(ft_strlen(g_line->env_var[i].value) + 1))))
 				cleanup(EXIT);
 			ft_strcpy(tmp[j].value, g_line->env_var[i].value);
 			tmp[j].name_len = g_line->env_var[i].name_len;
@@ -330,6 +345,21 @@ int		bc_unset(t_cmd *data)
 		}
 		i++;
 	}
+	return (j);
+}
+
+int		bc_unset(t_cmd *data)
+{
+	int		len;
+	t_evar	*tmp;
+	int		j;
+
+	len = 0;
+	while (g_line->env_var[len].name != NULL)
+		len++;
+	if (!(MALLOC(tmp, len)))
+		cleanup(EXIT);
+	j = bc_unset_continue(data, tmp, len);
 	tmp[j].name = NULL;
 	tmp[j].value = NULL;
 	tmp[j].name_len = -1;
@@ -358,10 +388,7 @@ int		builtin(t_cmd *data, int cmd)
 	else if (cmd == BC_ENV)
 		ret = bc_env();
 	else if (cmd == BC_EXIT)
-	{
-		cleanup(RETURN);
-		exit(0);
-	}
+		ret = 0;
 	else if (cmd == BC_EXPORT)
 		ret = 0;
 	else if (cmd == BC_PWD)
@@ -392,19 +419,11 @@ int		is_builtin(char *str)
 
 // end of the sickl_'s code
 
-void	make_a_redirection(t_rdr *redir)
+void	open_redir_files(t_rdr *redir, mode_t mode, int index[2], int fd[2])
 {
 	int		i;
-	int		fd[2];
-	int		index[2];
-	mode_t	mode;
-
+	
 	i = 0;
-	index[0] = -1;
-	index[1] = -1;
-	fd[0] = -1;
-	fd[1] = -1;
-	mode = S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 	while (redir[i].file_name)
 	{
 		if (redir[i].type == 0 || redir[i].type == 1)
@@ -413,9 +432,9 @@ void	make_a_redirection(t_rdr *redir)
 			if (fd[1] != -1)
 				close(fd[1]);
 			if (redir[index[1]].type == 0)
-				fd[1] = open(redir[index[1]].file_name, O_WRONLY | O_CREAT | O_APPEND, mode);
+				fd[1] = open(redir[index[1]].file_name, APPND);
 			else if (redir[index[1]].type == 1)
-				fd[1] = open(redir[index[1]].file_name, O_WRONLY | O_CREAT | O_TRUNC, mode);
+				fd[1] = open(redir[index[1]].file_name, TRNCT);
 		}
 		else if (redir[i].type == 2)
 		{
@@ -426,6 +445,20 @@ void	make_a_redirection(t_rdr *redir)
 		}
 		i++;
 	}
+}
+
+void	make_a_redirection(t_rdr *redir)
+{
+	int		fd[2];
+	int		index[2];
+	mode_t	mode;
+
+	index[0] = -1;
+	index[1] = -1;
+	fd[0] = -1;
+	fd[1] = -1;
+	mode = S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	open_redir_files(redir, mode, index, fd);
 	if (fd[0] > -1)
 	{
 		dup2(fd[0], 0);
@@ -445,6 +478,34 @@ void	make_a_redirection(t_rdr *redir)
 ** also it redirects pipes
 */
 
+void	execute_cmd_continue(t_cmd *data, int bk[2])
+{
+	if (!ft_strchr(data->find, '/'))
+	{
+		data->path2exec = find_in_path(data->find);
+		if (!data->path2exec)
+		{
+			dup2(bk[0], 0);
+			close(bk[0]);
+			dup2(bk[1], 1);
+			close(bk[1]);
+			g_bash_errno = E_COMMAND;
+			ft_strncpy(g_bash_error, data->find, -1);
+			bash_error();
+			exit(g_bash_errno);
+		}
+	}
+	execve(data->path2exec, data->args, g_line->envp);
+	dup2(bk[0], 0);
+	close(bk[0]);
+	dup2(bk[1], 1);
+	close(bk[1]);
+	g_bash_errno = E_ERRNO;
+	ft_strncpy(g_bash_error, data->path2exec, -1);
+	bash_error();
+	exit(errno == 8 ? 126 : g_bash_errno);
+}
+
 void	execute_cmd(t_cmd *data, int *pfd, int j)
 {
 	int		cmd;
@@ -463,37 +524,12 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 		builtin(data, cmd);
 	}
 	else
-	{
-		if (!ft_strchr(data->find, '/'))
-		{
-			data->path2exec = find_in_path(data->find);
-			if (!data->path2exec)
-			{
-				dup2(bk[0], 0);
-				close(bk[0]);
-				dup2(bk[1], 1);
-				close(bk[1]);
-				g_bash_errno = E_COMMAND;
-				ft_strncpy(g_bash_error, data->find, -1);
-				bash_error();
-				exit(g_bash_errno);
-			}
-		}
-		execve(data->path2exec, data->args, g_line->envp);
-		dup2(bk[0], 0);
-		close(bk[0]);
-		dup2(bk[1], 1);
-		close(bk[1]);
-		g_bash_errno = E_ERRNO;
-		ft_strncpy(g_bash_error, data->path2exec, -1);
-		bash_error();
-		exit(errno == 8 ? 126 : g_bash_errno);
-	}
+		execute_cmd_continue(data, bk);
 	exit(0);
 }
 
 /*
-** This function gives g_program_return exit status
+** This function gives g_program_return an exit status
 ** of the last executed program so we can use it
 ** with $?
 */
@@ -514,6 +550,30 @@ void	put_exit_status(void)
 ** of pipes then start executing the line of
 ** command/commands
 */
+
+void	parent_stuff(t_cmd  *data, int *pfd, int j)
+{
+	put_exit_status();
+	if (!CMP(data->find, "cd") && chdir(data->args[1]) < 0)
+	{
+		g_program_return = 1;
+		g_bash_errno = E_ERRNO;
+		ft_strncpy(g_bash_error, data->args[1], -1);
+		g_bash_commandid = BC_CD; // BASH COMMAND CD
+		bash_error();
+	}
+	else if (!CMP(data->find, "export"))
+		bc_export(data);
+	else if (!CMP(data->find, "unset"))
+		bc_unset(data);
+	else if (!CMP(data->find, "exit"))
+	{
+		cleanup(RETURN);
+		exit(0);
+	}
+	close(pfd[j - 1]);
+	close(pfd[j]);
+}
 
 void	open_pipes_and_execute(t_cmd *data)
 {
@@ -536,23 +596,7 @@ void	open_pipes_and_execute(t_cmd *data)
 			if (pid == 0)
 				execute_cmd(data, pfd, j);
 			else
-			{
-				put_exit_status();
-				if (!CMP(data->find, "cd") && chdir(data->args[1]) < 0)
-				{
-					g_program_return = 1;
-					g_bash_errno = E_ERRNO;
-					ft_strncpy(g_bash_error, data->args[1], -1);
-					g_bash_commandid = BC_CD; // BASH COMMAND CD
-					bash_error();
-				}
-				else if (!CMP(data->find, "export"))
-					bc_export(data);
-				else if (!CMP(data->find, "unset"))
-					bc_unset(data);
-				close(pfd[j - 1]);
-				close(pfd[j]);
-			}
+				parent_stuff(data, pfd, j);
 		}
 		j += 2;
 		data = data->next;
