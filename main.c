@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/08 20:20:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/11 17:45:12 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1083,8 +1083,11 @@ int		format_string()
 
 void	reset_prompt(void)
 {
-	PRINTS("\b\b  \n");
-	init_read(*g_line);
+	if (g_sig == 0)
+		PRINTS("\b\b  ");
+	PRINTS("\n");
+	if (g_sig == 0)
+		init_read();
 }
 
 void	exit_the_shell(void)
@@ -1287,6 +1290,7 @@ void	init_globals(t_line *ref)
 	g_line = ref;
 	g_bw.buf = NULL;
 	g_bw.buf_i = NULL;
+	g_sig = 0;
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
 	g_bash_error = NULL;

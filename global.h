@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/08 20:06:30 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/11 17:10:50 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,7 @@ int		g_bash_commandid;
 t_fnl	*g_list_of_commands;
 int		g_program_return;
 char	g_s_program_return[100];
+int		g_sig;
+pid_t	g_pid;
 
 #endif

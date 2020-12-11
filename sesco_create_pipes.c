@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/09 17:23:44 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/11 18:12:19 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,13 @@ void	put_exit_status(void)
 {
 	int		status;
 
+	g_sig = 1;
 	wait(&status);
+	g_sig = 0;
 	if (WIFEXITED(status))
 		g_program_return = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		g_program_return = WTERMSIG(status);
+		g_program_return = WTERMSIG(status) + 128;
 }
 
 void	parent_stuff(t_cmd *data, int *pfd, int j)
@@ -99,8 +101,6 @@ void	parent_stuff(t_cmd *data, int *pfd, int j)
 		cleanup(RETURN);
 		exit(0);
 	}
-	close(pfd[j - 1]);
-	close(pfd[j]);
 }
 
 /*
@@ -113,7 +113,7 @@ void	open_pipes_and_execute(t_cmd *data)
 {
 	int		*pfd;
 	int		j;
-	pid_t	pid;
+	//pid_t	pid;
 
 	j = 1;
 	pfd = open_pipes(data);
@@ -121,20 +121,21 @@ void	open_pipes_and_execute(t_cmd *data)
 	{
 		if (data->find)
 		{
-			pid = fork();
-			if (pid == -1)
+			g_pid = fork();
+			if (g_pid == -1)
 			{
 				free(pfd);
 				cleanup(EXIT);
 			}
-			if (pid == 0)
+			if (g_pid == 0)
 				execute_cmd(data, pfd, j);
-			else
-				parent_stuff(data, pfd, j);
+			close(pfd[j - 1]);
+			close(pfd[j]);
 		}
 		j += 2;
 		data = data->next;
 	}
+	parent_stuff(data, pfd, j);	
 	free(pfd);
 }
 
