@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/11 18:12:19 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:10:48 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,23 @@ int		*open_pipes(t_cmd *data)
 void	put_exit_status(void)
 {
 	int		status;
+	int		w_ret;
 
-	g_sig = 1;
-	wait(&status);
-	g_sig = 0;
-	if (WIFEXITED(status))
-		g_program_return = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		g_program_return = WTERMSIG(status) + 128;
+	w_ret = 1;
+	while (w_ret > 0)
+	{
+		g_sig = 1;
+		w_ret = waitpid(0, &status, 0);
+		g_sig = 0;
+		if (WIFEXITED(status))
+			g_program_return = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_program_return = WTERMSIG(status) + 128;
+	}
 }
 
-void	parent_stuff(t_cmd *data, int *pfd, int j)
+void	parent_stuff(t_cmd *data)
 {
-	put_exit_status();
 	if (!CMP(data->find, "cd") && chdir(data->args[1]) < 0)
 	{
 		g_program_return = 1;
@@ -109,14 +113,11 @@ void	parent_stuff(t_cmd *data, int *pfd, int j)
 ** command/commands
 */
 
-void	open_pipes_and_execute(t_cmd *data)
+void	open_pipes_and_execute(t_cmd *data, int *pfd)
 {
-	int		*pfd;
 	int		j;
-	//pid_t	pid;
 
 	j = 1;
-	pfd = open_pipes(data);
 	while (data)
 	{
 		if (data->find)
@@ -132,23 +133,26 @@ void	open_pipes_and_execute(t_cmd *data)
 			close(pfd[j - 1]);
 			close(pfd[j]);
 		}
+		parent_stuff(data);	
 		j += 2;
 		data = data->next;
 	}
-	parent_stuff(data, pfd, j);	
-	free(pfd);
+	put_exit_status();
 }
 
 void	loop_in_data(void)
 {
 	t_cmd	*data;
 	t_fnl	*tmp;
+	int		*pfd;
 
 	tmp = g_list_of_commands;
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
-		open_pipes_and_execute(data);
+		pfd = open_pipes(data);
+		open_pipes_and_execute(data, pfd);
 		tmp = tmp->next;
+		free(pfd);
 	}
 }
