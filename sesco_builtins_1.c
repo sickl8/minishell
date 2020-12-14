@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/09 17:12:59 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/14 18:43:21 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,6 @@ int		bc_unset(t_cmd *data)
 	return (0);
 }
 
-void	bc_program_return(void)
-{
-	PRINT("minishell: ");
-	ft_putnbr_fd(g_program_return, 1);
-	PRINT(": command not found\n");
-	exit(127);
-}
-
 int		builtin(t_cmd *data, int cmd)
 {
 	int		ret;
@@ -104,8 +96,6 @@ int		builtin(t_cmd *data, int cmd)
 		ret = bc_pwd(data);
 	else if (cmd == BC_UNSET)
 		ret = 0;
-	else if (cmd == 1337)
-		bc_program_return();
 	if (!ret)
 		exit(0);
 	return (ret);
@@ -116,8 +106,6 @@ int		is_builtin(char *str)
 	int		i;
 
 	i = 0;
-	if (!CMP(str, "?"))
-		return (1337);
 	while (g_bash_command[++i])
 	{
 		if (!CMP(str, g_bash_command[i]))

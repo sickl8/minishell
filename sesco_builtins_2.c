@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/09 17:14:09 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/14 18:31:16 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ int		bc_env(void)
 	i = 0;
 	while (g_line->env_var[i].name)
 	{
-		PRINT(g_line->env_var[i].name);
-		PRINTS("=");
-		PRINT(g_line->env_var[i].value);
-		PRINTS("\n");
+		OPRINT(g_line->env_var[i].name);
+		OPRINTS("=");
+		OPRINT(g_line->env_var[i].value);
+		OPRINTS("\n");
 		i++;
 	}
 	return (0);
@@ -112,14 +112,14 @@ int		bc_echo(t_cmd *data)
 	}
 	while (data->args[i] && data->args[i + 1])
 	{
-		PRINT(data->args[i]);
+		OPRINT(data->args[i]);
 		i++;
-		PRINTS(" ");
+		OPRINTS(" ");
 	}
 	if (data->args[i])
-		PRINT(data->args[i]);
+		OPRINT(data->args[i]);
 	if (pn)
-		PRINT("\n");
+		OPRINT("\n");
 	return (0);
 }
 
@@ -130,7 +130,7 @@ int		bc_pwd(t_cmd *data)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (-1);
-	PRINT(cwd);
-	PRINTS("\n");
+	OPRINT(cwd);
+	OPRINTS("\n");
 	return (0);
 }

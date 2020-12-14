@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/11 17:45:12 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/14 18:34:10 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,29 @@ void	bash_error()
 {
 	if (g_bash_errno == E_SYNTAX)
 	{
-		PRINTS("minishell: syntax error near unexpected token `");
-		PRINT(g_bash_error);
-		PRINTS("'");
+		EPRINTS("minishell: syntax error near unexpected token `");
+		EPRINT(g_bash_error);
+		EPRINTS("'");
 	}
 	else if (g_bash_errno == E_MULTILINE)
 	{
-		PRINTS("minishell: multiline is not supported");
+		EPRINTS("minishell: multiline is not supported");
 	}
 	else if (g_bash_errno == E_COMMAND)
 	{
-		PRINTS("minishell: ");
-		PRINT(g_bash_error);
-		PRINTS(": command not found");
+		EPRINTS("minishell: ");
+		EPRINT(g_bash_error);
+		EPRINTS(": command not found");
 	}
 	else if (g_bash_errno == E_ERRNO)
 	{
-		PRINT(g_bash_command[g_bash_commandid]);
-		PRINTS(": ");
-		PRINT(g_bash_error);
-		PRINTS(": ");
-		PRINT(strerror(errno));
+		EPRINT(g_bash_command[g_bash_commandid]);
+		EPRINTS(": ");
+		EPRINT(g_bash_error);
+		EPRINTS(": ");
+		EPRINT(strerror(errno));
 	}
-	PRINTS("\n");
+	EPRINTS("\n");
 }
 
 int		check_s_bashsyn(t_bm p)
@@ -1084,15 +1084,15 @@ int		format_string()
 void	reset_prompt(void)
 {
 	if (g_sig == 0)
-		PRINTS("\b\b  ");
-	PRINTS("\n");
+		OPRINTS("\b\b  ");
+	OPRINTS("\n");
 	if (g_sig == 0)
 		init_read();
 }
 
 void	exit_the_shell(void)
 {
-	PRINTS("exit\n");
+	OPRINTS("exit\n");
 	cleanup(RETURN);
 	exit(0);
 }
@@ -1100,12 +1100,13 @@ void	exit_the_shell(void)
 void	ctrl_d(int *bk)
 {
 	reset_stdin(bk);
-	PRINTS("  \n");
+	OPRINTS("  \n");
 }
 
 void	handle_signal(int sig)
 {
-	reset_prompt();
+	if (sig != SIGQUIT)
+		reset_prompt();
 }
 
 void	handle_error(void)
@@ -1341,8 +1342,8 @@ int		main(int ac, char **av, char **envp)
 			if (!format_string())
 			{
 				exec();
-				if (!CMP(line.rd.buf, "exit"))
-					return (cleanup(RETURN));
+				// if (!CMP(line.rd.buf, "exit"))
+				// 	return (cleanup(RETURN));
 				free_tmp();
 			}
 			else

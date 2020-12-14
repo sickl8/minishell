@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_create_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/14 17:10:48 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/14 18:36:57 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,16 @@ void	put_exit_status(void)
 		g_sig = 1;
 		w_ret = waitpid(0, &status, 0);
 		g_sig = 0;
-		if (WIFEXITED(status))
+		if (g_program_return != 1 && WIFEXITED(status))
 			g_program_return = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
+		else if (g_program_return != 1 && WIFSIGNALED(status))
 			g_program_return = WTERMSIG(status) + 128;
 	}
 }
 
 void	parent_stuff(t_cmd *data)
 {
+	g_program_return = 0;
 	if (!CMP(data->find, "cd") && chdir(data->args[1]) < 0)
 	{
 		g_program_return = 1;
@@ -132,8 +133,8 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 				execute_cmd(data, pfd, j);
 			close(pfd[j - 1]);
 			close(pfd[j]);
+			parent_stuff(data);	
 		}
-		parent_stuff(data);	
 		j += 2;
 		data = data->next;
 	}
