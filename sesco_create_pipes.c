@@ -89,14 +89,8 @@ void	put_exit_status(void)
 void	parent_stuff(t_cmd *data)
 {
 	g_program_return = 0;
-	if (!CMP(data->find, "cd") && chdir(data->args[1]) < 0)
-	{
-		g_program_return = 1;
-		g_bash_errno = E_ERRNO;
-		ft_strncpy(g_bash_error, data->args[1], -1);
-		g_bash_commandid = BC_CD;
-		bash_error();
-	}
+	if (!CMP(data->find, "cd"))
+		bc_cd(data);
 	else if (!CMP(data->find, "export"))
 		bc_export(data);
 	else if (!CMP(data->find, "unset"))

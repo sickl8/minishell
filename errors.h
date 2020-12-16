@@ -21,5 +21,8 @@
 # define E_SIG(x) 128 + x
 # define E_SYNTAX 258
 # define EB_UNSET_EXPORT_NVI 0
+# define EB_CD_HNT 1
+# define EB_CD_TMA 2
+# define EB_EXIT_NAR 3
 
 #endif

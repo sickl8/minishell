@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
+#include <fcntl.h>
 #include "libft/libft.h"
 #include "proto.h"
 #include "typedef.h"
@@ -1116,7 +1117,10 @@ void	reset_prompt(void)
 
 void	exit_the_shell(void)
 {
-	OPRINTS("exit\n");
+	// OPRINTS("exit\n");
+	char *tty_name = ttyname(STDIN_FILENO);
+	int fd = open(tty_name, O_WRONLY);
+	write(fd, "exit\n", 5);
 	cleanup(RETURN);
 	exit(0);
 }
@@ -1135,7 +1139,6 @@ void	handle_signal(int sig)
 
 void	handle_error(void)
 {
-	printf("error?\n");
 	exit(1);
 }
 
@@ -1328,6 +1331,9 @@ void	init(t_line *ref, char **envp)
 	"unset", "env", "exit", NULL }, *b_errors[N_B_ERROR];
 
 	b_errors[EB_UNSET_EXPORT_NVI] = "not a valid identifier";
+	b_errors[EB_CD_HNT] = "HOME not set";
+	b_errors[EB_CD_TMA] = "too many arguments";
+	b_errors[EB_EXIT_NAR] = "numeric argument required";
 	b_errors[N_B_ERROR - 1] = NULL;
 	g_bash_command = names;
 	g_builtin_error = b_errors;
