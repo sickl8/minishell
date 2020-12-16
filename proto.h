@@ -46,5 +46,8 @@ int		bc_export(t_cmd *data);
 int		is_builtin(char *str);
 int		builtin(t_cmd *data, int cmd);
 int		bc_unset(t_cmd *data);
+void	free_envar();
+int		env_var_comp(char *s);
+int		c_env_var_comp(char c);
 
 #endif

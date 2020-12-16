@@ -59,26 +59,31 @@ int		bc_export_continue(t_cmd *data, int len, t_evar *tmp, char **var_val)
 
 int		bc_export(t_cmd *data)
 {
-	int		i;
-	int		len;
-	t_evar	*tmp;
-	char	**var_val;
+	// int		i;
+	// int		len;
+	// t_evar	*tmp;
+	// char	**var_val;
 
-	len = 0;
-	while (g_line->env_var[len].name != NULL)
-		len++;
-	len += 2;
-	if (!(MALLOC(tmp, len)))
-		cleanup(EXIT);
-	var_val = ft_split(data->args[1], '=');
-	i = bc_export_continue(data, len, tmp, var_val);
-	tmp[i].name = NULL;
-	tmp[i].value = NULL;
-	tmp[i].name_len = -1;
-	tmp[i].value_len = -1;
-	free_path(var_val);
-	free(g_line->env_var);
-	g_line->env_var = tmp;
+	// len = 0;
+	// while (g_line->env_var[len].name != NULL)
+	// 	len++;
+	// len += 2;
+	// if (!(MALLOC(tmp, len)))
+	// 	cleanup(EXIT);
+	// // !(var_val = ft_split(data->args[1], '=')) ? cleanup(EXIT) : 0;
+	// i = bc_export_continue(data, len, tmp, var_val);
+	// tmp[i].name = NULL;
+	// !(tmp[i].value = ft_strdup("")) ? cleanup(EXIT) : 0;
+	// tmp[i].name_len = -1;
+	// tmp[i].value_len = -1;
+	// free_path(var_val);
+	// free_envar();
+	// g_line->env_var = tmp;
+	g_bash_errno = E_BUILTIN;
+	g_builtin_errno = EB_UNSET_EXPORT_NVI;
+	g_bash_commandid = BC_EXPORT;
+	STRCPY(g_bash_error, data->args[1] ? data->args[1] : "");
+	bash_error();
 	return (0);
 }
 
@@ -132,5 +137,6 @@ int		bc_pwd(t_cmd *data)
 		return (-1);
 	OPRINT(cwd);
 	OPRINTS("\n");
+	free(cwd);
 	return (0);
 }

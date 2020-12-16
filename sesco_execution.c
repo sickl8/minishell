@@ -36,7 +36,6 @@
 
 char	*the_right_path(char **paths, int i, struct dirent *file, DIR *dir)
 {
-	struct stat	f_inf;
 	char		*tmp;
 
 	if (!(tmp = ft_strjoin(paths[i], file->d_name)))
@@ -44,13 +43,7 @@ char	*the_right_path(char **paths, int i, struct dirent *file, DIR *dir)
 		free_path(paths);
 		cleanup(EXIT);
 	}
-	if (stat(tmp, &f_inf) != -1)
-	{
-		if (f_inf.st_mode & S_IXUSR)
-			return (tmp);
-	}
-	free(tmp);
-	return (NULL);
+	return (tmp);
 }
 
 char	*find_in_single_path(char *tofind, char **paths, int i)
@@ -83,11 +76,12 @@ char	*find_in_path(char *tofind)
 	int				i;
 	char			*ret;
 
-	i = 0;
 	path = find_env("PATH");
-	paths = ft_split(path.value, ':');
+	if (!(paths = ft_split(path.value, ':'))) // paths is automatically freed on any NULL malloc return
+		cleanup(EXIT);
 	ret = NULL;
-	while (paths && paths[i] && ret == NULL)
+	i = 0;
+	while (paths[i] && ret == NULL)
 	{
 		ret = find_in_single_path(tofind, paths, i);
 		i++;

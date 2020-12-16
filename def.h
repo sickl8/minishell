@@ -55,7 +55,8 @@
 # define PV(x, y) printf(#x " = " y, x)
 # define APPND O_WRONLY | O_CREAT | O_APPEND, mode
 # define TRNCT O_WRONLY | O_CREAT | O_TRUNC, mode
-
+# define N_B_ERROR 2
+# define STRCPY(dest, src) ft_strncpy(dest, src, -1)
 // #define g_bash_errno *get_g_bash_errno(__func__)
 
 # include "bufferedio.h"
