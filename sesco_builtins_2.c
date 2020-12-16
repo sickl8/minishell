@@ -79,11 +79,29 @@ int		bc_export(t_cmd *data)
 	// free_path(var_val);
 	// free_envar();
 	// g_line->env_var = tmp;
-	g_bash_errno = E_BUILTIN;
-	g_builtin_errno = EB_UNSET_EXPORT_NVI;
-	g_bash_commandid = BC_EXPORT;
-	STRCPY(g_bash_error, data->args[1] ? data->args[1] : "");
-	bash_error();
+	t_evar	var;
+	char	*tmp;
+	var.name = data->args[1];
+	var.value = data->args[1];
+	tmp = ft_strchr(data->args[1], '=');
+	if (!env_var_comp(var.name))
+	{
+		g_bash_errno = E_BUILTIN;
+		g_builtin_errno = EB_UNSET_EXPORT_NVI;
+		g_bash_commandid = BC_EXPORT;
+		STRCPY(g_bash_error, data->args[1] ? data->args[1] : "");
+		bash_error();
+		//continue;
+	}
+	else if (tmp)
+	{
+		*tmp = '\0';
+		var.value = tmp + 1;
+		var.name_len = ft_strlen(var.name);
+		var.value_len = ft_strlen(var.value);
+		//var is ready
+
+	}
 	return (0);
 }
 

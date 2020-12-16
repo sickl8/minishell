@@ -631,8 +631,9 @@ int		is_ws(char c)
 
 int		env_var_comp(char *s)
 {
-	if (c_env_var_comp(*s) && (*s > '9' && *s < '0'))
+	if (c_env_var_comp(*s) && (*s > '9' || *s < '0'))
 	{
+		s++;
 		while (*s)
 		{
 			if (!c_env_var_comp(*s))
