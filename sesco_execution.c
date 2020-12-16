@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:01:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/11 17:41:39 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/17 00:02:41 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,7 @@
 
 /*
 ** Find the command in $PATH
-** also we check if the command is executable
 */
-
-char	*the_right_path(char **paths, int i, struct dirent *file, DIR *dir)
-{
-	char		*tmp;
-
-	if (!(tmp = ft_strjoin(paths[i], file->d_name)))
-	{
-		free_path(paths);
-		cleanup(EXIT);
-	}
-	return (tmp);
-}
 
 char	*find_in_single_path(char *tofind, char **paths, int i)
 {
@@ -61,7 +48,11 @@ char	*find_in_single_path(char *tofind, char **paths, int i)
 			if (!CMP(tofind, file->d_name))
 			{
 				paths[i] = fix_path(paths, i);
-				ret = the_right_path(paths, i, file, dir);
+				if (!(ret = ft_strjoin(paths[i], file->d_name)))
+				{
+					free_path(paths);
+					cleanup(EXIT);
+				}
 			}
 		}
 		closedir(dir);

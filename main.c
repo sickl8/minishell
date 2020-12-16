@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/14 18:34:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/17 00:19:34 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,12 @@ void	bash_error()
 	}
 	else if (g_bash_errno == E_BUILTIN)
 	{
+		EPRINTS("minishell: ");
 		EPRINT(g_bash_command[g_bash_commandid]);
 		EPRINTS(": ");
+		EPRINTS("`");
 		EPRINT(g_bash_error);
+		EPRINTS("'");
 		EPRINTS(": ");
 		EPRINT(g_builtin_error[g_builtin_errno]);
 	}

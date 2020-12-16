@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/14 18:31:16 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/17 00:20:19 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,58 +29,80 @@
 
 #include <stdio.h>
 
-int		bc_export_continue(t_cmd *data, int len, t_evar *tmp, char **var_val)
+int		count_args(char **args)
 {
 	int		i;
 
 	i = 0;
-	while (i < (len - 2))
+	while (args[i] != NULL)
+		i++;
+	return (i - 1);
+}
+
+int		check_var_name(char *name, int end)
+{
+	int		i;
+
+	i = 0;
+	if (!ft_isalpha(name[i]) && name[i] != '_')
+		return (0);
+	i++;
+	while (i < end)
 	{
-		if (!(MALLOC(tmp[i].name, (ft_strlen(g_line->env_var[i].name) + 1))))
-			cleanup(EXIT);
-		ft_strcpy(tmp[i].name, g_line->env_var[i].name);
-		if (!(MALLOC(tmp[i].value, (ft_strlen(g_line->env_var[i].value) + 1))))
-			cleanup(EXIT);
-		ft_strcpy(tmp[i].value, g_line->env_var[i].value);
-		tmp[i].name_len = g_line->env_var[i].name_len;
-		tmp[i].value_len = g_line->env_var[i].value_len;
+		if (!ft_isalnum(name[i]) && name[i] != '_')
+			return (0);
 		i++;
 	}
-	if (!(MALLOC(tmp[i].name, (ft_strlen(var_val[0]) + 1))))
+	return (1);
+}
+
+int		*check_errors_of_args(char **args, int len)
+{
+	int		*valid_args;
+	char	*name;
+	int		j;
+	int		i;
+
+	if (!(valid_args = ft_calloc(len, sizeof(int))))
 		cleanup(EXIT);
-	ft_strcpy(tmp[i].name, var_val[0]);
-	if (!(MALLOC(tmp[i].value, (ft_strlen(var_val[1]) + 1))))
-		cleanup(EXIT);
-	ft_strcpy(tmp[i].value, var_val[1]);
-	tmp[i].name_len = ft_strlen(var_val[0]);
-	tmp[i].value_len = ft_strlen(var_val[1]);
-	return (++i);
+	i = 1;
+	while (i < len + 1)
+	{
+		j = 0;
+		while (args[i][j] != '=' && args[i][j] != '\0')
+			j++;
+		if (!check_var_name(args[i], j))
+		{
+			g_bash_errno = E_BUILTIN;
+			g_builtin_errno = EB_UNSET_EXPORT_NVI;
+			g_bash_commandid = BC_EXPORT;
+			STRCPY(g_bash_error, args[i] ? args[i] : "");
+			g_program_return = 1;
+			bash_error();
+			valid_args[i - 1] = 1;
+		}
+		i++;
+	}
+	return (valid_args);
 }
 
 int		bc_export(t_cmd *data)
 {
-	// int		i;
-	// int		len;
-	// t_evar	*tmp;
-	// char	**var_val;
+	int		args_len;
+	int		*valid_args;
 
-	// len = 0;
-	// while (g_line->env_var[len].name != NULL)
-	// 	len++;
-	// len += 2;
-	// if (!(MALLOC(tmp, len)))
-	// 	cleanup(EXIT);
-	// // !(var_val = ft_split(data->args[1], '=')) ? cleanup(EXIT) : 0;
-	// i = bc_export_continue(data, len, tmp, var_val);
-	// tmp[i].name = NULL;
-	// !(tmp[i].value = ft_strdup("")) ? cleanup(EXIT) : 0;
-	// tmp[i].name_len = -1;
-	// tmp[i].value_len = -1;
-	// free_path(var_val);
-	// free_envar();
-	// g_line->env_var = tmp;
+	args_len = count_args(data->args);
+	valid_args = check_errors_of_args(data->args, args_len);
+	free(valid_args);
+	return (0);
+}
+
+/*
+int		bc_export(t_cmd *data)
+{
 	t_evar	var;
 	char	*tmp;
+
 	var.name = data->args[1];
 	var.value = data->args[1];
 	tmp = ft_strchr(data->args[1], '=');
@@ -103,7 +125,7 @@ int		bc_export(t_cmd *data)
 
 	}
 	return (0);
-}
+}*/
 
 int		bc_env(void)
 {
