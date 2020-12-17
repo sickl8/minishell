@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/17 00:19:34 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/17 20:56:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 #include "def.h"
 #include "global.h"
 #include "errors.h"
+
+#include "get_next_line.h"
 
 #include <stdio.h>
 
@@ -770,6 +772,7 @@ int		set_mask()
 	size_t	i;
 
 	i = -1;
+	memset(g_line->rd.msk, '\0', g_line->rd_len + 1);
 	while (g_line->rd.buf[++i])
 	{
 		if (g_line->rd.buf[i] == '\\')
@@ -906,7 +909,7 @@ void	free_scol()
 	free(g_line->scol);
 }
 
-void	free_envar()
+void	free_envar(void)
 {
 	int	i;
 
@@ -965,6 +968,8 @@ void	fastn()
 	free_and_set_to_null(&g_line->pipe);
 	free_and_set_to_null(&g_line->env.buf);
 	free_and_set_to_null(&g_line->env.msk);
+	free_and_set_to_null(&g_line->rd.buf);
+	free_and_set_to_null(&g_line->rd.msk);
 	while (g_list_of_commands)
 	{
 		while (g_list_of_commands->cmd_and_args)
@@ -1039,9 +1044,8 @@ int		format_string()
 	t_fnl	**tracer;
 
 	g_bash_errno = 0;
-	if ((tmp = ft_strchr(g_line->rd.buf, '\n')))
-		*tmp = '\0' * g_line->rd_ret--;
-	g_line->rd_len = ft_strlen(g_line->rd.buf);
+	if (!(MALLOC(g_line->rd.msk, g_line->rd_len + 1)))
+		cleanup(EXIT);
 	set_mask();
 	// PV(g_line->rd.msk, "%s\n");
 	if (g_bash_errno)
@@ -1198,8 +1202,8 @@ void	init_read()
 	pwd.name = "PWD";
 	pwd.value = getcwd(NULL, 0);
 	user = find_env("USER");
-	ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
-	ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
+	//ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
+	//ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
@@ -1291,13 +1295,10 @@ void	init_envp(char **envp)
 
 void	init_buf()
 {
-	if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
-	!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
-	!(MALLOC(g_bash_error, ARG_MAX + 2)))
+	//if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
+	//!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
+	if (!(MALLOC(g_bash_error, ARG_MAX + 2)))
 	{
-		free(g_line->rd.buf);
-		free(g_line->rd.msk);
-		free(g_bash_error);
 		handle_error();
 	}
 }
@@ -1360,10 +1361,11 @@ int		main(int ac, char **av, char **envp)
 	while (1)
 	{
 		init_read();
-		line.rd_ret = read(STDIN_FILENO, line.rd.buf, ARG_MAX);
+		line.rd_ret = get_next_line(STDIN_FILENO, &line.rd.buf);
+		line.rd_len = ft_strlen(line.rd.buf);
 		if (line.rd_ret < 0)
 			handle_error();
-		else if (!ft_strchr(line.rd.buf, '\n') && line.rd_ret > 0)
+		else if (!line.rd_ret && line.rd_len > 0)
 			ctrl_d(&stdin_bak);
 		else if (line.rd_ret == 0)
 			exit_the_shell();
