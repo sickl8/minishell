@@ -56,6 +56,26 @@ int		check_var_name(char *name, int end)
 	return (1);
 }
 
+void		duplicated_variable(char *arg_name, int len)
+{
+	int	i;
+	char	tmp[len + 1];
+
+	g_dup = 0;
+	i = 0;
+	ft_strncpy(tmp, arg_name, len);
+	printf("name %s\n", arg_name);
+	while (g_line->env_var[i].name)
+	{
+		if (!CMP(arg_name, g_line->env_var[i].name))
+		{
+			g_dup = i;
+			return ;
+		}
+		i++;
+	}
+}
+
 int		*check_errors_of_args(char **args, int len)
 {
 	int		*valid_args;
@@ -71,6 +91,7 @@ int		*check_errors_of_args(char **args, int len)
 		j = 0;
 		while (args[i][j] != '=' && args[i][j] != '\0')
 			j++;
+		duplicated_variable(args[i], j);
 		if (!check_var_name(args[i], j))
 		{
 			g_bash_errno = E_BUILTIN;
@@ -93,6 +114,7 @@ int		bc_export(t_cmd *data)
 
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len);
+	printf("%d\n", g_dup);
 	free(valid_args);
 	return (0);
 }
