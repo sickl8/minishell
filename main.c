@@ -1199,6 +1199,13 @@ void	init_read()
 	t_evar return_status;
 
 	home = find_env("HOME");
+	if (!home.name)
+	{
+		home.name = "HOME";
+		home.value = "";
+		home.name_len = 4;
+		home.value_len = 0;
+	}
 	return_status = find_env("?");
 	pwd.name = "PWD";
 	pwd.value = getcwd(NULL, 0);
