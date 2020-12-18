@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 18:40:16 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/18 19:25:52 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int		bc_unset(t_cmd *data)
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
 	lengths = calc_lengths(valid_args, args_len);
-	if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_len))))
+	if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_len + 1))))
 		cleanup(EXIT);
 	unset_var(data->args, lengths, tmp);
 	free(valid_args);
