@@ -97,9 +97,9 @@ void	parent_stuff(t_cmd *data)
 		bc_unset(data);
 	else if (!CMP(data->find, "exit"))
 	{
-		cleanup(RETURN);
-		exit(0);
-		//bc_exit(data->args);
+		// cleanup(RETURN);
+		// exit(0);
+		bc_exit(data->args);
 	}
 }
 

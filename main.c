@@ -75,10 +75,13 @@ void	bash_error()
 		EPRINTS("minishell: ");
 		EPRINT(g_bash_command[g_bash_commandid]);
 		EPRINTS(": ");
-		EPRINTS("`");
-		EPRINT(g_bash_error);
-		EPRINTS("'");
-		EPRINTS(": ");
+		if (g_builtin_errno != EB_CD_EXIT_TMA)
+		{
+			EPRINTS("`");
+			EPRINT(g_bash_error);
+			EPRINTS("'");
+			EPRINTS(": ");
+		}
 		EPRINT(g_builtin_error[g_builtin_errno]);
 	}
 	EPRINTS("\n");
@@ -1338,7 +1341,7 @@ void	init(t_line *ref, char **envp)
 
 	b_errors[EB_UNSET_EXPORT_NVI] = "not a valid identifier";
 	b_errors[EB_CD_HNT] = "HOME not set";
-	b_errors[EB_CD_TMA] = "too many arguments";
+	b_errors[EB_CD_EXIT_TMA] = "too many arguments";
 	b_errors[EB_EXIT_NAR] = "numeric argument required";
 	b_errors[N_B_ERROR - 1] = NULL;
 	g_bash_command = names;

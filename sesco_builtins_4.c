@@ -80,7 +80,58 @@ t_export	calc_lengths(int *valid, int len)
 	return (res);
 }
 
-void	bc_exit(char **args)
+int		check_if_num(char *s)
 {
-	exit(0);
+	int		i;
+
+	i = 0;
+	while (s[i] && (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13)))
+		i++;
+	if (!ISNUM(s[i]) && s[i] != '+' && s[i] != '-')
+		return (1);
+	if (!ISNUM(s[i]))
+		i++;
+	if (!ISNUM(s[i]))
+		return (1);
+	while (s[i] && ISNUM(s[i]))
+		i++;
+	while (s[i])
+	{
+		if (!(s[i] && (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13))))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int		bc_exit(char **argv)
+{
+	int		argc;
+	int		exit_status;
+
+	OPRINTS("exit\n");
+	argc = 0;
+	while (argv[argc])
+		argc++;
+	if (argc > 1 && check_if_num(argv[1]))
+	{
+		g_bash_commandid = BC_EXIT;
+		g_bash_errno = E_BUILTIN;
+		g_builtin_errno = EB_EXIT_NAR;
+		ft_strcpy(g_bash_error, argv[1]);
+		bash_error();
+		cleanup(RETURN);
+		exit(2);
+	}
+	if (argc > 2)
+	{
+		g_bash_commandid = BC_EXIT;
+		g_bash_errno = E_BUILTIN;
+		g_builtin_errno = EB_CD_EXIT_TMA;
+		bash_error();
+		return (1);
+	}
+	exit_status = argc == 1 ? 0 : ft_atoi(argv[1]);
+	cleanup(RETURN);
+	exit(exit_status % 256);
 }

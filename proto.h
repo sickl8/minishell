@@ -57,6 +57,6 @@ int			*check_errors_of_args(char **args, int len, int i, int j);
 t_evar		ft_realloc(char *name, char *value);
 t_export	calc_lengths(int *valid, int len);
 char		*name_or_value(int sign, char *arg);
-void		bc_exit(char **args);
+int			bc_exit(char **args);
 
 #endif

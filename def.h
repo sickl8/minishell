@@ -57,6 +57,7 @@
 # define TRNCT O_WRONLY | O_CREAT | O_TRUNC, mode
 # define N_B_ERROR 5
 # define STRCPY(dest, src) ft_strncpy(dest, src, -1)
+# define ISNUM(x) (x >= '0' && x <= '9')
 // #define g_bash_errno *get_g_bash_errno(__func__)
 
 # include "bufferedio.h"
