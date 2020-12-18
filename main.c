@@ -35,6 +35,7 @@
 void	exec()
 {
 	loop_in_data();
+	free_tmp();
 }
 
 // int		*get_g_bash_errno(const char *fn)
@@ -950,7 +951,7 @@ int		cleanup(int ex)
 	if (g_list_of_commands)
 		free_loc();
 	if (ex)
-		handle_error();
+		handle_error(ex);
 	return (0);
 }
 
@@ -1148,9 +1149,9 @@ void	handle_signal(int sig)
 		reset_prompt();
 }
 
-void	handle_error(void)
+void	handle_error(int ex)
 {
-	exit(1);
+	exit(ex);
 }
 
 void	print_color(int color)
@@ -1303,9 +1304,7 @@ void	init_buf()
 	//if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
 	//!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
 	if (!(MALLOC(g_bash_error, ARG_MAX + 2)))
-	{
-		handle_error();
-	}
+		handle_error(1);
 }
 
 void	init_line()
@@ -1353,14 +1352,18 @@ void	init(t_line *ref, char **envp)
 	init_env();
 }
 
+void	capture_signals()
+{
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
+}
 
 int		main(int ac, char **av, char **envp)
 {
 	t_line	line;
 	int		stdin_bak;
 
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, handle_signal);
+	capture_signals();
 	init(&line, envp);
 	backup_stdin(&stdin_bak);
 	while (1)
@@ -1368,7 +1371,7 @@ int		main(int ac, char **av, char **envp)
 		init_read();
 		line.rd_ret = get_next_line(&line.rd.buf);
 		if (line.rd_ret < 0)
-			handle_error();
+			handle_error(1);
 		else if (!ft_strchr(line.rd.buf, '\n') && line.rd_ret)
 			ctrl_d(&stdin_bak);
 		else if (line.rd_ret == 0)
@@ -1376,12 +1379,7 @@ int		main(int ac, char **av, char **envp)
 		else
 		{
 			if (!format_string())
-			{
 				exec();
-				// if (!CMP(line.rd.buf, "exit"))
-				// 	return (cleanup(RETURN));
-				free_tmp();
-			}
 			else
 				bash_error();
 			free_and_set_to_null(&g_line->rd.buf);

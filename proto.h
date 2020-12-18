@@ -58,5 +58,6 @@ t_evar		ft_realloc(char *name, char *value);
 t_export	calc_lengths(int *valid, int len);
 char		*name_or_value(int sign, char *arg);
 int			bc_exit(char **args);
+void		free_tmp();
 
 #endif

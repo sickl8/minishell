@@ -113,20 +113,17 @@ int		bc_exit(char **argv)
 	argc = 0;
 	while (argv[argc])
 		argc++;
+	g_bash_commandid = BC_EXIT;
+	g_bash_errno = E_BUILTIN;
 	if (argc > 1 && check_if_num(argv[1]))
 	{
-		g_bash_commandid = BC_EXIT;
-		g_bash_errno = E_BUILTIN;
 		g_builtin_errno = EB_EXIT_NAR;
 		ft_strcpy(g_bash_error, argv[1]);
 		bash_error();
-		cleanup(RETURN);
-		exit(2);
+		cleanup(2);
 	}
 	if (argc > 2)
 	{
-		g_bash_commandid = BC_EXIT;
-		g_bash_errno = E_BUILTIN;
 		g_builtin_errno = EB_CD_EXIT_TMA;
 		bash_error();
 		return (1);
