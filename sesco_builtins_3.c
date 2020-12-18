@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 18:21:54 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/18 20:02:14 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,16 +127,39 @@ t_evar	ft_realloc(char *name, char *value)
 	}
 	return (tmp);
 }
-int		bc_cd(t_cmd *data)
+
+int		go_to_home(void)
 {
-	if (chdir(data->args[1]) < 0)
-	{
+	 t_evar	home_path;
+
+	 home_path = find_env("HOME");
+ 	 if (chdir(home_path.value) < 0)
+	 {
 		g_program_return = 1;
 		g_bash_errno = E_ERRNO;
-		ft_strncpy(g_bash_error, data->args[1], -1);
+		ft_strncpy(g_bash_error, home_path.value, -1);
 		g_bash_commandid = BC_CD;
 		bash_error();
 		return (1);
+	 }
+	 return (0);
+}
+
+int		bc_cd(t_cmd *data)
+{
+	if (data->args[1])
+	{
+		if (chdir(data->args[1]) < 0)
+		{
+			g_program_return = 1;
+			g_bash_errno = E_ERRNO;
+			ft_strncpy(g_bash_error, data->args[1], -1);
+			g_bash_commandid = BC_CD;
+			bash_error();
+			return (1);
+		}
 	}
+	else
+		return (go_to_home());
 	return (0);
 }
