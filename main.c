@@ -1199,13 +1199,6 @@ void	init_read()
 	t_evar return_status;
 
 	home = find_env("HOME");
-	if (!home.name)
-	{
-		home.name = "HOME";
-		home.value = "";
-		home.name_len = 4;
-		home.value_len = 0;
-	}
 	return_status = find_env("?");
 	pwd.name = "PWD";
 	pwd.value = getcwd(NULL, 0);
@@ -1219,7 +1212,7 @@ void	init_read()
 	skittles("@minishell");
 	BPRINTS(ESC_RESET ":");
 	BPRINTS(ESC_BLUE_B);
-	if (ft_strstr(pwd.value, home.value) == pwd.value)
+	if (ft_strstr(pwd.value, home.name ? home.value : NULL) == pwd.value)
 	{
 		BPRINTS("~");
 		BPRINT(pwd.value + home.value_len);
