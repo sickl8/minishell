@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/14 18:43:21 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/18 18:40:16 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,51 +29,41 @@
 
 #include <stdio.h>
 
-int		bc_unset_continue(t_cmd *data, t_evar *tmp, int len)
+void	unset_var(char **args, t_export len, t_evar *tmp)
 {
-	int		i;
 	int		j;
+	int		i;
 
 	j = 0;
 	i = 0;
-	while (i < len)
+	while (i < len.env_len)
 	{
-		if (CMP(g_line->env_var[i].name, data->args[1]))
+		if (g_dup == 0 || j != (g_dup - 1))
 		{
-			if (!(MALLOC(tmp[j].name,
-							(ft_strlen(g_line->env_var[i].name) + 1))))
-				cleanup(EXIT);
-			ft_strcpy(tmp[j].name, g_line->env_var[i].name);
-			if (!(MALLOC(tmp[j].value,
-							(ft_strlen(g_line->env_var[i].value) + 1))))
-				cleanup(EXIT);
-			ft_strcpy(tmp[j].value, g_line->env_var[i].value);
-			tmp[j].name_len = g_line->env_var[i].name_len;
-			tmp[j].value_len = g_line->env_var[i].value_len;
-			j++;
+			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			i++;
 		}
-		i++;
+		j++;
 	}
-	return (j);
+	tmp[i] = ft_realloc(NULL, NULL);
 }
 
 int		bc_unset(t_cmd *data)
 {
-	int		len;
-	t_evar	*tmp;
-	int		j;
+	int			args_len;
+	int			*valid_args;
+	t_export	lengths;
+	t_evar		*tmp;
 
-	len = 0;
-	while (g_line->env_var[len].name != NULL)
-		len++;
-	if (!(MALLOC(tmp, len)))
+	g_dup = 0;
+	args_len = count_args(data->args);
+	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
+	lengths = calc_lengths(valid_args, args_len);
+	if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_var))))
 		cleanup(EXIT);
-	j = bc_unset_continue(data, tmp, len);
-	tmp[j].name = NULL;
-	tmp[j].value = NULL;
-	tmp[j].name_len = -1;
-	tmp[j].value_len = -1;
-	free(g_line->env_var);
+	unset_var(data->args, lengths, tmp);
+	free(valid_args);
+	free_envar();
 	g_line->env_var = tmp;
 	return (0);
 }
