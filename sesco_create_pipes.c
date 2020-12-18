@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/14 18:36:57 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/18 18:45:17 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	parent_stuff(t_cmd *data)
 	else if (!CMP(data->find, "exit"))
 	{
 		cleanup(RETURN);
-		exit(0);
+		bc_exit(data->args);
 	}
 }
 

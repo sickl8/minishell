@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 18:22:56 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/18 18:48:54 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,9 @@ t_export	calc_lengths(int *valid, int len)
 	res.env_len -= g_dup ? 1 : 0;
 	res.new_var_len += env_len;
 	return (res);
+}
+
+void	bc_exit(char **args)
+{
+	exit(0);
 }
