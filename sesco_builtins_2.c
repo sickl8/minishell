@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_2.c                                 :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/17 00:20:19 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:53:05 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,6 @@
 #include "errors.h"
 
 #include <stdio.h>
-
-int		count_args(char **args)
-{
-	int		i;
-
-	i = 0;
-	while (args[i] != NULL)
-		i++;
-	return (i - 1);
-}
 
 int		check_var_name(char *name, int end)
 {
@@ -61,37 +51,36 @@ void		duplicated_variable(char *arg_name, int len)
 	int	i;
 	char	tmp[len + 1];
 
-	g_dup = 0;
 	i = 0;
+	// if it's name only without equal don't consider it so i won't add it to env
 	ft_strncpy(tmp, arg_name, len);
-	printf("name %s\n", arg_name);
-	while (g_line->env_var[i].name)
+	tmp[len] = '\0';
+	if (arg_name[len - 1] != '\0' && g_dup == 0)
 	{
-		if (!CMP(arg_name, g_line->env_var[i].name))
+		while (g_line->env_var[i].name)
 		{
-			g_dup = i;
-			return ;
+			if (!CMP(tmp, g_line->env_var[i].name))
+			{
+				g_dup = i + 1;
+				break ;
+			}
+			i++;
 		}
-		i++;
 	}
 }
 
-int		*check_errors_of_args(char **args, int len)
+int		*check_errors_of_args(char **args, int len, int i, int j)
 {
 	int		*valid_args;
 	char	*name;
-	int		j;
-	int		i;
 
 	if (!(valid_args = ft_calloc(len, sizeof(int))))
 		cleanup(EXIT);
-	i = 1;
 	while (i < len + 1)
 	{
 		j = 0;
 		while (args[i][j] != '=' && args[i][j] != '\0')
 			j++;
-		duplicated_variable(args[i], j);
 		if (!check_var_name(args[i], j))
 		{
 			g_bash_errno = E_BUILTIN;
@@ -100,21 +89,163 @@ int		*check_errors_of_args(char **args, int len)
 			STRCPY(g_bash_error, args[i] ? args[i] : "");
 			g_program_return = 1;
 			bash_error();
-			valid_args[i - 1] = 1;
 		}
+		duplicated_variable(args[i], j);
+		// if it doesn't have equal on it consider it as invalid
+		if (!check_var_name(args[i], j) || args[i][j] == '\0')
+			valid_args[i - 1] = 1;
 		i++;
 	}
 	return (valid_args);
 }
 
+static	t_evar	ft_realloc(char *name, char *value)
+{
+	t_evar	tmp;
+	int		name_len;
+	int		value_len;
+
+	if (name)
+	{
+		name_len = ft_strlen(name);
+		value_len = ft_strlen(value);
+		if (!(MALLOC(tmp.name, name_len + 1)))
+			cleanup(EXIT);
+		ft_strcpy(tmp.name, name);
+		if (!(MALLOC(tmp.value, value_len + 1)))
+			cleanup(EXIT);
+		ft_strcpy(tmp.value, value);
+		tmp.name_len = name_len;
+		tmp.value_len = value_len;
+	}
+	else
+	{
+		tmp.name = NULL;
+		(tmp.value = ft_strdup("")) ? 0 : cleanup(EXIT);
+		tmp.name_len = -1;
+		tmp.value_len = -1;
+	}
+	return (tmp);
+}
+
+char	*name_or_value(int sign, char *arg)
+{
+	char	*ret;
+	int		i;
+	int		equal;
+
+	i = 0;
+	equal = 0;
+	ret = NULL;
+	while (arg[equal] != '=')
+		equal++;
+	if (sign == 0)
+	{
+		if (!(MALLOC(ret, sizeof(char) * equal + 1)))
+			cleanup(EXIT);
+		ret = ft_strncpy(ret, arg, equal);
+		ret[equal] = '\0';
+	}
+	else if (sign == 1)
+	{
+		equal += 1;
+		if (!(MALLOC(ret, sizeof(char) * ft_strlen(arg + equal) + 1)))
+			cleanup(EXIT);
+		ft_strcpy(ret, arg + equal);
+	}
+	return (ret);
+}
+
+t_export	calc_lengths(int *valid, int len)
+{
+	int			i;
+	t_export	res;
+
+	i = 0;
+	res.env_len = 0;
+	res.new_var_len = 0;
+	// count existed env variables
+	while (g_line->env_var[res.env_len].name)
+		res.env_len++;
+	// add the valid args
+	res.new_var_len = 0;
+	i = 0;
+	while (i < len)
+		if (valid[i++] == 0)
+			res.new_var_len++;
+	// remove from the existing ones
+	res.env_len -= g_dup ? 1 : 0;
+	res.new_var_len += env_len;
+	return (res);
+}
+
+void	export_new_vars(char **args, int len, int *valid)
+{
+	int		new_var_len;
+	int		i;
+	int		j;
+	int		env_len;
+	t_evar	*tmp;
+	char	*name;
+	char	*value;
+
+	env_len = 0;
+	// count existed env variables
+	while (g_line->env_var[env_len].name)
+		env_len++;
+	// add the valid args
+	new_var_len = 0;
+	i = 0;
+	while (i < len)
+		if (valid[i++] == 0)
+			new_var_len++;
+	// remove from the existing ones
+	env_len -= g_dup ? 1 : 0;
+	new_var_len += env_len;
+	if (!(tmp = malloc(sizeof(t_evar) * (new_var_len + 1))))
+		cleanup(EXIT);
+	// re-initialize i
+	i = 0;
+	j = 0;
+	// fill tmp with the existing variables
+	while (i < env_len)
+	{
+		if (g_dup == 0 || j != (g_dup - 1))
+		{
+			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			i++;
+		}
+		j++;
+	}
+	// fill the rest with args and terminate with NULL
+	// re-initialize j
+	j = 1;
+	while (i < new_var_len)
+	{
+		name = name_or_value(0, args[j]);
+		value = name_or_value(1, args[j]);
+		tmp[i] = ft_realloc(name, value);
+		free(name);
+		free(value);
+		i++;
+		j++;
+	}
+	tmp[i] = ft_realloc(NULL, NULL);
+	free_envar();
+	g_line->env_var = tmp; // 52 lines
+}
+
 int		bc_export(t_cmd *data)
 {
-	int		args_len;
-	int		*valid_args;
+	int			args_len;
+	int			*valid_args;
+	t_export	lengths;
 
+	g_dup = 0;
 	args_len = count_args(data->args);
-	valid_args = check_errors_of_args(data->args, args_len);
-	printf("%d\n", g_dup);
+	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
+	lengths = calc_lengths(valid_args, args_len);
+	export_new_vars(data->args, args_len, valid_args);
 	free(valid_args);
 	return (0);
 }

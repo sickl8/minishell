@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/11 17:24:03 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:52:15 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ void	free_envar();
 int		env_var_comp(char *s);
 int		c_env_var_comp(char c);
 int		bc_cd(t_cmd *data);
+int		count_args(char **args);
+
 
 #endif

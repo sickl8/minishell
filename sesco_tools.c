@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:52:43 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/09 17:09:52 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:53:39 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@
 #include "errors.h"
 
 #include <stdio.h>
+
+int		count_args(char **args)
+{
+	int		i;
+
+	i = 0;
+	while (args[i] != NULL)
+		i++;
+	return (i - 1);
+}
 
 void	ft_strcpy(char *dst, char *src)
 {
