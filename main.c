@@ -515,6 +515,7 @@ void	reset_stdin(int *bk)
 	if (close(*bk) == -1)
 		handle_error();
 	backup_stdin(bk);
+	// free(g_line->rd.buf);
 }
 
 void	backup_stdin(int *bk)
@@ -968,7 +969,6 @@ void	fastn()
 	free_and_set_to_null(&g_line->pipe);
 	free_and_set_to_null(&g_line->env.buf);
 	free_and_set_to_null(&g_line->env.msk);
-	free_and_set_to_null(&g_line->rd.buf);
 	free_and_set_to_null(&g_line->rd.msk);
 	while (g_list_of_commands)
 	{
@@ -1044,6 +1044,7 @@ int		format_string()
 	t_fnl	**tracer;
 
 	g_bash_errno = 0;
+	g_line->rd_len = ft_strlen(g_line->rd.buf);
 	if (!(MALLOC(g_line->rd.msk, g_line->rd_len + 1)))
 		cleanup(EXIT);
 	set_mask();
@@ -1221,6 +1222,7 @@ void	init_read()
 	BPRINTS(ESC_RESET "$ ");
 	bflush(STDOUT_FILENO);
 	free(pwd.value);
+	free(g_line->rd.buf);
 }
 
 void	continue_init_env()
@@ -1361,11 +1363,10 @@ int		main(int ac, char **av, char **envp)
 	while (1)
 	{
 		init_read();
-		line.rd_ret = get_next_line(STDIN_FILENO, &line.rd.buf);
-		line.rd_len = ft_strlen(line.rd.buf);
+		line.rd_ret = get_next_line(&line.rd.buf);
 		if (line.rd_ret < 0)
 			handle_error();
-		else if (!line.rd_ret && line.rd_len > 0)
+		else if (!ft_strchr(line.rd.buf, '\n') && line.rd_ret)
 			ctrl_d(&stdin_bak);
 		else if (line.rd_ret == 0)
 			exit_the_shell();
@@ -1380,6 +1381,7 @@ int		main(int ac, char **av, char **envp)
 			}
 			else
 				bash_error();
+			free_and_set_to_null(&g_line->rd.buf);
 		}
 	}
 }

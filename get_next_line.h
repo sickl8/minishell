@@ -31,7 +31,7 @@ typedef struct	s_chr
 char			*ft_subs(const char *s, unsigned int start, size_t len);
 char			*ft_sjoin(const char *s1, const char *s2);
 int				f1(char **p1, char **p2, int x);
-int				get_next_line(int fd, char **line);
+int				get_next_line(char **line);
 char			*fs(const char *str, int x);
 char			*ft_sdup(const char *s1);
 size_t			ft_slen(const char *s);

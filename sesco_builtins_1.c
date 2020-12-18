@@ -59,7 +59,7 @@ int		bc_unset(t_cmd *data)
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
 	lengths = calc_lengths(valid_args, args_len);
-	if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_var))))
+	if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_len))))
 		cleanup(EXIT);
 	unset_var(data->args, lengths, tmp);
 	free(valid_args);

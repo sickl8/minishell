@@ -64,19 +64,19 @@ t_export	calc_lengths(int *valid, int len)
 
 	i = 0;
 	res.env_len = 0;
-	res.new_var_len = 0;
+	res.new_env_len = 0;
 	// count existed env variables
 	while (g_line->env_var[res.env_len].name)
 		res.env_len++;
 	// add the valid args
-	res.new_var_len = 0;
+	res.new_env_len = 0;
 	i = 0;
 	while (i < len)
 		if (valid[i++] == 0)
-			res.new_var_len++;
+			res.new_env_len++;
 	// remove from the existing ones
 	res.env_len -= g_dup ? 1 : 0;
-	res.new_var_len += env_len;
+	res.new_env_len += res.env_len;
 	return (res);
 }
 

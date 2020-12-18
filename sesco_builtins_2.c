@@ -46,7 +46,7 @@ void	export_new_vars(char **args, t_export len, int i, t_evar *tmp)
 		j++;
 	}
 	j = 1;
-	while (i < len.new_var_len)
+	while (i < len.new_env_len)
 	{
 		name = name_or_value(0, args[j]);
 		value = name_or_value(1, args[j++]);
@@ -68,7 +68,7 @@ int		bc_export(t_cmd *data)
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
 	lengths = calc_lengths(valid_args, args_len);
-	if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_var_len + 1))))
+	if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_env_len + 1))))
 		cleanup(EXIT);
 	export_new_vars(data->args, lengths, 0, tmp);
 	free(valid_args);
