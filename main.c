@@ -6,10 +6,10 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/23 11:37:33 by aamzouar         ###   ########.fr       */
-/*   Updated: 2020/11/16 18:15:28 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/17 20:56:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <unistd.h>
 #include <sys/wait.h>
@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
+#include <fcntl.h>
 #include "libft/libft.h"
 #include "proto.h"
 #include "typedef.h"
@@ -27,11 +28,13 @@
 #include "global.h"
 #include "errors.h"
 
+#include "get_next_line.h"
+
 #include <stdio.h>
 
 void	exec()
 {
-	loop_in_cmd();
+	loop_in_data();
 }
 
 // int		*get_g_bash_errno(const char *fn)
@@ -45,27 +48,40 @@ void	bash_error()
 {
 	if (g_bash_errno == E_SYNTAX)
 	{
-		PRINTS("minishell: syntax error near unexpected token `");
-		PRINT(g_bash_error);
-		PRINTS("'\n");
+		EPRINTS("minishell: syntax error near unexpected token `");
+		EPRINT(g_bash_error);
+		EPRINTS("'");
 	}
 	else if (g_bash_errno == E_MULTILINE)
 	{
-		PRINTS("minishell: multiline is not supported\n");
+		EPRINTS("minishell: multiline is not supported");
 	}
 	else if (g_bash_errno == E_COMMAND)
 	{
-		PRINTS("minishell: ");
-		PRINT(g_bash_error);
-		PRINTS(": command not found\n");
+		EPRINTS("minishell: ");
+		EPRINT(g_bash_error);
+		EPRINTS(": command not found");
 	}
 	else if (g_bash_errno == E_ERRNO)
 	{
-		PRINT(g_bash_command[g_bash_commandid]);
-		PRINT(g_bash_error);
-		PRINTS(": ");
-		PRINT(strerror(errno));
+		EPRINT(g_bash_command[g_bash_commandid]);
+		EPRINTS(": ");
+		EPRINT(g_bash_error);
+		EPRINTS(": ");
+		EPRINT(strerror(errno));
 	}
+	else if (g_bash_errno == E_BUILTIN)
+	{
+		EPRINTS("minishell: ");
+		EPRINT(g_bash_command[g_bash_commandid]);
+		EPRINTS(": ");
+		EPRINTS("`");
+		EPRINT(g_bash_error);
+		EPRINTS("'");
+		EPRINTS(": ");
+		EPRINT(g_builtin_error[g_builtin_errno]);
+	}
+	EPRINTS("\n");
 }
 
 int		check_s_bashsyn(t_bm p)
@@ -148,8 +164,8 @@ int		check_multiline()
 		while (*(++p))
 			if (*p != WHTSPC)
 				break ;
-	if (count_quote('\'') % 2 || count_quote('"') % 2 ||
-	(g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
+	if (count_quote('\'') % 2 || count_quote('"') % 2 || (g_line->rd_len > 0 &&
+	g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
 	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
 		return (1 + 0 * (g_bash_errno = E_MULTILINE));
 	return (0);
@@ -499,6 +515,7 @@ void	reset_stdin(int *bk)
 	if (close(*bk) == -1)
 		handle_error();
 	backup_stdin(bk);
+	// free(g_line->rd.buf);
 }
 
 void	backup_stdin(int *bk)
@@ -536,8 +553,23 @@ void	continue_rplc_env_var()
 t_evar	find_env(char *s)
 {
 	size_t	j;
+	t_evar	ret;
+	char	*tmp;
 
 	j = 0;
+	if (!CMP(s, "?"))
+	{
+		ret.name = s;
+		ret.name_len = 1;
+		if (!(tmp = ft_itoa(g_program_return)))
+			cleanup(EXIT);
+		ft_memset(g_s_program_return, 0, 100);
+		ft_strncpy(g_s_program_return, tmp, -1);
+		free(tmp);
+		ret.value = g_s_program_return;
+		ret.value_len = ft_strlen(ret.value);
+		return (ret);
+	}
 	while (g_line->env_var[j].name)
 	{
 		if (!ft_strcmp(g_line->env_var[j].name, s))
@@ -604,7 +636,23 @@ int		is_ws(char c)
 	return (0);
 }
 
-int		env_var_comp(char c)
+int		env_var_comp(char *s)
+{
+	if (c_env_var_comp(*s) && (*s > '9' || *s < '0'))
+	{
+		s++;
+		while (*s)
+		{
+			if (!c_env_var_comp(*s))
+				return (0);
+			s++;
+		}
+		return (1);
+	}
+	return (0);
+}
+
+int		c_env_var_comp(char c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') ||
 	(c >= 'a' && c <= 'z') || c == '_')
@@ -618,12 +666,17 @@ void	env_var(size_t *ref)
 
 	i = *ref;
 	g_line->rd.msk[i] = '$';
-	if (g_line->rd.buf[++i] && env_var_comp(g_line->rd.buf[i]) &&
+	if (g_line->rd.buf[i + 1] && g_line->rd.buf[i + 1] == '?')
+	{
+		g_line->rd.msk[i + 1] = ENVVAR;
+		i += 2;
+	}
+	else if (g_line->rd.buf[++i] && c_env_var_comp(g_line->rd.buf[i]) &&
 	!(g_line->rd.buf[i] >= '0' && g_line->rd.buf[i] <= '9'))
 	{
 		*ref = i;
 		g_line->rd.msk[i] = ENVVAR;
-		while (g_line->rd.buf[++i] && env_var_comp(g_line->rd.buf[i]) &&
+		while (g_line->rd.buf[++i] && c_env_var_comp(g_line->rd.buf[i]) &&
 		i - *ref < ENV_NAME_LEN_MAX)
 			g_line->rd.msk[i] = ENVVAR;
 	}
@@ -720,6 +773,7 @@ int		set_mask()
 	size_t	i;
 
 	i = -1;
+	memset(g_line->rd.msk, '\0', g_line->rd_len + 1);
 	while (g_line->rd.buf[++i])
 	{
 		if (g_line->rd.buf[i] == '\\')
@@ -856,7 +910,7 @@ void	free_scol()
 	free(g_line->scol);
 }
 
-void	free_envar()
+void	free_envar(void)
 {
 	int	i;
 
@@ -868,6 +922,7 @@ void	free_envar()
 		free(g_line->env_var[i].value);
 	}
 	free(g_line->env_var[i].value);
+	free(g_line->env_var);
 }
 
 int		cleanup(int ex)
@@ -883,7 +938,6 @@ int		cleanup(int ex)
 		free_scol();
 	if (g_line->pipe)///////
 		free_pipe();
-	free(g_line->env_var);
 	if (g_bw.buf[0])
 		free_g_bw();
 	if (g_line->redir)
@@ -915,6 +969,7 @@ void	fastn()
 	free_and_set_to_null(&g_line->pipe);
 	free_and_set_to_null(&g_line->env.buf);
 	free_and_set_to_null(&g_line->env.msk);
+	free_and_set_to_null(&g_line->rd.msk);
 	while (g_list_of_commands)
 	{
 		while (g_list_of_commands->cmd_and_args)
@@ -990,9 +1045,12 @@ int		format_string()
 
 	g_bash_errno = 0;
 	if ((tmp = ft_strchr(g_line->rd.buf, '\n')))
-		*tmp = '\0' * g_line->rd_ret--;
+		*tmp = '\0';
 	g_line->rd_len = ft_strlen(g_line->rd.buf);
+	if (!(MALLOC(g_line->rd.msk, g_line->rd_len + 1)))
+		cleanup(EXIT);
 	set_mask();
+	// PV(g_line->rd.msk, "%s\n");
 	if (g_bash_errno)
 		return (g_bash_errno);
 	rplc_env_var();
@@ -1060,13 +1118,19 @@ int		format_string()
 
 void	reset_prompt(void)
 {
-	PRINTS("\b\b  \n");
-	init_read(*g_line);
+	if (g_sig == 0)
+		OPRINTS("\b\b  ");
+	OPRINTS("\n");
+	if (g_sig == 0)
+		init_read();
 }
 
 void	exit_the_shell(void)
 {
-	PRINTS("exit\n");
+	// OPRINTS("exit\n");
+	char *tty_name = ttyname(STDIN_FILENO);
+	int fd = open(tty_name, O_WRONLY);
+	write(fd, "exit\n", 5);
 	cleanup(RETURN);
 	exit(0);
 }
@@ -1074,17 +1138,17 @@ void	exit_the_shell(void)
 void	ctrl_d(int *bk)
 {
 	reset_stdin(bk);
-	PRINTS("  \n");
+	OPRINTS("  \n");
 }
 
 void	handle_signal(int sig)
 {
-	reset_prompt();
+	if (sig != SIGQUIT)
+		reset_prompt();
 }
 
 void	handle_error(void)
 {
-	printf("error?\n");
 	exit(1);
 }
 
@@ -1134,13 +1198,15 @@ void	init_read()
 	t_evar	home;
 	t_evar	pwd;
 	t_evar	user;
+	t_evar return_status;
 
 	home = find_env("HOME");
+	return_status = find_env("?");
 	pwd.name = "PWD";
 	pwd.value = getcwd(NULL, 0);
 	user = find_env("USER");
-	ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
-	ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
+	//ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
+	//ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
@@ -1158,6 +1224,7 @@ void	init_read()
 	BPRINTS(ESC_RESET "$ ");
 	bflush(STDOUT_FILENO);
 	free(pwd.value);
+	free(g_line->rd.buf);
 }
 
 void	continue_init_env()
@@ -1232,13 +1299,10 @@ void	init_envp(char **envp)
 
 void	init_buf()
 {
-	if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
-	!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
-	!(MALLOC(g_bash_error, ARG_MAX + 2)))
+	//if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
+	//!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
+	if (!(MALLOC(g_bash_error, ARG_MAX + 2)))
 	{
-		free(g_line->rd.buf);
-		free(g_line->rd.msk);
-		free(g_bash_error);
 		handle_error();
 	}
 }
@@ -1262,6 +1326,8 @@ void	init_globals(t_line *ref)
 	g_line = ref;
 	g_bw.buf = NULL;
 	g_bw.buf_i = NULL;
+	g_sig = 0;
+	g_builtin_errno = 0;
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
 	g_bash_error = NULL;
@@ -1269,17 +1335,16 @@ void	init_globals(t_line *ref)
 
 void	init(t_line *ref, char **envp)
 {
-	MALLOC(g_bash_command, 9);
-	g_bash_command[0] = ft_strdup("minishell");
-	g_bash_command[1] = ft_strdup("echo");
-	g_bash_command[2] = ft_strdup("cd");
-	g_bash_command[3] = ft_strdup("pwd");
-	g_bash_command[4] = ft_strdup("export");
-	g_bash_command[5] = ft_strdup("unset");
-	g_bash_command[6] = ft_strdup("env");
-	g_bash_command[7] = ft_strdup("exit");
-	g_bash_command[8] = NULL;
-	
+	static char	*names[9] = { "minishell", "echo", "cd", "pwd", "export",
+	"unset", "env", "exit", NULL }, *b_errors[N_B_ERROR];
+
+	b_errors[EB_UNSET_EXPORT_NVI] = "not a valid identifier";
+	b_errors[EB_CD_HNT] = "HOME not set";
+	b_errors[EB_CD_EXIT_TMA] = "too many arguments";
+	b_errors[EB_EXIT_NAR] = "numeric argument required";
+	b_errors[N_B_ERROR - 1] = NULL;
+	g_bash_command = names;
+	g_builtin_error = b_errors;
 	init_globals(ref);
 	init_line();
 	init_buf();
@@ -1300,10 +1365,10 @@ int		main(int ac, char **av, char **envp)
 	while (1)
 	{
 		init_read();
-		line.rd_ret = read(STDIN_FILENO, line.rd.buf, ARG_MAX);
+		line.rd_ret = get_next_line(&line.rd.buf);
 		if (line.rd_ret < 0)
 			handle_error();
-		else if (!ft_strchr(line.rd.buf, '\n') && line.rd_ret > 0)
+		else if (!ft_strchr(line.rd.buf, '\n') && line.rd_ret)
 			ctrl_d(&stdin_bak);
 		else if (line.rd_ret == 0)
 			exit_the_shell();
@@ -1312,12 +1377,13 @@ int		main(int ac, char **av, char **envp)
 			if (!format_string())
 			{
 				exec();
-				if (!CMP(line.rd.buf, "exit"))
-					return (cleanup(RETURN));
+				// if (!CMP(line.rd.buf, "exit"))
+				// 	return (cleanup(RETURN));
 				free_tmp();
 			}
 			else
 				bash_error();
+			free_and_set_to_null(&g_line->rd.buf);
 		}
 	}
 }

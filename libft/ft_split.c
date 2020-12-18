@@ -15,8 +15,8 @@
 static char	**trash(char ***tab, int j)
 {
 	while (j > 0)
-		free(*tab[--j]);
-	free(*tab);
+		free(tab[0][--j]);
+	free(tab[0]);
 	return (NULL);
 }
 
@@ -37,14 +37,10 @@ static char	**ft_insert(char **tab, char *s, char c)
 		if (tab[j] == NULL)
 			return (trash(&tab, j));
 		tab[j][i] = '\0';
-		if (*s)
-		{
-			ft_strlcpy(tab[j], s, i + 1);
-			j++;
-		}
+		*s ? ft_strlcpy(tab[j++], s, i + 1) : 0;
 		s += i;
 	}
-	tab[j] = 0;
+	tab[j] = NULL;
 	return (tab);
 }
 

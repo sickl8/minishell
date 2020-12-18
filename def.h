@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/21 18:00:41 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/14 18:24:02 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,17 @@
 # define ARG_MAX 262144
 # define CMP(x, y) (ft_strcmp(x, y))
 # define NCMP(x, y, n) (ft_strncmp(x, y, n))
-# define PRINTS(x) write(STDOUT_FILENO, x, sizeof(x))
+
 # define BPRINTS(x) bwrite(STDOUT_FILENO, x, sizeof(x) - 1)
-# define PRINT(x) write(STDOUT_FILENO, x, ft_strlen(x))
 # define BPRINT(x) bwrite(STDOUT_FILENO, x, ft_strlen(x))
-# define PRINTC(x) write(STDOUT_FILENO, &x, 1)
 # define BPRINTC(x) bwrite(STDOUT_FILENO, &x, 1)
+
+# define OPRINTS(x) write(STDOUT_FILENO, x, sizeof(x))
+# define OPRINT(x) write(STDOUT_FILENO, x, ft_strlen(x))
+# define OPRINTC(x) write(STDOUT_FILENO, &x, 1)
+# define EPRINTS(x) write(STDERR_FILENO, x, sizeof(x))
+# define EPRINT(x) write(STDERR_FILENO, x, ft_strlen(x))
+# define EPRINTC(x) write(STDERR_FILENO, &x, 1)
 # define H printf("\nline: %d\n", __LINE__)
 # define BWR(fd, string) bwrite(fd, string, ft_strlen(string))
 # define IS_REDIR(x) (x == '<' || x == '>')
@@ -48,7 +53,10 @@
 # define IPP (*ref)++
 # define PPI ++(*ref)
 # define PV(x, y) printf(#x " = " y, x)
-
+# define APPND O_WRONLY | O_CREAT | O_APPEND, mode
+# define TRNCT O_WRONLY | O_CREAT | O_TRUNC, mode
+# define N_B_ERROR 5
+# define STRCPY(dest, src) ft_strncpy(dest, src, -1)
 // #define g_bash_errno *get_g_bash_errno(__func__)
 
 # include "bufferedio.h"
