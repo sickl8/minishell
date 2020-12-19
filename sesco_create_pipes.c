@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/19 10:39:10 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/19 10:59:43 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	parent_stuff(t_cmd *data)
 		bc_export(data);
 	else if (!CMP(data->find, "unset"))
 		bc_unset(data);
-	else if (!CMP(data->find, "exit"))
+	else if (!CMP(data->find, "exit") && data->next == NULL)
 		bc_exit(data->args);
 }
 
