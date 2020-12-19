@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 18:48:54 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/19 09:38:39 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,33 @@
 #include "errors.h"
 
 #include <stdio.h>
+
+int		go_to_home(void)
+{
+	 t_evar	home_path;
+
+	 home_path = find_env("HOME");
+	 if (!home_path.name)
+	 {
+		g_program_return = 1;
+		g_bash_errno = E_BUILTIN;
+		ft_strncpy(g_bash_error, home_path.value, -1);
+		g_builtin_errno = EB_CD_HNT;
+		g_bash_commandid = BC_CD;
+		bash_error();
+		return (1);
+	 }
+ 	 if (chdir(home_path.value) < 0)
+	 {
+		g_program_return = 1;
+		g_bash_errno = E_ERRNO;
+		ft_strncpy(g_bash_error, home_path.value, -1);
+		g_bash_commandid = BC_CD;
+		bash_error();
+		return (1);
+	 }
+	 return (0);
+}
 
 char	*name_or_value(int sign, char *arg)
 {

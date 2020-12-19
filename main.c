@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/17 20:56:42 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/19 09:38:36 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	bash_error()
 		EPRINTS("minishell: ");
 		EPRINT(g_bash_command[g_bash_commandid]);
 		EPRINTS(": ");
-		if (g_builtin_errno != EB_CD_EXIT_TMA)
+		if (g_builtin_errno != EB_CD_HNT && g_builtin_errno != EB_CD_EXIT_TMA)
 		{
 			EPRINTS("`");
 			EPRINT(g_bash_error);
