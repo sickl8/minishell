@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:03:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/19 10:40:02 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/19 10:52:45 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	create_files(t_rdr *redir)
 	i = 0;
 	while (redir[i].file_name)
 	{
-		fd = open(redir[i].file_name, O_CREAT, mode);
+		fd = open(redir[i].file_name, O_CREAT | O_TRUNC, mode);
 		close(fd);
 		i++;
 	}
