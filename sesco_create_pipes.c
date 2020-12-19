@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 19:26:46 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/19 10:39:10 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,7 @@ void	parent_stuff(t_cmd *data)
 	else if (!CMP(data->find, "unset"))
 		bc_unset(data);
 	else if (!CMP(data->find, "exit"))
-	{
-		// cleanup(RETURN);
-		// exit(0);
 		bc_exit(data->args);
-	}
 }
 
 /*
@@ -146,6 +142,7 @@ void	loop_in_data(void)
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
+		create_files(data->redir);
 		pfd = open_pipes(data);
 		open_pipes_and_execute(data, pfd);
 		tmp = tmp->next;

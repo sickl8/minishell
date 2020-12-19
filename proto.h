@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/19 09:19:31 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/19 10:40:20 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ char		*name_or_value(int sign, char *arg);
 int			bc_exit(char **args);
 void		free_tmp();
 int			go_to_home(void);
+void		create_files(t_rdr *redir);
 
 #endif

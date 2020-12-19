@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/14 18:24:02 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/19 10:35:25 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@
 # define IPP (*ref)++
 # define PPI ++(*ref)
 # define PV(x, y) printf(#x " = " y, x)
-# define APPND O_WRONLY | O_CREAT | O_APPEND, mode
-# define TRNCT O_WRONLY | O_CREAT | O_TRUNC, mode
+# define APPND O_WRONLY | O_APPEND
+# define TRNCT O_WRONLY | O_TRUNC
 # define N_B_ERROR 5
 # define STRCPY(dest, src) ft_strncpy(dest, src, -1)
 # define ISNUM(x) (x >= '0' && x <= '9')

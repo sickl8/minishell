@@ -6,7 +6,7 @@
 /*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:03:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/09 17:03:49 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/19 10:40:02 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,29 @@
 
 #include <stdio.h>
 
-void	open_redir_files(t_rdr *redir, mode_t mode, int index[2], int fd[2])
+/*
+** New Logic Always Create Files Before
+** Needing To Redirect The Output Of Any
+** Command
+*/
+
+void	create_files(t_rdr *redir)
+{
+	int		i;
+	mode_t	mode;
+	int		fd;
+
+	mode = S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	i = 0;
+	while (redir[i].file_name)
+	{
+		fd = open(redir[i].file_name, O_CREAT, mode);
+		close(fd);
+		i++;
+	}
+}
+
+void	open_redir_files(t_rdr *redir, int index[2], int fd[2])
 {
 	int		i;
 
@@ -61,14 +83,12 @@ void	make_a_redirection(t_rdr *redir)
 {
 	int		fd[2];
 	int		index[2];
-	mode_t	mode;
 
 	index[0] = -1;
 	index[1] = -1;
 	fd[0] = -1;
 	fd[1] = -1;
-	mode = S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-	open_redir_files(redir, mode, index, fd);
+	open_redir_files(redir, index, fd);
 	if (fd[0] > -1)
 	{
 		dup2(fd[0], 0);
