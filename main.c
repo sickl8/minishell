@@ -513,11 +513,11 @@ void	split_wmask(t_bm *rd, t_bm **wr, char c)
 void	reset_stdin(int *bk)
 {
 	if (close(0) == -1)
-		handle_error();
+		handle_error(1);
 	if (dup2(*bk, 0) == -1)
-		handle_error();
+		handle_error(1);
 	if (close(*bk) == -1)
-		handle_error();
+		handle_error(1);
 	backup_stdin(bk);
 	// free(g_line->rd.buf);
 }
@@ -525,7 +525,7 @@ void	reset_stdin(int *bk)
 void	backup_stdin(int *bk)
 {
 	if ((*bk = dup(STDIN_FILENO)) == -1)
-		handle_error();
+		handle_error(1);
 }
 
 void	continue_rplc_env_var()
@@ -1227,6 +1227,7 @@ void	init_read()
 	bflush(STDOUT_FILENO);
 	free(pwd.value);
 	free(g_line->rd.buf);
+	g_line->rd.buf = NULL;
 }
 
 void	continue_init_env()

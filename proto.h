@@ -16,7 +16,7 @@
 # include "typedef.h"
 
 void		backslash(size_t *ref, char lit_type);
-void		handle_error();
+void		handle_error(int ex);
 void		backup_stdin(int *bk);
 t_evar		find_env(char *s);
 t_evar		find_env_in_line(size_t *ref);

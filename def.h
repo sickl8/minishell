@@ -30,10 +30,10 @@
 # define BPRINT(x) bwrite(STDOUT_FILENO, x, ft_strlen(x))
 # define BPRINTC(x) bwrite(STDOUT_FILENO, &x, 1)
 
-# define OPRINTS(x) write(STDOUT_FILENO, x, sizeof(x))
+# define OPRINTS(x) write(STDOUT_FILENO, x, sizeof(x) - 1)
 # define OPRINT(x) write(STDOUT_FILENO, x, ft_strlen(x))
 # define OPRINTC(x) write(STDOUT_FILENO, &x, 1)
-# define EPRINTS(x) write(STDERR_FILENO, x, sizeof(x))
+# define EPRINTS(x) write(STDERR_FILENO, x, sizeof(x) - 1)
 # define EPRINT(x) write(STDERR_FILENO, x, ft_strlen(x))
 # define EPRINTC(x) write(STDERR_FILENO, &x, 1)
 # define H printf("\nline: %d\n", __LINE__)

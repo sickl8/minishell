@@ -6,7 +6,7 @@ minishell:
 clean:
 	rm -rf *.o
 
-fclean:
+fclean: clean
 	rm -rf minishell
 
 re: fclean minishell
