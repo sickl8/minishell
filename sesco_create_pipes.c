@@ -91,9 +91,9 @@ void	parent_stuff(t_cmd *data)
 	g_program_return = 0;
 	if (!CMP(data->find, "cd"))
 		bc_cd(data);
-	else if (!CMP(data->find, "export"))
+	else if (!CMP(data->find, "export") && data->next == NULL)
 		bc_export(data);
-	else if (!CMP(data->find, "unset"))
+	else if (!CMP(data->find, "unset") && data->next == NULL)
 		bc_unset(data);
 	else if (!CMP(data->find, "exit") && data->next == NULL)
 		bc_exit(data->args);
@@ -137,7 +137,9 @@ void	loop_in_data(void)
 	t_cmd	*data;
 	t_fnl	*tmp;
 	int		*pfd;
+	int		count;
 
+	count = 0;
 	tmp = g_list_of_commands;
 	while (tmp)
 	{
@@ -145,6 +147,7 @@ void	loop_in_data(void)
 		create_files(data->redir);
 		pfd = open_pipes(data);
 		open_pipes_and_execute(data, pfd);
+		count++;
 		tmp = tmp->next;
 		free(pfd);
 	}
