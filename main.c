@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/19 09:38:36 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/24 19:29:34 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1005,6 +1005,7 @@ void	free_tmp()
 	int	k;
 
 	i = -1;
+	// printf("called\n");
 	while (g_line->scol[++i].buf)
 	{
 		free_buf_and_mask(g_line->scol[i]);
@@ -1027,94 +1028,51 @@ void	free_tmp()
 
 int		format_string()
 {
-	// printf("str = |%s|\n", line.rd.buf);
-	// printf("msk = |%s|\n", line.mask);
-	// printf("env = |%s|\n", line.buf);
-	// printf("msk = |%s|\n", line.msk);
-	// for (int i = 0; i < g_line->env.cnt; i++)
-	// {
-	// 	for (int j = 0; j < g_line->scol[i].cnt; j++)
-	// 	{
-	// 		for (int k = 0; g_line->redir[i][j][k].buf; k++)
-	// 		{
-	// 			printf("buf[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].buf);
-	// 			printf("msk[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].msk);
-	// 		}
-	// 	}
-	// }
 	char	*tmp;
 	int		ret;
 	int		i;
+	int		x;
 	t_fnl	**tracer;
 
 	g_bash_errno = 0;
+	if ((tmp = ft_strchr(g_line->rd.buf, '\n')) != NULL)
+		*tmp = '\0';
 	g_line->rd_len = ft_strlen(g_line->rd.buf);
 	if (!(MALLOC(g_line->rd.msk, g_line->rd_len + 1)))
 		cleanup(EXIT);
 	set_mask();
-	// PV(g_line->rd.msk, "%s\n");
 	if (g_bash_errno)
 		return (g_bash_errno);
-	rplc_env_var();
-	split_wmask(&g_line->env, &g_line->scol, ';');
-	if (!(MALLOC(g_line->pipe, g_line->env.cnt + 1)))
-		cleanup(EXIT);
-	g_line->pipe[g_line->env.cnt] = NULL;
-	split_pipe();
-	split_redirects();
-	// printf("rdbuf = |%s|\n", g_line->rd.buf);
-	// printf("rdmsk = |%s|\n", g_line->rd.msk);
-	// for (int i = 0; g_line->scol[i].buf; i++)
-	// {
-	// 	printf("scol[%d].buf = |%s|\n", i, g_line->scol[i].buf);
-	// 	printf("scol[%d].msk = |%s|\n", i, g_line->scol[i].msk);
-		// for (int j = 0; g_line->pipe[i][j].buf; j++)
-		// {
-		// 	printf("pipe[%d][%d].buf = |%s|\n", i, j, g_line->pipe[i][j].buf);
-		// 	printf("pipe[%d][%d].msk = |%s|\n", i, j, g_line->pipe[i][j].msk);
-		// 	for (int k = 0; g_line->redir[i][j][k].buf; k++)
-		// 	{
-		// 		printf("buf[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].buf);
-		// 		printf("msk[%d][%d][%d] = |%s|\n", i, j, k, g_line->redir[i][j][k].msk);
-		// 	}
-		// }
-	// }
 	if (!initial_error_check())
 		return (g_bash_errno);
-	i = -1;
-	g_list_of_commands = NULL;
-	tracer = &g_list_of_commands;
-	while (++i < g_line->env.cnt)
+	////////////////////////////////////////////////////////////////////////////
+	
+	split_wmask(&g_line->rd, &g_line->it, ';');
+	x = -1;
+	while (g_line->it[++x].buf)
 	{
-		if (!(MALLOC(*tracer, 1)))
+		g_line->rd = g_line->it[x];
+		rplc_env_var();
+		split_wmask(&g_line->env, &g_line->scol, ';');
+		if (!(MALLOC(g_line->pipe, g_line->env.cnt + 1)))
 			cleanup(EXIT);
-		(*tracer)->cmd_and_args = NULL;
-		(*tracer)->next = NULL;
-		(*tracer)->cmd_and_args = get_cmd(g_line->redir[i]);
-		tracer = &(*tracer)->next;
-	}
-	/*t_fnl *tmmp = g_list_of_commands;
-	t_cmd *tmpp;
-	while (tmmp)
-	{
-		tmpp = tmmp->cmd_and_args;
-		while (tmpp)
+		g_line->pipe[g_line->env.cnt] = NULL;
+		split_pipe();
+		split_redirects();
+		i = -1;
+		g_list_of_commands = NULL;
+		tracer = &g_list_of_commands;
+		while (++i < g_line->env.cnt)
 		{
-			if (tmpp->find)
-				printf("cmd = |%s|\n", tmpp->find);
-			if (tmpp->args)
-				for (int i = 0; tmpp->args[i]; i++)
-					printf("arg[%d] = |%s|\n", i, tmpp->args[i]);
-			if (tmpp->redir)
-				for (int i = 0; tmpp->redir[i].file_name; i++)
-					printf("redir[%d].type = %s, redir[%d].file_name = |%s|\n",
-					i, tmpp->redir[i].type == RL ? "RL" : (tmpp->redir[i].type == RR ? "RR" : "RRR"), i, tmpp->redir[i].file_name);
-			tmpp = tmpp->next;
+			if (!(MALLOC(*tracer, 1)))
+				cleanup(EXIT);
+			(*tracer)->cmd_and_args = NULL;
+			(*tracer)->next = NULL;
+			(*tracer)->cmd_and_args = get_cmd(g_line->redir[i]);
+			tracer = &(*tracer)->next;
 		}
-		tmmp = tmmp->next;
-	}*/
-	// else if (check_command())
-	// 	ret = ECOMMAND;
+		exec();
+	}
 	return (g_bash_errno);
 }
 
@@ -1379,9 +1337,7 @@ int		main(int ac, char **av, char **envp)
 			exit_the_shell();
 		else
 		{
-			if (!format_string())
-				exec();
-			else
+			if (format_string())
 				bash_error();
 			free_and_set_to_null(&g_line->rd.buf);
 		}

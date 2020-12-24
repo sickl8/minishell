@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:33:39 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/18 14:54:05 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/24 19:19:08 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct	s_line
 	char	**envp;
 	t_evar	*env_var;
 	t_bm	rd;
+	t_bm	*it;
 	t_bm	env;
 	t_bm	*scol;
 	t_bm	**pipe;
