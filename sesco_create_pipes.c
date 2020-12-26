@@ -74,10 +74,10 @@ void	put_exit_status(void)
 	int		w_ret;
 
 	w_ret = 1;
-	while (w_ret > 0)
+	while (w_ret != -1)
 	{
 		g_sig = 1;
-		w_ret = waitpid(0, &status, 0);
+		w_ret = wait(&status);
 		g_sig = 0;
 		if (g_program_return != 1 && WIFEXITED(status))
 			g_program_return = WEXITSTATUS(status);
