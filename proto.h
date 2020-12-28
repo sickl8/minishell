@@ -32,6 +32,7 @@ size_t		true_len(t_bm p);
 void		free_buf_and_mask(t_bm s);
 t_bm		previous_word(t_bm rd, t_bm ref);
 void		loop_in_data();
+// void		_bash_error(const char *, int);
 void		bash_error();
 void		free_path(char **paths);
 int			*count_cmds(t_cmd *data, int *i);

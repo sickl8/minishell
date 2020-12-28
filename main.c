@@ -955,6 +955,24 @@ int		cleanup(int ex)
 	return (0);
 }
 
+void	free_it()
+{
+	int		i;
+
+	if (g_line->it)
+	{
+		i = 0;
+		while (g_line->it[i].buf)
+		{
+			free(g_line->it[i].buf);
+			free(g_line->it[i].msk);
+			i++;
+		}
+		free(g_line->it);
+	}
+	g_line->it = NULL;
+}
+
 void	free_and_set_to_null(void *adr)
 {
 	void	**cast;
@@ -973,6 +991,7 @@ void	fastn()
 	free_and_set_to_null(&g_line->pipe);
 	free_and_set_to_null(&g_line->env.buf);
 	free_and_set_to_null(&g_line->env.msk);
+	free_and_set_to_null(&g_line->rd.buf);
 	free_and_set_to_null(&g_line->rd.msk);
 	while (g_list_of_commands)
 	{
@@ -1048,6 +1067,7 @@ int		format_string()
 	////////////////////////////////////////////////////////////////////////////
 	
 	split_wmask(&g_line->rd, &g_line->it, ';');
+	free_buf_and_mask(g_line->rd);
 	x = -1;
 	while (g_line->it[++x].buf)
 	{
@@ -1073,7 +1093,8 @@ int		format_string()
 		}
 		exec();
 	}
-	return (g_bash_errno);
+	free_and_set_to_null(&g_line->it);
+	return (0);
 }
 
 void	reset_prompt(void)
@@ -1170,7 +1191,7 @@ void	init_read()
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
-	skittles(user.value);
+	skittles(!CMP(user.value, "aamzouar") ? "I'M GAY" : user.value);
 	skittles("@minishell");
 	BPRINTS(ESC_RESET ":");
 	BPRINTS(ESC_BLUE_B);

@@ -124,7 +124,7 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 				execute_cmd(data, pfd, j);
 			close(pfd[j - 1]);
 			close(pfd[j]);
-			parent_stuff(data);	
+			parent_stuff(data);
 		}
 		j += 2;
 		data = data->next;
@@ -144,7 +144,6 @@ void	loop_in_data(void)
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
-		create_files(data->redir);
 		pfd = open_pipes(data);
 		open_pipes_and_execute(data, pfd);
 		count++;

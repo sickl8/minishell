@@ -53,12 +53,17 @@
 # define IPP (*ref)++
 # define PPI ++(*ref)
 # define PV(x, y) printf(#x " = " y, x)
+# define EPV(x, y) fprintf(stderr, #x " = " y, x)
 # define APPND O_WRONLY | O_APPEND
 # define TRNCT O_WRONLY | O_TRUNC
 # define N_B_ERROR 5
 # define STRCPY(dest, src) ft_strncpy(dest, src, -1)
 # define ISNUM(x) (x >= '0' && x <= '9')
+# define PERM S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+
 // #define g_bash_errno *get_g_bash_errno(__func__)
+
+// # define bash_error() _bash_error(__func__, __LINE__)
 
 # include "bufferedio.h"
 # include "colors.h"

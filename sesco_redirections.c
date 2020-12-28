@@ -51,29 +51,29 @@ void	create_files(t_rdr *redir)
 	}
 }
 
-void	open_redir_files(t_rdr *redir, int index[2], int fd[2])
+void	open_redir_files(t_rdr *redir, int fd[2])
 {
 	int		i;
 
 	i = 0;
 	while (redir[i].file_name)
 	{
-		if (redir[i].type == 0 || redir[i].type == 1)
+		if (redir[i].type == RRR || redir[i].type == RR)
 		{
-			index[1] = i;
-			if (fd[1] != -1)
-				close(fd[1]);
-			if (redir[index[1]].type == 0)
-				fd[1] = open(redir[index[1]].file_name, APPND);
-			else if (redir[index[1]].type == 1)
-				fd[1] = open(redir[index[1]].file_name, TRNCT);
+			if (redir[i].type == RRR)
+				fd[1] = open(redir[i].file_name, APPND | O_CREAT, PERM);
+			else if (redir[i].type == RR)
+				fd[1] = open(redir[i].file_name, TRNCT | O_CREAT, PERM);
 		}
-		else if (redir[i].type == 2)
+		else if (redir[i].type == RL)
+			fd[0] = open(redir[i].file_name, O_RDONLY);
+		if (fd[0] == -1 || fd[1] == -1)
 		{
-			index[0] = i;
-			if (fd[0] != -1)
-				close(fd[0]);
-			fd[0] = open(redir[index[0]].file_name, O_RDONLY);
+			g_bash_errno = E_ERRNO;
+			ft_strcpy(g_bash_error, redir[i].file_name);
+			g_bash_commandid = BC_DEF;
+			bash_error();
+			return ;
 		}
 		i++;
 	}
@@ -82,13 +82,12 @@ void	open_redir_files(t_rdr *redir, int index[2], int fd[2])
 void	make_a_redirection(t_rdr *redir)
 {
 	int		fd[2];
-	int		index[2];
 
-	index[0] = -1;
-	index[1] = -1;
-	fd[0] = -1;
-	fd[1] = -1;
-	open_redir_files(redir, index, fd);
+	fd[0] = -2;
+	fd[1] = -2;
+	open_redir_files(redir, fd);
+	if (fd[0] == -1 || fd[1] == -1)
+		exit(1);
 	if (fd[0] > -1)
 	{
 		dup2(fd[0], 0);

@@ -130,9 +130,7 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 	make_a_redirection(data->redir);
 	data->path2exec = data->find;
 	if ((cmd = is_builtin(data->find)))
-	{
 		builtin(data, cmd);
-	}
 	else
 		execute_cmd_continue(data, bk);
 	exit(0);
