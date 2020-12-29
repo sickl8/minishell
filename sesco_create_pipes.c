@@ -112,20 +112,18 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 	j = 1;
 	while (data)
 	{
-		if (data->find)
+		g_pid = fork();
+		if (g_pid == -1)
 		{
-			g_pid = fork();
-			if (g_pid == -1)
-			{
-				free(pfd);
-				cleanup(EXIT);
-			}
-			if (g_pid == 0)
-				execute_cmd(data, pfd, j);
-			close(pfd[j - 1]);
-			close(pfd[j]);
-			parent_stuff(data);
+			free(pfd);
+			cleanup(EXIT);
 		}
+		if (g_pid == 0)
+			execute_cmd(data, pfd, j);
+		close(pfd[j - 1]);
+		close(pfd[j]);
+		if (data->find)
+			parent_stuff(data);
 		j += 2;
 		data = data->next;
 	}
