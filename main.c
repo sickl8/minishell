@@ -1190,7 +1190,7 @@ void	init_read()
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
-	skittles(!CMP(user.value, "aamzouar") ? "I'M GAY" : user.value);
+	skittles(!CMP(user.value, "isaadi") ? "I'M A MOTHERFUCKER" : user.value);
 	skittles("@minishell");
 	BPRINTS(ESC_RESET ":");
 	BPRINTS(ESC_BLUE_B);
