@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:01:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 20:08:20 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/29 21:16:43 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*find_in_single_path(char *tofind, char **paths, int i)
 	{
 		while ((file = readdir(dir)) && ret == NULL)
 		{
-			if (!CMP(tofind, file->d_name))
+			if (!CMP(tofind, ft_strtolower(file->d_name)))
 			{
 				paths[i] = fix_path(paths, i);
 				if (!(ret = ft_strjoin(paths[i], file->d_name)))

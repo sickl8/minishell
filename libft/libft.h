@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 18:36:12 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 14:12:43 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/29 21:11:53 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ void			*ft_memset(void *b, int c, size_t len);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 int				ft_strcmp(char *s1, char *s2);
 char			*ft_strstr(char *haystack, char *needle);
+char			*ft_strtolower(char *str);
 
 #endif

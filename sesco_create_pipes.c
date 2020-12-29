@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_create_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/19 10:59:43 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/29 21:17:37 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 			free(pfd);
 			cleanup(EXIT);
 		}
+		
+		data->find = data->find ? ft_strtolower(data->find) : NULL;
 		if (g_pid == 0)
 			execute_cmd(data, pfd, j);
 		close(pfd[j - 1]);
