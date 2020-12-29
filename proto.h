@@ -35,7 +35,7 @@ void		loop_in_data();
 // void		_bash_error(const char *, int);
 void		bash_error();
 void		free_path(char **paths);
-int			*count_cmds(t_cmd *data, int *i);
+int			*count_cmds(t_cmd *data);
 void		execute_cmd(t_cmd *data, int *pfd, int j);
 void		make_a_redirection(t_rdr *redir);
 char		*fix_path(char **paths, int i);

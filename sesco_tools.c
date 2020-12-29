@@ -99,16 +99,16 @@ void	free_path(char **paths)
 ** memory to the holding array
 */
 
-int		*count_cmds(t_cmd *data, int *i)
+int		*count_cmds(t_cmd *data)
 {
 	int		*pipes_fd;
 
 	while (data)
 	{
-		(*i)++;
+		g_cmds_length++;
 		data = data->next;
 	}
-	if (!(MALLOC(pipes_fd, *i * 2)))
+	if (!(MALLOC(pipes_fd, g_cmds_length * 2)))
 		cleanup(EXIT);
 	return (pipes_fd);
 }

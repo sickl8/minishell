@@ -43,8 +43,9 @@ int		*open_pipes(t_cmd *data)
 	int		j;
 	int		pfd[2];
 
-	i = 0;
-	pipes_fd = count_cmds(data, &i);
+	g_cmds_length = 0;
+	pipes_fd = count_cmds(data);
+	i = g_cmds_length;
 	j = 1;
 	pipes_fd[0] = dup(0);
 	pipes_fd[(i * 2) - 1] = dup(1);
@@ -89,13 +90,13 @@ void	put_exit_status(void)
 void	parent_stuff(t_cmd *data)
 {
 	g_program_return = 0;
-	if (!CMP(data->find, "cd"))
+	if (!CMP(data->find, "cd") && g_cmds_length == 1)
 		bc_cd(data);
-	else if (!CMP(data->find, "export") && data->next == NULL)
+	else if (!CMP(data->find, "export") && g_cmds_length == 1)
 		bc_export(data);
-	else if (!CMP(data->find, "unset") && data->next == NULL)
+	else if (!CMP(data->find, "unset") && g_cmds_length == 1)
 		bc_unset(data);
-	else if (!CMP(data->find, "exit") && data->next == NULL)
+	else if (!CMP(data->find, "exit") && g_cmds_length == 1)
 		bc_exit(data->args);
 }
 

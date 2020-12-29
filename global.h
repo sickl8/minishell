@@ -31,5 +31,6 @@ char	g_s_program_return[100];
 int		g_sig;
 pid_t	g_pid;
 int		g_dup;
+int     g_cmds_length;
 
 #endif
