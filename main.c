@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/24 19:29:34 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/12/30 15:59:17 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1176,14 +1176,14 @@ void	skittles(char *s)
 void	init_read()
 {
 	t_evar	home;
-	t_evar	pwd;
 	t_evar	user;
 	t_evar return_status;
 
 	home = find_env("HOME");
 	return_status = find_env("?");
-	pwd.name = "PWD";
-	pwd.value = getcwd(NULL, 0);
+	g_pwd.name = "PWD";
+	g_pwd.value = getcwd(NULL, 0);
+	g_pwd.value_len = ft_strlen(g_pwd.value);
 	user = find_env("USER");
 	//ft_memset(g_line->rd.buf, '\0', ARG_MAX + 2);
 	//ft_memset(g_line->rd.msk, '\0', ARG_MAX + 3);
@@ -1194,16 +1194,16 @@ void	init_read()
 	skittles("@minishell");
 	BPRINTS(ESC_RESET ":");
 	BPRINTS(ESC_BLUE_B);
-	if (ft_strstr(pwd.value, home.name ? home.value : NULL) == pwd.value)
+	if (ft_strstr(g_pwd.value, home.name ? home.value : NULL) == g_pwd.value)
 	{
 		BPRINTS("~");
-		BPRINT(pwd.value + home.value_len);
+		BPRINT(g_pwd.value + home.value_len);
 	}
 	else
-		BPRINT(pwd.value);
+		BPRINT(g_pwd.value);
 	BPRINTS(ESC_RESET "$ ");
 	bflush(STDOUT_FILENO);
-	free(pwd.value);
+	free(g_pwd.value);
 	free(g_line->rd.buf);
 	g_line->rd.buf = NULL;
 }
@@ -1319,6 +1319,7 @@ void	init(t_line *ref, char **envp)
 
 	b_errors[EB_UNSET_EXPORT_NVI] = "not a valid identifier";
 	b_errors[EB_CD_HNT] = "HOME not set";
+	b_errors[EB_CD_ONT] = "OLDPWD not set";
 	b_errors[EB_CD_EXIT_TMA] = "too many arguments";
 	b_errors[EB_EXIT_NAR] = "numeric argument required";
 	b_errors[N_B_ERROR - 1] = NULL;

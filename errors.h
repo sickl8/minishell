@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 13:26:44 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/27 18:52:10 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/30 15:17:04 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@
 # define EB_CD_HNT 1
 # define EB_CD_EXIT_TMA 2
 # define EB_EXIT_NAR 3
+# define EB_CD_ONT 4
 
 #endif

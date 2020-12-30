@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_4.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/19 09:38:39 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/30 17:24:14 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,32 @@
 
 #include <stdio.h>
 
-int		go_to_home(void)
+int		go_to(t_cmd *data)
 {
-	t_evar	home_path;
+	t_evar	var;
 
-	home_path = find_env("HOME");
-	if (!home_path.name)
+	var = data->args[1] ? find_env("OLDPWD") : find_env("HOME");
+	if (!var.name)
 	{
-		g_program_return = 1;
-		g_bash_errno = E_BUILTIN;
-		ft_strncpy(g_bash_error, home_path.value, -1);
-		g_builtin_errno = EB_CD_HNT;
+		A(g_program_return, 1) && A(g_bash_errno, E_BUILTIN);
+		ft_strncpy(g_bash_error, var.value, -1);
+		g_builtin_errno = data->args[1] ? EB_CD_ONT : EB_CD_HNT;
 		g_bash_commandid = BC_CD;
 		bash_error();
 		return (1);
 	}
-	if (chdir(home_path.value) < 0)
+	var.value_len = !(var.value = ft_strdup(var.value)) ?
+	cleanup(EXIT) : var.value_len;
+	if (change_dir(var.value, getcwd(NULL, 0)) < 0)
 	{
-		g_program_return = 1;
-		g_bash_errno = E_ERRNO;
-		ft_strncpy(g_bash_error, home_path.value, -1);
+		A(g_program_return, 1) && A(g_bash_errno, E_ERRNO);
+		ft_strncpy(g_bash_error, var.value, -1);
 		g_bash_commandid = BC_CD;
 		bash_error();
+		free(var.value);
 		return (1);
 	}
+	free(var.value);
 	return (0);
 }
 

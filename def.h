@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   def.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/19 10:35:25 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/30 15:17:20 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define EPV(x, y) fprintf(stderr, #x " = " y, x)
 # define APPND O_WRONLY | O_APPEND
 # define TRNCT O_WRONLY | O_TRUNC
-# define N_B_ERROR 5
+# define N_B_ERROR 6
 # define STRCPY(dest, src) ft_strncpy(dest, src, -1)
 # define ISNUM(x) (x >= '0' && x <= '9')
 # define PERM S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH

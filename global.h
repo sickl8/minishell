@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/11 17:10:50 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/30 15:32:13 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ int		g_sig;
 pid_t	g_pid;
 int		g_dup;
 int     g_cmds_length;
+t_evar	g_pwd;
 
 #endif

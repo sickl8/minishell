@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   proto.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/19 10:40:20 by aamzouar         ###   ########.fr       */
+/*   Updated: 2020/12/30 17:22:05 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ t_export	calc_lengths(int *valid, int len);
 char		*name_or_value(int sign, char *arg);
 int			bc_exit(char **args);
 void		free_tmp();
-int			go_to_home(void);
+int			go_to(t_cmd *data);
+int			change_dir(char *s, char *cwd);
 void		create_files(t_rdr *redir);
+int			assign(void *p, unsigned long long v, int size);
 
 #endif
