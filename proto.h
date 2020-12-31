@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/31 17:35:38 by sickl8           ###   ########.fr       */
+/*   Updated: 2020/12/31 18:55:02 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,7 @@ int			change_dir(char *s, char *cwd);
 void		create_files(t_rdr *redir);
 int			assign(void *p, unsigned long long v, int size);
 int			eerf(void *p);
+int			bc_cd_fork(t_cmd *data);
+int			go_to_fork(t_cmd *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/30 17:24:14 by sickl8           ###   ########.fr       */
+/*   Updated: 2020/12/31 18:53:50 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,22 @@ int		go_to(t_cmd *data)
 	var = data->args[1] ? find_env("OLDPWD") : find_env("HOME");
 	if (!var.name)
 	{
-		A(g_program_return, 1) && A(g_bash_errno, E_BUILTIN);
-		ft_strncpy(g_bash_error, var.value, -1);
-		g_builtin_errno = data->args[1] ? EB_CD_ONT : EB_CD_HNT;
-		g_bash_commandid = BC_CD;
-		bash_error();
+		// A(g_program_return, 1) && A(g_bash_errno, E_BUILTIN);
+		// ft_strncpy(g_bash_error, var.value, -1);
+		// g_builtin_errno = data->args[1] ? EB_CD_ONT : EB_CD_HNT;
+		// g_bash_commandid = BC_CD;
+		// bash_error();
 		return (1);
 	}
 	var.value_len = !(var.value = ft_strdup(var.value)) ?
 	cleanup(EXIT) : var.value_len;
 	if (change_dir(var.value, getcwd(NULL, 0)) < 0)
 	{
-		A(g_program_return, 1) && A(g_bash_errno, E_ERRNO);
-		ft_strncpy(g_bash_error, var.value, -1);
-		g_bash_commandid = BC_CD;
-		bash_error();
-		free(var.value);
+		// A(g_program_return, 1) && A(g_bash_errno, E_ERRNO);
+		// ft_strncpy(g_bash_error, var.value, -1);
+		// g_bash_commandid = BC_CD;
+		// bash_error();
+		// free(var.value);
 		return (1);
 	}
 	free(var.value);

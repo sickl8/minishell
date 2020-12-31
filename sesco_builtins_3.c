@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/30 17:29:57 by sickl8           ###   ########.fr       */
+/*   Updated: 2020/12/31 18:53:33 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,11 @@ int		bc_cd(t_cmd *data)
 	{
 		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)
 		{
-			g_program_return = 1;
-			g_bash_errno = E_ERRNO;
-			ft_strncpy(g_bash_error, data->args[1], -1);
-			g_bash_commandid = BC_CD;
-			bash_error();
+			// g_program_return = 1;
+			// g_bash_errno = E_ERRNO;
+			// ft_strncpy(g_bash_error, data->args[1], -1);
+			// g_bash_commandid = BC_CD;
+			// bash_error();
 			return (1);
 		}
 	}

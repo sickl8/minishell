@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/31 17:31:13 by sickl8           ###   ########.fr       */
+/*   Updated: 2020/12/31 18:57:09 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int		builtin(t_cmd *data, int cmd)
 	int		ret;
 
 	if (cmd == BC_CD)
-		ret = bc_cd(data);
+		ret = bc_cd_fork(data);
 	else if (cmd == BC_ECHO)
 		ret = bc_echo(data);
 	else if (cmd == BC_ENV)
