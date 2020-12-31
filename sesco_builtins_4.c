@@ -138,7 +138,7 @@ int		bc_exit(char **argv)
 	int		argc;
 	int		exit_status;
 
-	OPRINTS("exit\n");
+	g_cmds_length == 1 ? OPRINTS("exit\n") : 0;
 	argc = 0;
 	while (argv[argc])
 		argc++;
@@ -149,15 +149,16 @@ int		bc_exit(char **argv)
 		g_builtin_errno = EB_EXIT_NAR;
 		ft_strcpy(g_bash_error, argv[1]);
 		bash_error();
-		cleanup(2);
+		g_cmds_length == 1 ? cleanup(2) : 0;
 	}
-	if (argc > 2)
+	else if (argc > 2)
 	{
 		g_builtin_errno = EB_CD_EXIT_TMA;
 		bash_error();
 		return (1);
 	}
 	exit_status = argc == 1 ? 0 : ft_atoi(argv[1]);
-	cleanup(RETURN);
-	exit(exit_status % 256);
+	g_cmds_length == 1 ? cleanup(RETURN) : 0;
+	g_cmds_length == 1 ? exit(exit_status % 256) : 0;
+    return (0);
 }

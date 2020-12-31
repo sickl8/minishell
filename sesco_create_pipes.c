@@ -96,7 +96,7 @@ void	parent_stuff(t_cmd *data)
 		bc_export(data);
 	else if (!CMP(data->find, "unset"))
 		bc_unset(data);
-	else if (!CMP(data->find, "exit") && g_cmds_length == 1)
+	else if (!CMP(data->find, "exit"))
 		bc_exit(data->args);
 }
 
