@@ -68,12 +68,17 @@ int		bc_export(t_cmd *data)
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
 	lengths = calc_lengths(valid_args, args_len);
-	if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_env_len + 1))))
-		cleanup(EXIT);
-	export_new_vars(data->args, lengths, 0, tmp);
-	free(valid_args);
-	free_envar();
-	g_line->env_var = tmp;
+	if (g_cmds_length == 1)
+	{
+		if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_env_len + 1))))
+			cleanup(EXIT);
+		export_new_vars(data->args, lengths, 0, tmp);
+		free(valid_args);
+		free_envar();
+		g_line->env_var = tmp;
+	}
+	else
+		free(valid_args);
 	return (0);
 }
 

@@ -92,9 +92,9 @@ void	parent_stuff(t_cmd *data)
 	g_program_return = 0;
 	if (!CMP(data->find, "cd") && g_cmds_length == 1)
 		bc_cd(data);
-	else if (!CMP(data->find, "export") && g_cmds_length == 1)
+	else if (!CMP(data->find, "export"))
 		bc_export(data);
-	else if (!CMP(data->find, "unset") && g_cmds_length == 1)
+	else if (!CMP(data->find, "unset"))
 		bc_unset(data);
 	else if (!CMP(data->find, "exit") && g_cmds_length == 1)
 		bc_exit(data->args);
