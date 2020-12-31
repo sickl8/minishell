@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/30 15:59:17 by sickl8           ###   ########.fr       */
+/*   Updated: 2020/12/31 17:35:09 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1059,10 +1059,8 @@ int		format_string()
 	if (!(MALLOC(g_line->rd.msk, g_line->rd_len + 1)))
 		cleanup(EXIT);
 	set_mask();
-	if (g_bash_errno)
-		return (g_bash_errno);
-	if (!initial_error_check())
-		return (g_bash_errno);
+	if (g_bash_errno || !initial_error_check())
+		return (eerf(g_line->rd.msk) * 0 + g_bash_errno);
 	////////////////////////////////////////////////////////////////////////////
 	
 	split_wmask(&g_line->rd, &g_line->it, ';');
