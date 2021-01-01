@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sickl_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2020/12/30 18:18:07 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/01 19:39:10 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,41 @@ int		change_dir(char *s, char *cwd)
 	bc_export(&d);
 	eerf(s) && eerf(cwd) && eerf(p);
 	return (ret);
+}
+
+size_t	ft_len(void *p, int	size, size_t end)
+{
+	short	*sp;
+	int		*ip;
+	long	*lp;
+	size_t	ret;
+
+	ret = 0;
+	if (size == 1)
+		return (ft_strlen((char*)p));
+	else if (size == 2 && (sp = (short*)p))
+	{
+		while (sp[ret] != (short)end)
+			ret++;
+	}
+	else if (size == 4 && (ip = (int*)p))
+	{
+		while (ip[ret] != (int)end)
+			ret++;
+	}
+	else if (size == 8 && (lp = (long*)p))
+	{
+		while (lp[ret] != (long)end)
+			ret++;
+	}
+	return (ret);
+}
+
+int		bc_export_bk(t_cmd *data)
+{
+	int		argc;
+	char	**argv;
+
+	argv = data->args;
+	argc = 0;
 }

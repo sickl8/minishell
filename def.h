@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   def.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/30 15:17:20 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/01 19:40:45 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@
 # define STRCPY(dest, src) ft_strncpy(dest, src, -1)
 # define ISNUM(x) (x >= '0' && x <= '9')
 # define PERM S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+# define LEN(x) ft_len(x, sizeof(x), 0)
+# define LEN(x, y) ft_len(x, sizeof(x), y)
 
 // #define g_bash_errno *get_g_bash_errno(__func__)
 

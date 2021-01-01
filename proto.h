@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   proto.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/31 18:55:02 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/01 19:41:06 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ int			assign(void *p, unsigned long long v, int size);
 int			eerf(void *p);
 int			bc_cd_fork(t_cmd *data);
 int			go_to_fork(t_cmd *data);
+size_t		ft_len(void *p, int	size, size_t end);
 
 #endif
