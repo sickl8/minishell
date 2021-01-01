@@ -36,6 +36,14 @@
 ** pipes_fd[2] = pipe[0];
 */
 
+void    *failing_error(t_cmd *data)
+{
+	EPRINTS("minishell: ");
+	EPRINT(strerror(errno));
+	EPRINTS("\n");
+	return (NULL);
+}
+
 int		*open_pipes(t_cmd *data)
 {
 	int		*pipes_fd;
@@ -54,7 +62,7 @@ int		*open_pipes(t_cmd *data)
 		if (pipe(pfd) == -1)
 		{
 			free(pipes_fd);
-			cleanup(EXIT);
+			return ((int *)failing_error(data));
 		}
 		pipes_fd[j] = pfd[1];
 		pipes_fd[j + 1] = pfd[0];
@@ -117,7 +125,8 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 		if (g_pid == -1)
 		{
 			free(pfd);
-			cleanup(EXIT);
+			failing_error(data);
+			return ;
 		}
 		data->find = data->find ? ft_strtolower(data->find) : NULL;
 		if (g_pid == 0)
@@ -144,8 +153,8 @@ void	loop_in_data(void)
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
-		pfd = open_pipes(data);
-		open_pipes_and_execute(data, pfd);
+		if ((pfd = open_pipes(data)))
+			open_pipes_and_execute(data, pfd);
 		count++;
 		tmp = tmp->next;
 		free(pfd);

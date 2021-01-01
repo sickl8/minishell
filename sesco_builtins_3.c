@@ -134,7 +134,7 @@ int		bc_cd(t_cmd *data)
 	{
 		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)
 		{
-			// g_program_return = 1;
+			g_program_return = 1;
 			// g_bash_errno = E_ERRNO;
 			// ft_strncpy(g_bash_error, data->args[1], -1);
 			// g_bash_commandid = BC_CD;
