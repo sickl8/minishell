@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/31 17:35:09 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/01 17:34:46 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1116,7 +1116,8 @@ void	exit_the_shell(void)
 void	ctrl_d(int *bk)
 {
 	reset_stdin(bk);
-	OPRINTS("  \n");
+	OPRINTS("\e[2K");
+	OPRINTS("\r");
 }
 
 void	handle_signal(int sig)
