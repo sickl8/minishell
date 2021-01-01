@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/31 18:53:33 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/01 17:22:51 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		duplicated_variable(char *arg_name, int len)
 	// if it's name only without equal don't consider it so i won't add it to env
 	ft_strncpy(tmp, arg_name, len);
 	tmp[len] = '\0';
-	if (arg_name[len - 1] != '\0' && g_dup == 0)
+	if (arg_name[(len > 0 ? len : 1) - 1] != '\0' && g_dup == 0)
 	{
 		while (g_line->env_var[i].name)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_create_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/30 13:08:04 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/01 17:02:06 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	parent_stuff(t_cmd *data)
 ** command/commands
 */
 
-void	open_pipes_and_execute(t_cmd *data, int *pfd)
+int		open_pipes_and_execute(t_cmd *data, int *pfd)
 {
 	int		j;
 
@@ -126,7 +126,7 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 		{
 			free(pfd);
 			failing_error(data);
-			return ;
+			return (1);
 		}
 		data->find = data->find ? ft_strtolower(data->find) : NULL;
 		if (g_pid == 0)
@@ -139,6 +139,7 @@ void	open_pipes_and_execute(t_cmd *data, int *pfd)
 		data = data->next;
 	}
 	put_exit_status();
+	return (0);
 }
 
 void	loop_in_data(void)
@@ -154,7 +155,8 @@ void	loop_in_data(void)
 	{
 		data = tmp->cmd_and_args;
 		if ((pfd = open_pipes(data)))
-			open_pipes_and_execute(data, pfd);
+			if (open_pipes_and_execute(data, pfd))
+				return ;
 		count++;
 		tmp = tmp->next;
 		free(pfd);
