@@ -36,14 +36,6 @@
 ** pipes_fd[2] = pipe[0];
 */
 
-void    *failing_error(t_cmd *data)
-{
-	EPRINTS("minishell: ");
-	EPRINT(strerror(errno));
-	EPRINTS("\n");
-	return (NULL);
-}
-
 int		*open_pipes(t_cmd *data)
 {
 	int		*pipes_fd;
@@ -101,7 +93,7 @@ void	parent_stuff(t_cmd *data)
 	if (!CMP(data->find, "cd") && g_cmds_length == 1)
 		bc_cd(data);
 	else if (!CMP(data->find, "export"))
-		bc_export(data);
+		!data->args[1] ? print_all_envs() : bc_export(data);
 	else if (!CMP(data->find, "unset"))
 		bc_unset(data);
 	else if (!CMP(data->find, "exit"))

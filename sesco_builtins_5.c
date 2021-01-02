@@ -29,6 +29,25 @@
 
 #include <stdio.h>
 
+void    print_all_envs(void)
+{
+	int		env_len;
+
+	env_len = ;
+}
+
+/*
+** showing an error if FORK or PIPE failed !
+*/
+
+void    *failing_error(t_cmd *data)
+{
+	EPRINTS("minishell: ");
+	EPRINT(strerror(errno));
+	EPRINTS("\n");
+	return (NULL);
+}
+
 int		go_to_fork(t_cmd *data)
 {
 	t_evar	var;

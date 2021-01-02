@@ -29,28 +29,6 @@
 
 #include <stdio.h>
 
-/*
-** New Logic Always Create Files Before
-** Needing To Redirect The Output Of Any
-** Command
-*/
-
-void	create_files(t_rdr *redir)
-{
-	int		i;
-	mode_t	mode;
-	int		fd;
-
-	mode = S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-	i = 0;
-	while (redir[i].file_name)
-	{
-		fd = open(redir[i].file_name, O_CREAT | O_TRUNC, mode);
-		close(fd);
-		i++;
-	}
-}
-
 void	open_redir_files(t_rdr *redir, int fd[2])
 {
 	int		i;

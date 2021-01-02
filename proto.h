@@ -62,7 +62,6 @@ int			bc_exit(char **args);
 void		free_tmp();
 int			go_to(t_cmd *data);
 int			change_dir(char *s, char *cwd);
-void		create_files(t_rdr *redir);
 int			assign(void *p, unsigned long long v, int size);
 int			eerf(void *p);
 int			bc_cd_fork(t_cmd *data);
