@@ -98,4 +98,5 @@ int		bc_export_bk(t_cmd *data)
 
 	argv = data->args;
 	argc = 0;
+	return (0);
 }

@@ -61,7 +61,7 @@
 # define ISNUM(x) (x >= '0' && x <= '9')
 # define PERM S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 # define LEN(x) ft_len(x, sizeof(x), 0)
-# define LEN(x, y) ft_len(x, sizeof(x), y)
+# define LENX(x, y) ft_len(x, sizeof(x), y)
 
 // #define g_bash_errno *get_g_bash_errno(__func__)
 
