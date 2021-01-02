@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/02 23:32:47 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/02 23:46:17 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1125,9 +1125,7 @@ void	handle_signal(int sig)
 	if (sig != SIGQUIT)
 		reset_prompt();
 	else
-	{
-		OPRINTS("  \b\b");
-	}
+		OPRINTS("\b\b  \b\b");
 }
 
 void	handle_error(int ex)
