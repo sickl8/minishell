@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2020/12/31 18:54:36 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:06:50 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	print_env_list(t_evar *env_copy, int env_len)
 	}
 }
 
-void    print_all_envs(void)
+int		print_all_envs(void)
 {
 	t_evar		*env_copy;
 	int			env_len;
@@ -104,6 +104,7 @@ void    print_all_envs(void)
 		sort_env_list(env_copy);
 		print_env_list(env_copy, env_len);
 	}
+	return (0);
 }
 
 /*

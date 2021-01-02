@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/31 18:53:50 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:22:29 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,15 @@ int		bc_exit(char **argv)
 	g_bash_errno = E_BUILTIN;
 	if (argc > 1 && check_if_num(argv[1]))
 	{
+		g_program_return = 255;
 		g_builtin_errno = EB_EXIT_NAR;
 		ft_strcpy(g_bash_error, argv[1]);
 		bash_error();
-		g_cmds_length == 1 ? cleanup(2) : 0;
+		g_cmds_length == 1 ? cleanup(255) : 0;
 	}
 	else if (argc > 2)
 	{
+		g_program_return = 1;
 		g_builtin_errno = EB_CD_EXIT_TMA;
 		bash_error();
 		return (1);

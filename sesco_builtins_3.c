@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/01 18:48:45 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:04:28 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ t_evar	ft_realloc(char *name, char *value)
 
 int		bc_cd(t_cmd *data)
 {
+	g_parent = 1;
 	if (data->args[1] && CMP(data->args[1], "-"))
 	{
 		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)

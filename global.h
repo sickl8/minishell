@@ -6,7 +6,7 @@
 /*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/30 15:32:13 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:19:07 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@ char	**g_builtin_error;
 int		g_bash_commandid;
 t_fnl	*g_list_of_commands;
 int		g_program_return;
+// int		g_g_program_return;
 char	g_s_program_return[100];
 int		g_sig;
 pid_t	g_pid;
 int		g_dup;
 int     g_cmds_length;
 t_evar	g_pwd;
+int		g_parent;
 
 #endif

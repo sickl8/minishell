@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   proto.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/01 19:41:06 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:19:12 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int			bc_cd_fork(t_cmd *data);
 int			go_to_fork(t_cmd *data);
 size_t		ft_len(void *p, int	size, size_t end);
 void    	*failing_error(t_cmd *data);
-void    	print_all_envs(void);
+int 	   	print_all_envs(void);
+// int			*get_g_program_return(const char *fn);
 
 #endif

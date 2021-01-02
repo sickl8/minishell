@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_create_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/01 17:02:06 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:18:06 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,13 @@ void	put_exit_status(void)
 		g_sig = 1;
 		w_ret = wait(&status);
 		g_sig = 0;
-		if (g_program_return != 1 && WIFEXITED(status))
-			g_program_return = WEXITSTATUS(status);
-		else if (g_program_return != 1 && WIFSIGNALED(status))
-			g_program_return = WTERMSIG(status) + 128;
+		if (!g_parent)
+		{
+			if (g_program_return != 1 && WIFEXITED(status))
+				g_program_return = WEXITSTATUS(status);
+			else if (g_program_return != 1 && WIFSIGNALED(status))
+				g_program_return = WTERMSIG(status) + 128;
+		}
 	}
 }
 
@@ -91,13 +94,14 @@ void	parent_stuff(t_cmd *data)
 {
 	g_program_return = 0;
 	if (!CMP(data->find, "cd") && g_cmds_length == 1)
-		bc_cd(data);
+		A(g_parent, 1) && bc_cd(data);
 	else if (!CMP(data->find, "export"))
-		!data->args[1] ? print_all_envs() : bc_export(data);
+		A(g_parent, 1) &&
+		(!data->args[1] ? print_all_envs() : bc_export(data));
 	else if (!CMP(data->find, "unset"))
-		bc_unset(data);
+		A(g_parent, 1) && bc_unset(data);
 	else if (!CMP(data->find, "exit"))
-		bc_exit(data->args);
+		A(g_parent, 1) && bc_exit(data->args);
 }
 
 /*
@@ -113,6 +117,7 @@ int		open_pipes_and_execute(t_cmd *data, int *pfd)
 	j = 1;
 	while (data)
 	{
+		g_parent = 0;
 		g_pid = fork();
 		if (g_pid == -1)
 		{

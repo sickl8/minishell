@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/01 17:34:46 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:18:50 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void	exec()
 	free_tmp();
 }
 
-// int		*get_g_bash_errno(const char *fn)
+// int		*get_g_program_return(const char *fn)
 // {
-// 	printf("g_bash_errno read or written from function: %s\n", fn);
-// 	printf("current value = %d\n", g_g_bash_errno);
-// 	return (&g_g_bash_errno);
+// 	printf("g_program_return read or written from function: %s\n", fn);
+// 	printf("current value = %d\n", g_g_program_return);
+// 	return (&g_g_program_return);
 // }
 
 void	bash_error()

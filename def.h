@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   def.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/01 19:40:45 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/02 22:19:16 by sickl8           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@
 # define LEN(x) ft_len(x, sizeof(x), 0)
 # define LENX(x, y) ft_len(x, sizeof(x), y)
 
-// #define g_bash_errno *get_g_bash_errno(__func__)
+// #define g_program_return *get_g_program_return(__func__)
 
 // # define bash_error() _bash_error(__func__, __LINE__)
 
