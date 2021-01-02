@@ -67,5 +67,7 @@ int			eerf(void *p);
 int			bc_cd_fork(t_cmd *data);
 int			go_to_fork(t_cmd *data);
 size_t		ft_len(void *p, int	size, size_t end);
+void    	*failing_error(t_cmd *data);
+void    	print_all_envs(void);
 
 #endif

@@ -29,11 +29,81 @@
 
 #include <stdio.h>
 
+t_evar	*create_env_list(int env_len)
+{
+	t_evar		*env_copy;
+	int			i;
+
+	if (!env_len)
+		return (g_line->env_var);
+	if (!(env_copy = malloc(sizeof(t_evar) * env_len)))
+		cleanup(EXIT);
+	i = 0;
+	while (i < env_len)
+	{
+		env_copy[i] = g_line->env_var[i];
+		i++;
+	}
+	return (env_copy);
+}
+
+void	sort_env_list(t_evar *env_copy)
+{
+	int		i;
+	int		j;
+	t_evar	tmp_env;
+
+	i = 0;
+	while (g_line->env_var[i].name)
+	{
+		j = i + 1;
+		while (g_line->env_var[j].name)
+		{
+			if (CMP(env_copy[i].name, env_copy[j].name) > 0)
+			{
+				tmp_env = env_copy[i];
+				env_copy[i] = env_copy[j];
+				env_copy[j] = tmp_env;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	print_env_list(t_evar *env_copy, int env_len)
+{
+	int		i;
+
+	i = 0;
+	while (i < env_len)
+	{
+		OPRINT("declare -x ");
+		OPRINT(env_copy[i].name);
+		OPRINTS("=");
+		OPRINT("\"");
+		OPRINT(env_copy[i].value);
+		OPRINT("\"");
+		OPRINTS("\n");
+		i++;
+	}
+}
+
 void    print_all_envs(void)
 {
-	int		env_len;
+	t_evar		*env_copy;
+	int			env_len;
 
-	env_len = ;
+	env_len = 0;
+	while (g_line->env_var[env_len].name)
+		env_len++;
+	// if there is no env variable
+	env_copy = create_env_list(env_len);
+	if (env_copy[0].name)
+	{
+		sort_env_list(env_copy);
+		print_env_list(env_copy, env_len);
+	}
 }
 
 /*
