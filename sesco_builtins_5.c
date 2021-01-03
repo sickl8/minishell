@@ -104,6 +104,7 @@ int		print_all_envs(void)
 		sort_env_list(env_copy);
 		print_env_list(env_copy, env_len);
 	}
+	free(env_copy);
 	return (0);
 }
 
