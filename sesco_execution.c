@@ -128,7 +128,6 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 	dup2(pfd[j], 1);
 	close(pfd[j]);
 	make_a_redirection(data->redir);
-	data->path2exec = data->find;
 	if (data->find)
 	{
 		if ((cmd = is_builtin(data->find)))
