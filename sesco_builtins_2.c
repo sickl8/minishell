@@ -29,22 +29,12 @@
 
 #include <stdio.h>
 
-void	export_new_vars(char **args, t_export len, int i, t_evar *tmp)
+int		export_new_vars(t_evar *tmp, int i, t_export len, char **args)
 {
 	int		j;
 	char	*name;
 	char	*value;
 
-	j = 0;
-	while (i < len.env_len)
-	{
-		if (g_dup == 0 || j != (g_dup - 1))
-		{
-			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
-			i++;
-		}
-		j++;
-	}
 	j = 1;
 	while (i < len.new_env_len)
 	{
@@ -54,6 +44,27 @@ void	export_new_vars(char **args, t_export len, int i, t_evar *tmp)
 		free(name);
 		free(value);
 	}
+	return (i);
+}
+
+void	put_old_vars(char **args, t_export len, int i, t_evar *tmp)
+{
+	int		j;
+	int		k;
+
+	j = 0;
+	while (i < len.env_len)
+	{
+		if (args[k] && CMP(args[k], g_line->env_var[j].name))
+		{
+			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			i++;
+		}
+		else
+			k++;
+		j++;
+	}
+	i = export_new_vars(tmp, i, len, args);
 	tmp[i] = ft_realloc(NULL, NULL);
 }
 
@@ -72,7 +83,7 @@ int		bc_export(t_cmd *data)
 	{
 		if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_env_len + 1))))
 			cleanup(EXIT);
-		export_new_vars(data->args, lengths, 0, tmp);
+		put_old_vars(data->args, lengths, 0, tmp);
 		free(valid_args);
 		free_envar();
 		g_line->env_var = tmp;
