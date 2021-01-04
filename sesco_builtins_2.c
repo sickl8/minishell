@@ -36,7 +36,7 @@ int		export_new_vars(t_evar *tmp, int i, t_export len, char **args)
 	char	*value;
 
 	j = 1;
-	while (i < len.new_env_len)
+	while (i < len.new_env_len && args[j])
 	{
 		name = name_or_value(0, args[j]);
 		value = name_or_value(1, args[j++]);
@@ -51,17 +51,21 @@ void	put_old_vars(char **args, t_export len, int i, t_evar *tmp)
 {
 	int		j;
 	int		k;
+	char	*name;
 
 	j = 0;
-	while (i < len.env_len)
+	k = 1;
+	while (i < len.env_len && g_line->env_var[j].name && args[k])
 	{
-		if (args[k] && CMP(args[k], g_line->env_var[j].name))
+		name = name_or_value(0, args[k]);
+		if (name && CMP(name, g_line->env_var[j].name)) 
 		{
 			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
 			i++;
 		}
 		else
 			k++;
+		free(name);
 		j++;
 	}
 	i = export_new_vars(tmp, i, len, args);
