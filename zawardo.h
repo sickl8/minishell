@@ -1,0 +1,1 @@
+#define malloc(x) malloc_wraper_c(x, __LINE__, __func__, __FILE__)
