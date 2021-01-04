@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/02 23:46:17 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/04 15:25:54 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1094,21 +1094,22 @@ int		format_string()
 	return (0);
 }
 
-void	reset_prompt(void)
+void	reset_prompt(int jmp)
 {
 	if (g_sig == 0)
-		OPRINTS("\b\b  ");
-	OPRINTS("\n");
+		OPRINTS("\b\b  \b\b");
+	jmp ? OPRINTS("\n") : 0;
 	if (g_sig == 0)
 		init_read();
 }
 
 void	exit_the_shell(void)
 {
-	// OPRINTS("exit\n");
-	char *tty_name = ttyname(STDIN_FILENO);
-	int fd = open(tty_name, O_WRONLY);
-	write(fd, "exit\n", 5);
+	// printf("salut\n");
+	OPRINTS("exit\n");
+	// char *tty_name = ttyname(STDIN_FILENO);
+	// int fd = open(tty_name, O_WRONLY);
+	// write(fd, "exit\n", 5);
 	cleanup(RETURN);
 	exit(0);
 }
@@ -1123,9 +1124,13 @@ void	ctrl_d(int *bk)
 void	handle_signal(int sig)
 {
 	if (sig != SIGQUIT)
-		reset_prompt();
+		reset_prompt(1);
 	else
-		OPRINTS("\b\b  \b\b");
+	{
+		OPRINTS("\e[2K");
+		OPRINTS("\r");
+		reset_prompt(0);
+	}
 }
 
 void	handle_error(int ex)

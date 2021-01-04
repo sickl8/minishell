@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_create_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/02 22:18:06 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/04 15:48:32 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	put_exit_status(void)
 			if (g_program_return != 1 && WIFEXITED(status))
 				g_program_return = WEXITSTATUS(status);
 			else if (g_program_return != 1 && WIFSIGNALED(status))
-				g_program_return = WTERMSIG(status) + 128;
+				g_program_return = WTERMSIG(status) + 128 + _WINT(status) & 0177;
 		}
 	}
 }

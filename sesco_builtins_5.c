@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_5.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/02 22:06:50 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/04 15:39:27 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int		go_to_fork(t_cmd *data)
 	}
 	var.value_len = !(var.value = ft_strdup(var.value)) ?
 	cleanup(EXIT) : var.value_len;
-	if (change_dir(var.value, getcwd(NULL, 0)) < 0)
+	if (chdir(var.value) < 0)
 	{
 		A(g_program_return, 1) && A(g_bash_errno, E_ERRNO);
 		ft_strncpy(g_bash_error, var.value, -1);
@@ -153,7 +153,7 @@ int		bc_cd_fork(t_cmd *data)
 {
 	if (data->args[1] && CMP(data->args[1], "-"))
 	{
-		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)
+		if (chdir(data->args[1]) < 0)
 		{
 			g_bash_errno = E_ERRNO;
 			ft_strncpy(g_bash_error, data->args[1], -1);
