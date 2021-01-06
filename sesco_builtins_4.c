@@ -58,30 +58,19 @@ int		go_to(t_cmd *data)
 	return (0);
 }
 
-char	*name_or_value(int sign, char *arg)
+t_evar	name_or_value(char *arg)
 {
-	char	*ret;
-	int		i;
-	int		equal;
+	t_evar	ret;
 
-	i = 0;
-	equal = 0;
-	ret = NULL;
-	while (arg[equal] != '=')
-		equal++;
-	if (sign == 0)
+	ret.name = NULL;
+	ret.value = NULL;
+	if (arg)
 	{
-		if (!(MALLOC(ret, sizeof(char) * equal + 1)))
+		if (!(ret.name = ft_strdup(arg)))
 			cleanup(EXIT);
-		ret = ft_strncpy(ret, arg, equal);
-		ret[equal] = '\0';
-	}
-	else if (sign == 1)
-	{
-		equal += 1;
-		if (!(MALLOC(ret, sizeof(char) * ft_strlen(arg + equal) + 1)))
-			cleanup(EXIT);
-		ft_strcpy(ret, arg + equal);
+		ret.value = ft_strchr(ret.name, '=');
+		ret.value[0] = '\0';
+		ret.value = ret.value + 1;
 	}
 	return (ret);
 }
@@ -104,7 +93,6 @@ t_export	calc_lengths(int *valid, int len)
 		if (valid[i++] == 0)
 			res.new_env_len++;
 	// remove from the existing ones
-	res.env_len -= g_dup ? 1 : 0;
 	res.new_env_len += res.env_len;
 	return (res);
 }

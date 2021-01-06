@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 18:23:04 by aamzouar         ###   ########.fr       */
+/*   Updated: 2021/01/06 11:38:46 by aamzouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,47 +29,83 @@
 
 #include <stdio.h>
 
-int		export_new_vars(t_evar *tmp, int i, t_export len, char **args)
+void	export_new_vars(char **args, int i, t_evar *tmp)
 {
 	int		j;
-	char	*name;
-	char	*value;
+	t_evar	new;
+	int		k;
+	int		old;
 
 	j = 1;
-	while (i < len.new_env_len && args[j])
+	old = i;
+	while (args[j])
 	{
-		name = name_or_value(0, args[j]);
-		value = name_or_value(1, args[j++]);
-		tmp[i++] = ft_realloc(name, value);
-		free(name);
-		free(value);
+		k = i;
+		new = name_or_value(args[j]);
+		while (j != 1 && k--)
+		{
+			if (!CMP(new.name, tmp[k].name))
+			{
+				free(tmp[k].name);
+				free(tmp[k].value);
+				tmp[k] = ft_realloc(new.name, new.value);
+				break ;
+			}
+		}
+		if (k == -1 || j == 1)
+			tmp[i++] = ft_realloc(new.name, new.value);
+		j++;
+		free(new.name);
 	}
-	return (i);
+	tmp[i] = ft_realloc(NULL, NULL);
 }
 
-void	put_old_vars(char **args, t_export len, int i, t_evar *tmp)
+void	export_old_vars(char **args, t_export len, int i, t_evar *tmp)
 {
 	int		j;
+	t_evar	new;
 	int		k;
-	char	*name;
 
 	j = 0;
 	k = 1;
-	while (i < len.env_len && g_line->env_var[j].name && args[k])
+	while (i < len.env_len && g_line->env_var[j].name)
 	{
-		name = name_or_value(0, args[k]);
-		if (name && CMP(name, g_line->env_var[j].name)) 
+		new = name_or_value(args[k]);
+		if (!args[k] || CMP(new.name, g_line->env_var[j].name)) 
 		{
 			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
 			i++;
 		}
 		else
 			k++;
-		free(name);
+		free(new.name);
 		j++;
 	}
-	i = export_new_vars(tmp, i, len, args);
-	tmp[i] = ft_realloc(NULL, NULL);
+	export_new_vars(args, i, tmp);
+}
+
+char	**assign_valid_args(char **args, int *valid, int len)
+{
+	char	**tmp_args;
+	int		i;
+	int		j;
+
+	if (!(tmp_args = malloc(sizeof(char **) * (len + 2))))
+		cleanup(EXIT);
+	tmp_args[0] = args[0];
+	i = 1;
+	j = 1;
+	while (i < len + 1)
+	{
+		if (valid[i - 1] == 0)
+		{
+			tmp_args[j] = args[i];
+			j++;
+		}
+		i++;
+	}
+	tmp_args[j] = NULL;
+	return (tmp_args); 
 }
 
 int		bc_export(t_cmd *data)
@@ -78,8 +114,8 @@ int		bc_export(t_cmd *data)
 	int			*valid_args;
 	t_export	lengths;
 	t_evar		*tmp;
+	char		**tmp_args;
 
-	g_dup = 0;
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
 	lengths = calc_lengths(valid_args, args_len);
@@ -87,7 +123,9 @@ int		bc_export(t_cmd *data)
 	{
 		if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_env_len + 1))))
 			cleanup(EXIT);
-		put_old_vars(data->args, lengths, 0, tmp);
+		tmp_args = assign_valid_args(data->args, valid_args, args_len);
+		export_old_vars(tmp_args, lengths, 0, tmp);
+		free(tmp_args);
 		free(valid_args);
 		free_envar();
 		g_line->env_var = tmp;

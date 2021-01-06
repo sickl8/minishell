@@ -46,29 +46,6 @@ int		check_var_name(char *name, int end)
 	return (1);
 }
 
-void		duplicated_variable(char *arg_name, int len)
-{
-	int	i;
-	char	tmp[len + 1];
-
-	i = 0;
-	// if it's name only without equal don't consider it so i won't add it to env
-	ft_strncpy(tmp, arg_name, len);
-	tmp[len] = '\0';
-	if (arg_name[(len > 0 ? len : 1) - 1] != '\0' && g_dup == 0)
-	{
-		while (g_line->env_var[i].name)
-		{
-			if (!CMP(tmp, g_line->env_var[i].name))
-			{
-				g_dup = i + 1;
-				break ;
-			}
-			i++;
-		}
-	}
-}
-
 int		*check_errors_of_args(char **args, int len, int i, int j)
 {
 	int		*valid_args;
@@ -90,7 +67,6 @@ int		*check_errors_of_args(char **args, int len, int i, int j)
 			g_program_return = 1;
 			bash_error();
 		}
-		duplicated_variable(args[i], j);
 		// if it doesn't have equal on it consider it as invalid
 		if (!check_var_name(args[i], j) || args[i][j] == '\0')
 			valid_args[i - 1] = 1;

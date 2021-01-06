@@ -59,11 +59,10 @@ int		bc_unset(t_cmd *data)
 	t_export	lengths;
 	t_evar		*tmp;
 
-	g_dup = 0;
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_args(data->args, args_len, 1, 0);
 	lengths = calc_lengths(valid_args, args_len);
-	if (g_cmds_length == 1)
+	if (g_cmds_length == 1 && data->args[1])
 	{
 		if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_len + 1))))
 			cleanup(EXIT);
