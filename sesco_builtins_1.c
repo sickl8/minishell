@@ -33,16 +33,17 @@ void	unset_var(char **args, t_export len, t_evar *tmp)
 {
 	int		j;
 	int		i;
-	int     k;
+	int		k;
 
 	j = 0;
 	i = 0;
 	k = 1;
 	while (i < len.env_len && g_line->env_var[j].name)
 	{
-		if (args[k] && CMP(args[k], g_line->env_var[j].name)) 
+		if (args[k] && CMP(args[k], g_line->env_var[j].name))
 		{
-			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			tmp[i] =
+				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
 			i++;
 		}
 		else

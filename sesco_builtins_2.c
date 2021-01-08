@@ -73,9 +73,11 @@ void	export_old_vars(char **args, t_export len, int *valid, t_evar *tmp)
 	while (i < len.env_len && g_line->env_var[j].name)
 	{
 		new = name_or_value(args[k]);
-		if (!args[k] || !ft_strchr(args[k], '=') || CMP(new.name, g_line->env_var[j].name)) 
+		if (!args[k] || !ft_strchr(args[k], '=') ||
+			CMP(new.name, g_line->env_var[j].name))
 		{
-			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			tmp[i] =
+				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
 			i++;
 		}
 		else
@@ -108,7 +110,7 @@ char	**assign_valid_args(char **args, int *valid, int len)
 		i++;
 	}
 	tmp_args[j] = NULL;
-	return (tmp_args); 
+	return (tmp_args);
 }
 
 int		bc_export(t_cmd *data)
