@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/02 22:04:28 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/06 17:58:50 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ t_evar	ft_realloc(char *name, char *value)
 	{
 		name_len = ft_strlen(name);
 		value_len = ft_strlen(value);
-		if (!(MALLOC(tmp.name, name_len + 1)))
+		if (!(MALLOC(&(tmp.name), name_len + 1)))
 			cleanup(EXIT);
 		ft_strcpy(tmp.name, name);
-		if (!(MALLOC(tmp.value, value_len + 1)))
+		if (!(MALLOC(&(tmp.value), value_len + 1)))
 			cleanup(EXIT);
 		ft_strcpy(tmp.value, value);
 		tmp.name_len = name_len;

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/04 19:30:13 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/06 19:10:01 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,27 @@ void    	*failing_error(t_cmd *data);
 int 	   	print_all_envs(void);
 // int			*get_g_program_return(const char *fn);
 void		*malloc_wraper_c(size_t i, int line, const char *func, const char *file);
+void		*mallok(void *adr, size_t bytes);
+int			bashsyn(char x);
+int			cmp(char *x, char *y);
+int			ncmp(char *x, char *y, size_t n);
+int			bprints(char *s);
+int			bprint(char *s);
+int			bprintc(char c);
+ssize_t		oprints(char *s);
+ssize_t		oprint(char *s);
+ssize_t		oprintc(char c);
+ssize_t		eprints(char *s);
+ssize_t		eprint(char *s);
+ssize_t		eprintc(char c);
+int			is_redir(char c);
+int			isnum(char c);
+int			str_is_rl(t_bm bm);
+int			str_is_rr(t_bm bm);
+int			str_is_rrr(t_bm bm);
+int			str_is_redir(t_bm bm);
+char		*stgcpy(char *dest, char *src);
+size_t		_lenx(void *p, int sz, size_t term);
+size_t		_len(void *p, int sz);
 
 #endif

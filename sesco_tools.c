@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzouar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:52:43 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/18 14:53:39 by aamzouar         ###   ########.fr       */
+/*   Updated: 2021/01/06 18:00:08 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*fix_path(char **paths, int i)
 	len = ft_strlen(paths[i]);
 	if (paths[i][len - 1] != '/')
 	{
-		if (!(MALLOC(ret, len + 2)))
+		if (!(MALLOC(&ret, len + 2)))
 		{
 			free_path(paths);
 			cleanup(EXIT);
@@ -108,7 +108,7 @@ int		*count_cmds(t_cmd *data)
 		g_cmds_length++;
 		data = data->next;
 	}
-	if (!(MALLOC(pipes_fd, g_cmds_length * 2)))
+	if (!(MALLOC(&pipes_fd, g_cmds_length * 8)))
 		cleanup(EXIT);
 	return (pipes_fd);
 }

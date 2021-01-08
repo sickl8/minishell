@@ -1,5 +1,6 @@
 #include "get_next_line.h"
 #include "def.h"
+#include "proto.h"
 #include "libft/libft.h"
 
 #include <stdio.h>
@@ -19,14 +20,14 @@ int		get_next_line(char **line)
 	long	rd_ret;
 	char	*tmp;
 
-	if (!line || BUFFER_SIZE < 1 || !(MALLOC(ret, BUFFER_SIZE + 1)))
+	if (!line || BUFFER_SIZE < 1 || !(MALLOC(&(ret), BUFFER_SIZE + 1)))
 		return (-1);
 	if ((rd_ret = read(STDIN_FILENO, ret, BUFFER_SIZE)) < 0)
 		return (error(ret, NULL, NULL));
 	ret[rd_ret] = '\0';
 	while (rd_ret == BUFFER_SIZE)
 	{
-		if (!(MALLOC(join, BUFFER_SIZE + 1)))
+		if (!(MALLOC(&(join), BUFFER_SIZE + 1)))
 			return (error(ret, NULL, NULL));
 		if ((rd_ret = read(STDIN_FILENO, join, BUFFER_SIZE)) < 0)
 			return (error(ret, join, NULL));

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/04 15:39:27 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/06 18:18:46 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int		go_to_fork(t_cmd *data)
 	var = data->args[1] ? find_env("OLDPWD") : find_env("HOME");
 	if (!var.name)
 	{
-		A(g_program_return, 1) && A(g_bash_errno, E_BUILTIN);
+		assign(&g_program_return, 1, 4) && assign(&g_bash_errno, E_BUILTIN, 4);
 		ft_strncpy(g_bash_error, var.value, -1);
 		g_builtin_errno = data->args[1] ? EB_CD_ONT : EB_CD_HNT;
 		g_bash_commandid = BC_CD;
@@ -138,7 +138,7 @@ int		go_to_fork(t_cmd *data)
 	cleanup(EXIT) : var.value_len;
 	if (chdir(var.value) < 0)
 	{
-		A(g_program_return, 1) && A(g_bash_errno, E_ERRNO);
+		assign(&g_program_return, 1, 4) && assign(&g_bash_errno, E_ERRNO, 4);
 		ft_strncpy(g_bash_error, var.value, -1);
 		g_bash_commandid = BC_CD;
 		bash_error();

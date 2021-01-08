@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 14:02:00 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/11 03:03:17 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/06 19:28:43 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 char	*ft_strncpy(char *dst, const char *src, size_t len)
 {
 	size_t	i;
 
 	i = 0;
-	while (src[i] && i < len)
+	while (i < len && src[i])
 	{
 		dst[i] = src[i];
 		i++;

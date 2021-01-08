@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 12:38:51 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/06 20:05:34 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/06 19:28:51 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int		bflush(int fd)
 void	init_wbuf_fd(char **b, size_t *buf_i, int fd)
 {
 	if (!b[fd])
-		if (!(MALLOC(b[fd], BUFS + 1)))
+		if (!(MALLOC(&b[fd], BUFS + 1)))
 			cleanup(EXIT);
 	ft_memset(b[fd], '\0', BUFS + 1);
 	buf_i[fd] = 0;
@@ -96,12 +96,12 @@ void	init_wbuf(char ***b, size_t **j)
 
 	g_bw.buf = b;
 	g_bw.buf_i = j;
-	if (!(MALLOC(*b, MAX_OPEN_FD + 1)))
+	if (!(MALLOC(b, 8 * MAX_OPEN_FD + 8)))
 		cleanup(EXIT);
 	i = -1;
 	while (++i <= MAX_OPEN_FD)
 		b[0][i] = NULL;
-	if (!(MALLOC(*j, MAX_OPEN_FD + 1)))
+	if (!(MALLOC(j, 8 * MAX_OPEN_FD + 8)))
 		cleanup(EXIT);
 	i = -1;
 	while (++i <= MAX_OPEN_FD)
@@ -114,7 +114,8 @@ int		bwrite(int fd, void* buffer, size_t len)
 	static char		**buf;
 	static char		*tmp;
 	int				ret;
-
+	void			*bfbf = buffer;
+	
 	if (len >= BUFS || fd < 0 || !buffer || fd > MAX_OPEN_FD)
 		return (write(fd, buf, len));
 	if (!buf)

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/04 15:25:54 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/08 17:09:38 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include "get_next_line.h"
 
 #include <stdio.h>
+
 
 void	exec()
 {
@@ -211,7 +212,8 @@ char	**get_cmd_p_args(t_bm *redir, t_rdr **rdr)
 	while (redir[++total].buf)
 		if (STR_IS_REDIR(redir[total]))
 			cnt++;
-	if (!(MALLOC(ret, total - 2 * cnt + 1)) || !(MALLOC(*rdr, cnt + 1)))
+	if (!(MALLOC(&(ret), 8 * (total - 2 * cnt + 1))) ||
+	!(MALLOC(&(*rdr), 16 * (cnt + 1))))
 		cleanup(EXIT);
 	ret[total - 2 * cnt] = NULL;
 	rdr[0][cnt].file_name = NULL;
@@ -238,7 +240,7 @@ t_cmd	*get_cmd(t_bm **redir)
 	tracer = &ret;
 	while (redir[++i])
 	{
-		if (!(MALLOC(*tracer, 1)))
+		if (!(MALLOC(&(*tracer), 56)))
 			cleanup(EXIT);
 		set_cmd_2_null(*tracer);
 		(*tracer)->next = NULL;
@@ -323,10 +325,10 @@ void	continue_split_redirects(t_bm *rd, t_bm **wr, size_t wc)
 		wr[0][i].buf = NULL;
 		wr[0][i].msk = NULL;
 		tr_ln = true_len(p);
-		if (!(MALLOC(wr[0][i].buf, tr_ln + 1)))
+		if (!(MALLOC(&(wr[0][i].buf), tr_ln + 1)))
 			cleanup(EXIT);
 		wr[0][i].buf[tr_ln] = '\0';
-		if (!(MALLOC(wr[0][i].msk, tr_ln + 1)))
+		if (!(MALLOC(&(wr[0][i].msk), tr_ln + 1)))
 			cleanup(EXIT);
 		wr[0][i].msk[tr_ln] = '\0';
 		copy_valid_chars(wr[0][i].buf ,p.buf, p.msk, tr_ln);
@@ -418,7 +420,7 @@ void	split_redirect(t_bm *rd, t_bm **wr)
 	size_t	wc;
 
 	wc = count_words_redir(rd);
-	if (!(MALLOC(*wr, wc + 1)))
+	if (!(MALLOC(&(*wr), 24 * wc + 24)))
 		cleanup(EXIT);
 	wr[0][wc].buf = NULL;
 	wr[0][wc].msk = NULL;
@@ -430,14 +432,14 @@ void	split_redirects()
 	size_t	i;
 	size_t	j;
 
-	if (!(MALLOC(g_line->redir, g_line->env.cnt + 1)))
+	if (!(MALLOC(&(g_line->redir), 8 * g_line->env.cnt + 8)))
 		cleanup(EXIT);
 	g_line->redir[g_line->env.cnt] = NULL;
 	i = -1;
 	while (++i < g_line->env.cnt)
 	{
 		g_line->redir[i] = NULL;
-		if (!(MALLOC(g_line->redir[i], g_line->scol[i].cnt + 1)))
+		if (!(MALLOC(&(g_line->redir[i]), 8 * g_line->scol[i].cnt + 8)))
 			cleanup(EXIT);
 		g_line->redir[i][g_line->scol[i].cnt] = NULL;
 		j = -1;
@@ -476,10 +478,10 @@ void	continue_split_wmask(t_bm *rd, t_bm **wr, size_t cnt, char c)
 		wr[0][i].buf = NULL;
 		if (!(p = ft_strchr(p, c)))
 			p = ft_strchr(rd->msk, '\0');
-		if (!(MALLOC(wr[0][i].buf, p - bk + 1)))
+		if (!(MALLOC(&(wr[0][i].buf), p - bk + 1)))
 			cleanup(EXIT);
 		wr[0][i].buf[p - bk] = '\0';
-		if (!(MALLOC(wr[0][i].msk, p - bk + 1)))
+		if (!(MALLOC(&(wr[0][i].msk), p - bk + 1)))
 			cleanup(EXIT);
 		wr[0][i].msk[p - bk] = '\0';
 		ft_strncpy(wr[0][i].buf, rd->buf + (bk - rd->msk), p - bk);
@@ -501,7 +503,7 @@ void	split_wmask(t_bm *rd, t_bm **wr, char c)
 			cnt++;
 		i++;
 	}
-	if (!(MALLOC(*wr, cnt + 1)))
+	if (!(MALLOC(&(*wr), 24 * cnt + 24)))
 		cleanup(EXIT);
 	wr[0][cnt].msk = NULL;
 	wr[0][cnt].buf = NULL;
@@ -622,9 +624,9 @@ void	rplc_env_var()
 		else
 			tlen++;
 	}
-	if (!(MALLOC(g_line->env.buf, tlen + 1)))
+	if (!(MALLOC(&(g_line->env.buf), tlen + 1)))
 		cleanup(EXIT);
-	if (!(MALLOC(g_line->env.msk, tlen + 2)))
+	if (!(MALLOC(&(g_line->env.msk), tlen + 2)))
 		cleanup(EXIT);
 	ft_memset(g_line->env.buf, 0, tlen + 1);
 	ft_memset(g_line->env.msk, 0, tlen + 2);
@@ -747,24 +749,25 @@ void	dquote(size_t *ref)
 
 void	backslash(size_t *ref, char lit_type)
 {
-	g_line->rd.msk[I] = '\\';
+	g_line->rd.msk[*ref] = '\\';
 	if (lit_type == NONLIT)
 	{
-		if (g_line->rd.buf[I + 1])
-			g_line->rd.msk[PPI] = LITERAL;
+		if (g_line->rd.buf[*ref + 1])
+			g_line->rd.msk[++(*ref)] = LITERAL;
 		else
 			g_bash_errno = E_MULTILINE;
 	}
 	else if (lit_type == SEMILIT)
 	{
-		if (g_line->rd.buf[I + 1])
+		if (g_line->rd.buf[*ref + 1])
 		{
-			if (g_line->rd.buf[PPI] == '"' || g_line->rd.buf[I] == '\\' ||
-			g_line->rd.buf[I] == '$')
-				g_line->rd.msk[I] = LITERAL;
+			if (g_line->rd.buf[++(*ref)] == '"' ||
+			g_line->rd.buf[*ref] == '\\' ||
+			g_line->rd.buf[*ref] == '$')
+				g_line->rd.msk[*ref] = LITERAL;
 			else
-				A(g_line->rd.msk[I - 1], SEMILIT) &&
-				A(g_line->rd.msk[I], SEMILIT);
+				assign(&(g_line->rd.msk[*ref - 1]), SEMILIT, 1) &&
+				assign(&(g_line->rd.msk[*ref]), SEMILIT, 1);
 		}
 		else
 			g_bash_errno = E_MULTILINE;
@@ -1056,7 +1059,7 @@ int		format_string()
 	if ((tmp = ft_strchr(g_line->rd.buf, '\n')) != NULL)
 		*tmp = '\0';
 	g_line->rd_len = ft_strlen(g_line->rd.buf);
-	if (!(MALLOC(g_line->rd.msk, g_line->rd_len + 1)))
+	if (!(MALLOC(&(g_line->rd.msk), g_line->rd_len + 1)))
 		cleanup(EXIT);
 	set_mask();
 	if (g_bash_errno || !initial_error_check())
@@ -1071,7 +1074,7 @@ int		format_string()
 		g_line->rd = g_line->it[x];
 		rplc_env_var();
 		split_wmask(&g_line->env, &g_line->scol, ';');
-		if (!(MALLOC(g_line->pipe, g_line->env.cnt + 1)))
+		if (!(MALLOC(&(g_line->pipe), 8 * g_line->env.cnt + 8)))
 			cleanup(EXIT);
 		g_line->pipe[g_line->env.cnt] = NULL;
 		split_pipe();
@@ -1081,7 +1084,7 @@ int		format_string()
 		tracer = &g_list_of_commands;
 		while (++i < g_line->env.cnt)
 		{
-			if (!(MALLOC(*tracer, 1)))
+			if (!(MALLOC(&(*tracer), 16)))
 				cleanup(EXIT);
 			(*tracer)->cmd_and_args = NULL;
 			(*tracer)->next = NULL;
@@ -1173,6 +1176,7 @@ void	skittles(char *s)
 	while (s[++i])
 	{
 		print_color(color);
+		// bwrite(STDOUT_FILENO, &(s[i]), 1);
 		BPRINTC(s[i]);
 		color++;
 		color %= 11;
@@ -1196,7 +1200,7 @@ void	init_read()
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
-	skittles(!CMP(user.value, "isaadi") ? "I'M A MOTHERFUCKER" : user.value);
+	skittles(user.value);
 	skittles("@minishell");
 	BPRINTS(ESC_RESET ":");
 	BPRINTS(ESC_BLUE_B);
@@ -1222,7 +1226,7 @@ void	continue_init_env()
 	while (g_line->envp[++i])
 	{
 		g_line->env_var[i].name_len = ft_strchr(g_line->envp[i], '=') - g_line->envp[i];
-		if (!(MALLOC(g_line->env_var[i].name, g_line->env_var[i].name_len + 1)))
+		if (!(MALLOC(&(g_line->env_var[i].name), g_line->env_var[i].name_len + 1)))
 			cleanup(EXIT);
 		g_line->env_var[i].name[g_line->env_var[i].name_len] = '\0';
 		ft_strncpy(g_line->env_var[i].name,
@@ -1243,7 +1247,7 @@ void	init_env()
 	i = 0;
 	while (g_line->envp[i])
 		i++;
-	if (!(MALLOC(g_line->env_var, i + 1)))
+	if (!(MALLOC(&(g_line->env_var), 32 * i + 32)))
 		cleanup(EXIT);
 	i = -1;
 	while (g_line->envp[++i])
@@ -1254,7 +1258,7 @@ void	init_env()
 	g_line->env_var[i].name = NULL;
 	g_line->env_var[i].name_len = -1;
 	g_line->env_var[i].value_len = -1;
-	if (!(MALLOC(g_line->env_var[i].value, 1)))
+	if (!(MALLOC(&(g_line->env_var[i].value), 1)))
 		cleanup(EXIT);
 	g_line->env_var[i].value[0] = '\0';
 	continue_init_env();
@@ -1270,7 +1274,7 @@ void	init_envp(char **envp)
 	i = 0;
 	while (envp[i])
 		i++;
-	if (!(MALLOC(g_line->envp, i + 1)))
+	if (!(MALLOC(&(g_line->envp), 8 * i + 8)))
 		cleanup(EXIT);
 	g_line->envp[i] = NULL;
 	i = -1;
@@ -1278,7 +1282,7 @@ void	init_envp(char **envp)
 	{
 		len = ft_strlen(envp[i]);
 		g_line->envp[i] = NULL;
-		if (!(MALLOC(g_line->envp[i], len + 1)))
+		if (!(MALLOC(&(g_line->envp[i]), len + 1)))
 			cleanup(EXIT);
 		ft_strncpy(g_line->envp[i], envp[i], len + 1);
 	}
@@ -1286,9 +1290,9 @@ void	init_envp(char **envp)
 
 void	init_buf()
 {
-	//if (!(MALLOC(g_line->rd.buf, ARG_MAX + 2)) ||
-	//!(MALLOC(g_line->rd.msk, ARG_MAX + 3)) ||
-	if (!(MALLOC(g_bash_error, ARG_MAX + 2)))
+	//if (!(MALLOC(&(g_line->rd.buf), ARG_MAX + 2)) ||
+	//!(MALLOC(&(g_line->rd.msk), ARG_MAX + 3)) ||
+	if (!(MALLOC(&(g_bash_error), ARG_MAX + 2)))
 		handle_error(1);
 }
 

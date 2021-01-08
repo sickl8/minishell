@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/04 16:03:40 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/08 15:04:31 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,14 @@ void	parent_stuff(t_cmd *data)
 {
 	g_program_return = 0;
 	if (!CMP(data->find, "cd") && g_cmds_length == 1)
-		A(g_parent, 1) && bc_cd(data);
+		assign(&g_parent, 1, 4) && bc_cd(data);
 	else if (!CMP(data->find, "export"))
-		A(g_parent, 1) &&
+		assign(&g_parent, 1, 4) &&
 		(!data->args[1] ? print_all_envs() : bc_export(data));
 	else if (!CMP(data->find, "unset"))
-		A(g_parent, 1) && bc_unset(data);
+		assign(&g_parent, 1, 4) && bc_unset(data);
 	else if (!CMP(data->find, "exit"))
-		A(g_parent, 1) && bc_exit(data->args);
+		assign(&g_parent, 1, 4) && bc_exit(data->args);
 }
 
 /*
@@ -113,6 +113,7 @@ void	parent_stuff(t_cmd *data)
 int		open_pipes_and_execute(t_cmd *data, int *pfd)
 {
 	int		j;
+	pid_t	ppid;
 
 	j = 1;
 	while (data)

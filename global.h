@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/02 22:19:07 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/08 14:53:52 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ int		g_dup;
 int     g_cmds_length;
 t_evar	g_pwd;
 int		g_parent;
+clock_t b;
 
 #endif
