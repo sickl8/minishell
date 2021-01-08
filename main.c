@@ -1232,6 +1232,7 @@ void	continue_init_env()
 			cleanup(EXIT);
 		g_line->env_var[i].value_len = ft_strlen(g_line->env_var[i].value);
 	}
+	set_name_only(0, NULL, 0, NULL);
 }
 
 void	init_env()

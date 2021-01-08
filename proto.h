@@ -71,5 +71,6 @@ void    	*failing_error(t_cmd *data);
 int 	   	print_all_envs(void);
 // int			*get_g_program_return(const char *fn);
 void		*malloc_wraper_c(size_t i, int line, const char *func, const char *file);
+void		set_name_only(int start, int *valid, int len, t_evar *tmp);
 
 #endif

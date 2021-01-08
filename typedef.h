@@ -39,6 +39,7 @@ typedef struct	s_evar
 	char	*value;
 	size_t	name_len;
 	size_t	value_len;
+	int		name_only;
 }				t_evar;
 
 typedef struct	s_bm

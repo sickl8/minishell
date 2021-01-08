@@ -69,8 +69,14 @@ t_evar	name_or_value(char *arg)
 		if (!(ret.name = ft_strdup(arg)))
 			cleanup(EXIT);
 		ret.value = ft_strchr(ret.name, '=');
-		ret.value[0] = '\0';
-		ret.value = ret.value + 1;
+		if (ret.value)
+		{
+			ret.value[0] = '\0';
+			ret.value = ret.value + 1;
+		}
+		else
+			ret.value = ret.name + ft_strlen(ret.name);
+		
 	}
 	return (ret);
 }
@@ -90,7 +96,7 @@ t_export	calc_lengths(int *valid, int len)
 	res.new_env_len = 0;
 	i = 0;
 	while (i < len)
-		if (valid[i++] == 0)
+		if (valid[i++] != 1)
 			res.new_env_len++;
 	// remove from the existing ones
 	res.new_env_len += res.env_len;
