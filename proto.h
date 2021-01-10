@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/10 14:31:56 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/10 19:25:46 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,15 @@ int			str_is_redir(t_bm bm);
 char		*stgcpy(char *dest, char *src);
 size_t		_lenx(void *p, int sz, size_t term);
 size_t		_len(void *p, int sz);
+void		set_zero(t_evar *tmp, int end);
+void		set_name_only(int start, int *valid, int len, t_evar *tmp);
+int			assign_valid_args_bk(int argc, char **argv, t_evar *tmp);
+int			free_tmp_ava(t_evar *tmp);
+char		*reset_evar(t_evar *var);
+t_evar		get_evar(char *s);
+char		**sanitize_av(int ac, char **av);
+void		assign_old_args(int x, t_evar *tmp);
+int			valid_arg(int ac, char **av, int index);
+int			bc_export_bk(t_cmd *data);
 
 #endif

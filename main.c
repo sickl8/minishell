@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/08 17:09:38 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/10 19:23:14 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1248,7 +1248,7 @@ void	init_env()
 	i = 0;
 	while (g_line->envp[i])
 		i++;
-	if (!(MALLOC(&(g_line->env_var), 32 * i + 32)))
+	if (!(MALLOC(&(g_line->env_var), sizeof(*(g_line->env_var)) * (i + 1))))
 		cleanup(EXIT);
 	i = -1;
 	while (g_line->envp[++i])
