@@ -80,11 +80,16 @@ void	print_env_list(t_evar *env_copy, int env_len)
 	{
 		OPRINT("declare -x ");
 		OPRINT(env_copy[i].name);
-		OPRINTS("=");
-		OPRINT("\"");
-		OPRINT(env_copy[i].value);
-		OPRINT("\"");
-		OPRINTS("\n");
+		if (!env_copy[i].name_only)
+		{
+			OPRINTS("=");
+			OPRINT("\"");
+			OPRINT(env_copy[i].value);
+			OPRINT("\"");
+			OPRINTS("\n");
+		}
+		else
+			OPRINTS("\n");
 		i++;
 	}
 }

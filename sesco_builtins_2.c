@@ -44,7 +44,7 @@ void	export_new_vars(char **args, int i, t_evar *tmp)
 		new = name_or_value(args[j]);
 		while (j != 1 && k--)
 		{
-			if (!CMP(new.name, tmp[k].name))
+			if (ft_strchr(args[j], '=') && !CMP(new.name, tmp[k].name))
 			{
 				free(tmp[k].name);
 				free(tmp[k].value);
@@ -60,20 +60,24 @@ void	export_new_vars(char **args, int i, t_evar *tmp)
 	tmp[i] = ft_realloc(NULL, NULL);
 }
 
-void	export_old_vars(char **args, t_export len, int i, t_evar *tmp)
+void	export_old_vars(char **args, t_export len, int *valid, t_evar *tmp)
 {
 	int		j;
 	t_evar	new;
 	int		k;
+	int		i;
 
+	i = 0;
 	j = 0;
 	k = 1;
 	while (i < len.env_len && g_line->env_var[j].name)
 	{
 		new = name_or_value(args[k]);
-		if (!args[k] || CMP(new.name, g_line->env_var[j].name)) 
+		if (!args[k] || !ft_strchr(args[k], '=') ||
+			CMP(new.name, g_line->env_var[j].name))
 		{
-			tmp[i] = ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			tmp[i] =
+				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
 			i++;
 		}
 		else
@@ -82,6 +86,7 @@ void	export_old_vars(char **args, t_export len, int i, t_evar *tmp)
 		j++;
 	}
 	export_new_vars(args, i, tmp);
+	set_name_only(len.env_len, valid, len.new_env_len, tmp);
 }
 
 char	**assign_valid_args(char **args, int *valid, int len)
@@ -97,7 +102,7 @@ char	**assign_valid_args(char **args, int *valid, int len)
 	j = 1;
 	while (i < len + 1)
 	{
-		if (valid[i - 1] == 0)
+		if (valid[i - 1] != 1)
 		{
 			tmp_args[j] = args[i];
 			j++;
@@ -105,7 +110,7 @@ char	**assign_valid_args(char **args, int *valid, int len)
 		i++;
 	}
 	tmp_args[j] = NULL;
-	return (tmp_args); 
+	return (tmp_args);
 }
 
 int		bc_export(t_cmd *data)
@@ -124,7 +129,7 @@ int		bc_export(t_cmd *data)
 		if (!(tmp = malloc(sizeof(t_evar) * (lengths.new_env_len + 1))))
 			cleanup(EXIT);
 		tmp_args = assign_valid_args(data->args, valid_args, args_len);
-		export_old_vars(tmp_args, lengths, 0, tmp);
+		export_old_vars(tmp_args, lengths, valid_args, tmp);
 		free(tmp_args);
 		free(valid_args);
 		free_envar();
@@ -142,10 +147,13 @@ int		bc_env(void)
 	i = 0;
 	while (g_line->env_var[i].name)
 	{
-		OPRINT(g_line->env_var[i].name);
-		OPRINTS("=");
-		OPRINT(g_line->env_var[i].value);
-		OPRINTS("\n");
+		if (!g_line->env_var[i].name_only)
+		{
+			OPRINT(g_line->env_var[i].name);
+			OPRINTS("=");
+			OPRINT(g_line->env_var[i].value);
+			OPRINTS("\n");
+		}
 		i++;
 	}
 	return (0);

@@ -68,8 +68,10 @@ int		*check_errors_of_args(char **args, int len, int i, int j)
 			bash_error();
 		}
 		// if it doesn't have equal on it consider it as invalid
-		if (!check_var_name(args[i], j) || args[i][j] == '\0')
+		if (!check_var_name(args[i], j))
 			valid_args[i - 1] = 1;
+		else if (args[i][j] == '\0')
+			valid_args[i - 1] = 2;
 		i++;
 	}
 	return (valid_args);
