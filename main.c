@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/10 19:23:14 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:22:10 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -553,6 +553,49 @@ void	continue_rplc_env_var()
 			j++;
 		}
 	}
+}
+
+t_evar	find_env_wv(char *s)
+{
+	size_t	j;
+	t_evar	ret;
+	char	*tmp;
+
+	j = 0;
+	if (!CMP(s, "?"))
+	{
+		ret.name = s;
+		ret.name_len = 1;
+		if (!(tmp = ft_itoa(g_program_return)))
+			cleanup(EXIT);
+		ft_memset(g_s_program_return, 0, 100);
+		ft_strncpy(g_s_program_return, tmp, -1);
+		free(tmp);
+		ret.value = g_s_program_return;
+		ret.value_len = ft_strlen(ret.value);
+		return (ret);
+	}
+	while (g_line->env_var[j].name)
+	{
+		if (!ft_strcmp(g_line->env_var[j].name, s) && g_line->env_var[j].value)
+			break ;
+		j++;
+	}
+	return (g_line->env_var[j]);
+}
+
+t_evar	*find_env_p(char *s)
+{
+	size_t	j;
+
+	j = 0;
+	while (g_line->env_var[j].name)
+	{
+		if (!ft_strcmp(g_line->env_var[j].name, s))
+			return (&g_line->env_var[j]);
+		j++;
+	}
+	return (NULL);
 }
 
 t_evar	find_env(char *s)

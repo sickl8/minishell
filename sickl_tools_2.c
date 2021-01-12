@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/10 19:19:39 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:15:00 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ int		free_tmp_ava(t_evar *tmp)
 
 char	*reset_evar(t_evar *var)
 {
-	if (var->value)
-		var->name[var->name_len - 1] = '=';
+	if (var->value && var->name)
+		var->name[var->name_len] = '=';
 	return (var->name);
 }
 
@@ -69,9 +69,11 @@ t_evar	get_evar(char *s)
 	ret.value = NULL;
 	ret.value_len = 0;
 	eq = ft_strchr(s, '=');
+	ret.name_only = 1;
 	if (eq)
 	{
 		*eq = '\0';
+		ret.name_only = 0;
 		ret.value = eq + 1;
 		ret.value_len = ft_strlen(ret.value);
 	}
@@ -88,8 +90,9 @@ void	assign_old_args(int x, t_evar *tmp)
 	j = 0;
 	while (g_line->env_var[++i].name)
 	{
-		if (!find_tmp_env(g_line->env_var[i].name, x, tmp))
-		{
+		// if (EPV() && !find_tmp_env(g_line->env_var[i].name, x, tmp))
+		// {
+		// 	EPV(x + j + i, "%d\n");
 			tmp[x + j + i] = g_line->env_var[i];
 			if ((tmp[x + j + i].name &&
 			!(tmp[x + j + i].name = ft_strdup(tmp[x + j + i].name))) ||
@@ -97,9 +100,9 @@ void	assign_old_args(int x, t_evar *tmp)
 			!(tmp[x + j + i].value = ft_strdup(tmp[x + j + i].value)
 			)))
 				free_tmp_ava(tmp) && cleanup(EXIT);
-		}
-		else
-			j--;
+		// }
+		// else
+		// 	j--;
 	}
 	tmp[x + j + i] = g_line->env_var[i];
 	if (!(tmp[x + j + i].value = ft_strdup("")))

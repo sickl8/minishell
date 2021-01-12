@@ -39,3 +39,6 @@ test: fclean
 	libft/ft_strjoin.c libft/ft_strlcpy.c libft/ft_putnbr_fd.c libft/ft_calloc.c libft/ft_isalnum.c \
 	libft/ft_isalpha.c libft/ft_isdigit.c -o minishell && export ASAN_OPTIONS=detect_leak=1
 	rm alloc.o
+
+run: ref
+	./minishell

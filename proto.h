@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/10 19:25:46 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:10:41 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ char		**sanitize_av(int ac, char **av);
 void		assign_old_args(int x, t_evar *tmp);
 int			valid_arg(int ac, char **av, int index);
 int			bc_export_bk(t_cmd *data);
+t_evar		*find_env_p(char *s);
+void		invalid_arg(char **av, int i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/06 18:18:46 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:17:12 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,23 +74,28 @@ void	sort_env_list(t_evar *env_copy)
 void	print_env_list(t_evar *env_copy, int env_len)
 {
 	int		i;
+	int		j;
 
-	i = 0;
-	while (i < env_len)
+	i = -1;
+	while (++i < env_len)
 	{
 		OPRINT("declare -x ");
 		OPRINT(env_copy[i].name);
 		if (!env_copy[i].name_only)
 		{
-			OPRINTS("=");
-			OPRINT("\"");
-			OPRINT(env_copy[i].value);
+			j = -1 + 0 * OPRINTS("=\"");
+			while (env_copy[i].value[++j])
+			{
+				if (env_copy[i].value[j] == '$' || env_copy[i].value[j] == '\\'
+				|| env_copy[i].value[j] == '"')
+					OPRINTC('\\');
+				OPRINTC(env_copy[i].value[j]);
+			}
 			OPRINT("\"");
 			OPRINTS("\n");
 		}
 		else
 			OPRINTS("\n");
-		i++;
 	}
 }
 

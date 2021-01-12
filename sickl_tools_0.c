@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/10 19:21:18 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:12:54 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,33 +109,24 @@ size_t	ft_struct_len(void *p, void *member, size_t end, int size[2])
 	return (ret);
 }
 
-int		check_valid_args(int ac, char **av)
+void	invalid_arg(char **av, int i)
 {
-	int		i;
 	char	*eq;
-	int		ret;
 
-	i = 0;
-	ret = 0;
-	while (++i < ac)
+	eq = ft_strchr(av[i], '=');
+	if (eq)
+		*eq = '\0';
+	if (!env_var_comp(av[i]))
 	{
-		eq = ft_strchr(av[i], '=');
-		if (eq)
-			*eq = '\0';
-		if (env_var_comp(av[i]))
-		{
-			ret++;
-			g_bash_errno = E_BUILTIN;
-			g_builtin_errno = EB_UNSET_EXPORT_NVI;
-			g_bash_commandid = BC_EXPORT;
-			STRCPY(g_bash_error, av[i] ? av[i] : "");
-			g_program_return = 1;
-			bash_error();
-		}
-		if (eq)
-			*eq = '=';
+		g_bash_errno = E_BUILTIN;
+		g_builtin_errno = EB_UNSET_EXPORT_NVI;
+		g_bash_commandid = BC_EXPORT;
+		STRCPY(g_bash_error, av[i] ? av[i] : "");
+		g_program_return = 1;
+		bash_error();
 	}
-	return (ac - 1 - ret);
+	if (eq)
+		*eq = '=';
 }
 
 int		bc_export_bk(t_cmd *data)
@@ -143,13 +134,20 @@ int		bc_export_bk(t_cmd *data)
 	int		argc;
 	char	**argv;
 	t_evar	*tmp;
-	int		va;
+	// int		va;
 
+	// int		i;
+	// for (i = 0; g_line->env_var[i].name; i++);
+	// EPV(i, "%d\n");
 	argv = &(data->args[1]);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
 	argv = sanitize_av(argc, argv);
+	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
+	// fprintf(stderr, "ac = %d\n", argc);
+	// sleep(3);
 	if (g_cmds_length == 1)
 	{
+		// PV(argc, "%d\n");
 		if (!(tmp = malloc(sizeof(t_evar) * (argc +
 		ft_struct_len(g_line->env_var, &g_line->env_var->name, 0, (int[]){
 		sizeof(*(g_line->env_var)), sizeof(g_line->env_var->name)}) + 1))))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:01:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/29 21:16:43 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/11 17:52:25 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ char	*find_in_path(char *tofind)
 
 void	execute_cmd_continue(t_cmd *data, int bk[2])
 {
+	data->path2exec = data->find;
 	if (!ft_strchr(data->find, '/'))
 	{
 		data->path2exec = find_in_path(data->find);

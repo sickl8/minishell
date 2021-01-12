@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/10 19:20:30 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:09:08 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,16 @@ char	**sanitize_av(int ac, char **av)
 	char	**ret;
 	int		cnt;
 	int		i;
+	int		tmp;
 
 	cnt = 0;
+	g_ez = NULL;
 	i = -1;
 	while (av[++i])
-		cnt += valid_arg(ac, av, i);
+	{
+		(tmp = valid_arg(ac, av, i)) ? invalid_arg(av, i) : 0;
+		cnt += tmp;
+	}
 	if (!(ret = malloc((cnt + 1) * sizeof(*ret))))
 		cleanup(EXIT);
 	ret[cnt] = NULL;
@@ -77,15 +82,43 @@ char	**sanitize_av(int ac, char **av)
 int		valid_arg(int ac, char **av, int index)
 {
 	int		i;
+	t_evar	var;
+	t_evar	gvar;
+	t_evar	*evarp;
 
-	i = index;
-	while (++i < ac)
+	var = get_evar(av[index]);
+	i = var.value ? index : -1;
+	gvar = find_env(var.name);
+	if (gvar.name)
 	{
-		if (compare_evars(av[index], av[i]))
-			return (0);
+		if (var.value)
+		{
+			evarp = find_env_p(var.name);
+			free_and_set_to_null(&(evarp->value));
+			evarp->name_only = 0;
+			!(evarp->value = DUP(var.value)) ? eerf(g_ez) && cleanup(EXIT) : 0;
+		}
+		return (0);
 	}
+	av[index] = reset_evar(&var);
+	while (++i < ac)
+		if (index != i ? compare_evars(av[index], av[i]) : 0)
+			return (0);
 	return (1);
 }
+	// char *s, *d;
+	// s = ft_strdup("a");
+	// d = ft_strdup("a=1");
+	// fprintf(stderr, "s = |%s|, d = |%s|\n", s, d);
+	// EPV(compare_evars(s, d), "%d\n");
+	// s = ft_strdup("a=1");
+	// d = ft_strdup("a");
+	// fprintf(stderr, "s = |%s|, d = |%s|\n", s, d);
+	// EPV(compare_evars(s, d), "%d\n");
+	// s = ft_strdup("a=1");
+	// d = ft_strdup("a=2");
+	// fprintf(stderr, "s = |%s|, d = |%s|\n", s, d);
+	// EPV(compare_evars(s, d), "%d\n");
 
 int		assign_valid_args_bk(int ac, char **av, t_evar *tmp)
 {
@@ -97,19 +130,20 @@ int		assign_valid_args_bk(int ac, char **av, t_evar *tmp)
 	j = 0;
 	while (++i < ac)
 	{
+		g_ez = tmp;
 		if (valid_arg(ac, av, i))
 		{
 			var = get_evar(av[i]);
 			tmp[j].name = NULL;
 			tmp[j].value = NULL;
+			tmp[j].name_only = var.name_only;
 			tmp[j].name = ft_strdup(var.name);
 			if (!tmp[j].name ||
 			(var.value && !(tmp[j].value = ft_strdup(var.value))))
 				free_tmp_ava(tmp) && cleanup(EXIT);
 			tmp[j].name_len = var.name_len;
-			tmp[j].value_len = var.value_len;
+			tmp[j++].value_len = var.value_len;
 			av[i] = reset_evar(&var);
-			j++;
 		}
 	}
 	return (j);

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/08 15:26:12 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:33:56 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 # define STRCPY stgcpy
 # define LEN _len
 # define LENX _lenx
+# define DUP ft_strdup
 
 # define TRNCT 1024
 # define APPND 9
@@ -85,8 +86,8 @@
 # include "commandid.h"
 
 // # define H printf("\nline: %d\n", __LINE__)
-// # define PV(x, y) printf(#x " = " y, x)
-// # define EPV(x, y) fprintf(stderr, #x " = " y, x)
+# define PV(x, y) printf("%s = " y, #x, x)
+# define EPV(x, y) fprintf(stderr, "%s = " y, #x, x)
 #include <time.h>
 #define TIME(x) b = clock(); x printf("The section : \"%.20s\"[...] took %lfs = %lfms\n", #x, (double)(clock() - b) / CLOCKS_PER_SEC, ((double)(clock() - b) / CLOCKS_PER_SEC) * 1000)
 #define TEST_FORK() TIME(if (!fork()) exit(0);)
