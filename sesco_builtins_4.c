@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_4.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/02 22:22:29 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:39:16 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
@@ -33,7 +33,8 @@ int		go_to(t_cmd *data)
 {
 	t_evar	var;
 
-	var = data->args[1] ? find_env("OLDPWD") : find_env("HOME");
+	var = data->args[1] && CMP(data->args[1], "--") ? find_env("OLDPWD") :
+	find_env("HOME");
 	if (!var.name)
 	{
 		// A(g_program_return, 1) && A(g_bash_errno, E_BUILTIN);

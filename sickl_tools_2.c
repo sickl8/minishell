@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/11 19:15:00 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:42:25 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
 
-int		find_tmp_env(char *name, int x, t_evar *tmp)
+int		find_tmp_env(char *name, int x)
 {
 	int		i;
 

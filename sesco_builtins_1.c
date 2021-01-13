@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sesco_builtins_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sickl8 <sickl8@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2020/12/31 18:57:09 by sickl8           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:46:09 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
@@ -81,6 +81,7 @@ int		builtin(t_cmd *data, int cmd)
 {
 	int		ret;
 
+	ret = 0;
 	if (cmd == BC_CD)
 		ret = bc_cd_fork(data);
 	else if (cmd == BC_ECHO)

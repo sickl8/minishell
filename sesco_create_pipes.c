@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/10 19:25:31 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:45:30 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
@@ -113,7 +113,6 @@ void	parent_stuff(t_cmd *data)
 int		open_pipes_and_execute(t_cmd *data, int *pfd)
 {
 	int		j;
-	pid_t	ppid;
 
 	j = 1;
 	while (data)

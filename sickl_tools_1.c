@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/12 17:09:08 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 16:38:14 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>

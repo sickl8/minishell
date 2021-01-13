@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/06 11:38:46 by aamzouar         ###   ########.fr       */
+/*   Updated: 2021/01/13 17:47:09 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
@@ -188,6 +188,7 @@ int		bc_pwd(t_cmd *data)
 {
 	char	*cwd;
 
+	(void)data;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (-1);

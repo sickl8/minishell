@@ -10,20 +10,5 @@ clock_t b;
 
 int main()
 {
-	pid_t pid;
-	char *s = malloc(LEN);
-	for (register size_t i = 0; i < LEN - 1; i++)
-		s[i] = i % 94 + 32;
-   	s[LEN - 1] = 0;	
-	TIME(pid = fork(););
-	if (pid == 0)
-	{
-		s[LEN / 2] = 'a';
-		//child
-	}
-	else
-	{
-		wait(NULL);
-		//parent
-	}
+	return (-1);
 }

@@ -6,13 +6,13 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 12:38:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/06 19:28:51 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:47:33 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "def.h"
 #include "proto.h"
-#include "global.h"
+#include "extern.h"
 #include "libft/libft.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -112,9 +112,7 @@ int		bwrite(int fd, void* buffer, size_t len)
 {
 	static size_t	*buf_i;
 	static char		**buf;
-	static char		*tmp;
 	int				ret;
-	void			*bfbf = buffer;
 	
 	if (len >= BUFS || fd < 0 || !buffer || fd > MAX_OPEN_FD)
 		return (write(fd, buf, len));

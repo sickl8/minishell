@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/06 17:58:50 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:47:16 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
@@ -49,7 +49,6 @@ int		check_var_name(char *name, int end)
 int		*check_errors_of_args(char **args, int len, int i, int j)
 {
 	int		*valid_args;
-	char	*name;
 
 	if (!(valid_args = ft_calloc(len, sizeof(int))))
 		cleanup(EXIT);
@@ -109,7 +108,7 @@ t_evar	ft_realloc(char *name, char *value)
 int		bc_cd(t_cmd *data)
 {
 	g_parent = 1;
-	if (data->args[1] && CMP(data->args[1], "-"))
+	if (data->args[1] && CMP(data->args[1], "-") && CMP(data->args[1], "--"))
 	{
 		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)
 		{

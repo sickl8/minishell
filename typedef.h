@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:33:39 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/06 18:16:42 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 16:35:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define TYPEDEF_H
 
 # include <stdlib.h>
+# include <time.h>
 
 typedef long		ssize_t;
 

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/11 19:22:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:45:20 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,6 @@ t_cmd	*get_cmd(t_bm **redir)
 {
 	t_cmd	*ret;
 	t_cmd	**tracer;
-	char	**tmp;
 	int		i;
 
 	i = -1;
@@ -654,9 +653,7 @@ t_evar	find_env_in_line(size_t *ref)
 void	rplc_env_var()
 {
 	size_t	tlen;
-	t_evar	env;
 	size_t	i;
-	size_t	j;
 
 	i = -1;
 	tlen = 0;
@@ -964,8 +961,8 @@ void	free_envar(void)
 	int	i;
 
 	i = -1;
-	while (g_line->env_var[++i].name_len != -1 &&
-	g_line->env_var[i].value_len != -1)
+	while (g_line->env_var[++i].name_len != (size_t)-1 &&
+	g_line->env_var[i].value_len != (size_t)-1)
 	{
 		free(g_line->env_var[i].name);
 		free(g_line->env_var[i].value);
@@ -1093,7 +1090,6 @@ void	free_tmp()
 int		format_string()
 {
 	char	*tmp;
-	int		ret;
 	int		i;
 	int		x;
 	t_fnl	**tracer;
@@ -1125,7 +1121,7 @@ int		format_string()
 		i = -1;
 		g_list_of_commands = NULL;
 		tracer = &g_list_of_commands;
-		while (++i < g_line->env.cnt)
+		while (++i < (int)g_line->env.cnt)
 		{
 			if (!(MALLOC(&(*tracer), 16)))
 				cleanup(EXIT);
@@ -1386,8 +1382,10 @@ void	init(t_line *ref, char **envp)
 	init_env();
 }
 
-void	capture_signals()
+void	capture_signals(int ac, char **av)
 {
+	(void)ac;
+	(void)av;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 }
@@ -1397,7 +1395,7 @@ int		main(int ac, char **av, char **envp)
 	t_line	line;
 	int		stdin_bak;
 
-	capture_signals();
+	capture_signals(ac, av);
 	init(&line, envp);
 	backup_stdin(&stdin_bak);
 	while (1)

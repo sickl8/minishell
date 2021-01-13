@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/12 17:17:12 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/13 17:46:46 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "proto.h"
 #include "typedef.h"
 #include "def.h"
-#include "global.h"
+#include "extern.h"
 #include "errors.h"
 
 #include <stdio.h>
@@ -124,6 +124,7 @@ int		print_all_envs(void)
 
 void    *failing_error(t_cmd *data)
 {
+	(void)data;
 	EPRINTS("minishell: ");
 	EPRINT(strerror(errno));
 	EPRINTS("\n");
@@ -134,7 +135,8 @@ int		go_to_fork(t_cmd *data)
 {
 	t_evar	var;
 
-	var = data->args[1] ? find_env("OLDPWD") : find_env("HOME");
+	var = data->args[1] && CMP(data->args[1], "--") ? find_env("OLDPWD") :
+	find_env("HOME");
 	if (!var.name)
 	{
 		assign(&g_program_return, 1, 4) && assign(&g_bash_errno, E_BUILTIN, 4);
@@ -152,16 +154,15 @@ int		go_to_fork(t_cmd *data)
 		ft_strncpy(g_bash_error, var.value, -1);
 		g_bash_commandid = BC_CD;
 		bash_error();
-		free(var.value);
-		return (1);
+		return (eerf(var.value) * 0 + 1);
 	}
-	free(var.value);
-	return (0);
+	(!CMP(var.name, "OLDPWD") ? OPRINT(var.value) && OPRINT("\n") : 1);
+	return (0 * eerf(var.value));
 }
 
 int		bc_cd_fork(t_cmd *data)
 {
-	if (data->args[1] && CMP(data->args[1], "-"))
+	if (data->args[1] && CMP(data->args[1], "-") && CMP(data->args[1], "--"))
 	{
 		if (chdir(data->args[1]) < 0)
 		{
