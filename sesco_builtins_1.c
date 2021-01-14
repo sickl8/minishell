@@ -40,10 +40,11 @@ void	unset_var(char **args, t_export len, t_evar *tmp)
 	k = 1;
 	while (i < len.env_len && g_line->env_var[j].name)
 	{
-		if (args[k] && CMP(args[k], g_line->env_var[j].name))
+		if (!args[k] || CMP(args[k], g_line->env_var[j].name))
 		{
 			tmp[i] =
 				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			tmp[i].name_len = g_line->env_var[j].name_only;
 			i++;
 		}
 		else
