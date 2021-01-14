@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/13 16:38:14 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 #include <dirent.h>
 #include <string.h>
 #include "libft/libft.h"
-#include "proto.h"
-#include "typedef.h"
-#include "def.h"
-#include "extern.h"
-#include "errors.h"
+#include "header_proto.h"
+#include "header_typedef.h"
+#include "header_def.h"
+#include "header_extern.h"
+#include "header_errors.h"
 
 #include <stdio.h>
 
@@ -134,20 +134,13 @@ int		bc_export_bk(t_cmd *data)
 	int		argc;
 	char	**argv;
 	t_evar	*tmp;
-	// int		va;
 
-	// int		i;
-	// for (i = 0; g_line->env_var[i].name; i++);
-	// EPV(i, "%d\n");
 	argv = &(data->args[1]);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
 	argv = sanitize_av(argc, argv);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
-	// fprintf(stderr, "ac = %d\n", argc);
-	// sleep(3);
 	if (g_cmds_length == 1)
 	{
-		// PV(argc, "%d\n");
 		if (!(tmp = malloc(sizeof(t_evar) * (argc +
 		ft_struct_len(g_line->env_var, &g_line->env_var->name, 0, (int[]){
 		sizeof(*(g_line->env_var)), sizeof(g_line->env_var->name)}) + 1))))

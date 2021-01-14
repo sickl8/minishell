@@ -1,6 +1,6 @@
-#include "get_next_line.h"
-#include "def.h"
-#include "proto.h"
+#include "header_get_next_line.h"
+#include "header_def.h"
+#include "header_proto.h"
 #include "libft/libft.h"
 
 #include <stdio.h>

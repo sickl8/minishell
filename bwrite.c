@@ -6,13 +6,13 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 12:38:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/13 17:47:33 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "def.h"
-#include "proto.h"
-#include "extern.h"
+#include "header_def.h"
+#include "header_proto.h"
+#include "header_extern.h"
 #include "libft/libft.h"
 #include <stdlib.h>
 #include <stdio.h>

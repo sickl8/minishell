@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/13 17:46:46 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 #include <dirent.h>
 #include <string.h>
 #include "libft/libft.h"
-#include "proto.h"
-#include "typedef.h"
-#include "def.h"
-#include "extern.h"
-#include "errors.h"
+#include "header_proto.h"
+#include "header_typedef.h"
+#include "header_def.h"
+#include "header_extern.h"
+#include "header_errors.h"
 
 #include <stdio.h>
 
