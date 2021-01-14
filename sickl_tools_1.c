@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/13 16:38:14 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/14 11:04:29 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,19 +106,6 @@ int		valid_arg(int ac, char **av, int index)
 			return (0);
 	return (1);
 }
-	// char *s, *d;
-	// s = ft_strdup("a");
-	// d = ft_strdup("a=1");
-	// fprintf(stderr, "s = |%s|, d = |%s|\n", s, d);
-	// EPV(compare_evars(s, d), "%d\n");
-	// s = ft_strdup("a=1");
-	// d = ft_strdup("a");
-	// fprintf(stderr, "s = |%s|, d = |%s|\n", s, d);
-	// EPV(compare_evars(s, d), "%d\n");
-	// s = ft_strdup("a=1");
-	// d = ft_strdup("a=2");
-	// fprintf(stderr, "s = |%s|, d = |%s|\n", s, d);
-	// EPV(compare_evars(s, d), "%d\n");
 
 int		assign_valid_args_bk(int ac, char **av, t_evar *tmp)
 {

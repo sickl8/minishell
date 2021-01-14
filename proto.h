@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/12 17:10:41 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/14 12:03:39 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,78 @@ t_evar		*find_env_p(char *s);
 void		invalid_arg(char **av, int i);
 void		export_new_vars(char **args, int i, t_evar *tmp, int j);
 void		export_old_vars(char **args, t_export len, int *valid, t_evar *tmp);
+void 		exec(t_fnl **tracer, int i, int x);
+void 		bash_error(void);
+int			check_s_bashsyn(t_bm p);
+int			check_s_redir(t_bm p);
+int			check_syntax(void);
+int			count_quote(char c);
+int			check_multiline(void);
+void		continue_get_cmd_p_args(char **ret, t_bm *redir, t_rdr **rdr);
+char		**get_cmd_p_args(t_bm *redir, t_rdr **rdr);
+void		set_cmd_2_null(t_cmd *t);
+t_cmd		*get_cmd(t_bm **redir);
+int			initial_error_check(void);
+int			assign(void *p, unsigned long long v, int size);
+void		copy_valid_chars(char *dst, char *src, char *msk, size_t tr_ln);
+size_t		true_len(t_bm p);
+void		continue_split_redirects(t_bm *rd, t_bm **wr, size_t wc);
+t_bm		previous_word(t_bm rd, t_bm ref);
+t_bm		next_word(t_bm rd);
+size_t		count_words_redir(t_bm *rd);
+void		split_redirect(t_bm *rd, t_bm **wr);
+void		split_redirects(void);
+void		split_pipe(void);
+void		continue_split_wmask(t_bm *rd, t_bm **wr, size_t cnt, char c);
+void		split_wmask(t_bm *rd, t_bm **wr, char c);
+void		reset_stdin(int *bk);
+void		backup_stdin(int *bk);
+void		continue_rplc_env_var(void);
+t_evar		find_env_wv(char *s);
+t_evar		*find_env_p(char *s);
+t_evar		find_env(char *s);
+t_evar		find_env_in_line(size_t *ref);
+void		rplc_env_var(void);
+int			is_ws(char c);
+int			env_var_comp(char *s);
+int			c_env_var_comp(char c);
+void		env_var(size_t *ref);
+void		bash_syntax(size_t *ref);
+void		squote(size_t *ref);
+void		dquote(size_t *ref);
+void		backslash(size_t *ref, char lit_type);
+int			set_mask(void);
+void		free_loc(void);
+void		free_envp(void);
+void		free_redir(void);
+void		free_g_bw(void);
+void		free_pipe(void);
+void		free_scol(void);
+void		free_envar(void);
+int			cleanup(int ex);
+void		free_it(void);
+void		free_and_set_to_null(void *adr);
+void		fastn(void);
+void		free_buf_and_mask(t_bm s);
+void		free_tmp(void);
+int			format_string(void);
+void		reset_prompt(int jmp);
+void		exit_the_shell(void);
+void		ctrl_d(int *bk);
+void		handle_signal(int sig);
+void		handle_error(int ex);
+void		print_color(int color);
+void		skittles(char *s);
+void		init_read(void);
+void		continue_init_env(void);
+void		init_env(void);
+void		init_envp(char **envp);
+void		init_buf(void);
+void		init_line(void);
+void		init_globals(t_line *ref);
+void		init(t_line *ref, char **envp);
+void		capture_signals(int ac, char **av);
+void		handle_signal_int(int sig);
+void		handle_signal_quit(int sig);
 
 #endif

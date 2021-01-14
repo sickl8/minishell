@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/13 17:47:16 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/14 12:46:21 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int		*check_errors_of_args(char **args, int len, int i, int j)
 		{
 			g_bash_errno = E_BUILTIN;
 			g_builtin_errno = EB_UNSET_EXPORT_NVI;
-			g_bash_commandid = BC_EXPORT;
+			g_bash_commandid = BC_UNSET;
 			STRCPY(g_bash_error, args[i] ? args[i] : "");
 			g_program_return = 1;
 			bash_error();
