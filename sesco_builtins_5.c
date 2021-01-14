@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -107,7 +106,6 @@ int		print_all_envs(void)
 	env_len = 0;
 	while (g_line->env_var[env_len].name)
 		env_len++;
-	// if there is no env variable
 	env_copy = create_env_list(env_len);
 	if (env_copy[0].name)
 	{
@@ -122,7 +120,7 @@ int		print_all_envs(void)
 ** showing an error if FORK or PIPE failed !
 */
 
-void    *failing_error(t_cmd *data)
+void	*failing_error(t_cmd *data)
 {
 	(void)data;
 	EPRINTS("minishell: ");

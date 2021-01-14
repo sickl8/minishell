@@ -54,7 +54,7 @@ void	set_name_only(int start, int *valid, int len, t_evar *tmp)
 			if (valid[i] == 2)
 				tmp[start].name_only = 1;
 			i++;
-			start++;;
+			start++;
 		}
 	}
 	else
@@ -65,4 +65,62 @@ void	set_name_only(int start, int *valid, int len, t_evar *tmp)
 			start++;
 		}
 	}
+}
+
+void	export_new_vars(char **args, int i, t_evar *tmp, int j)
+{
+	t_evar	new;
+	int		k;
+	int		old;
+
+	old = i;
+	while (args[j])
+	{
+		k = i;
+		new = name_or_value(args[j]);
+		while (j != 1 && k--)
+		{
+			if (ft_strchr(args[j], '=') && !CMP(new.name, tmp[k].name))
+			{
+				free(tmp[k].name);
+				free(tmp[k].value);
+				tmp[k] = ft_realloc(new.name, new.value);
+				break ;
+			}
+		}
+		if (k == -1 || j == 1)
+			tmp[i++] = ft_realloc(new.name, new.value);
+		j++;
+		free(new.name);
+	}
+	tmp[i] = ft_realloc(NULL, NULL);
+}
+
+void	export_old_vars(char **args, t_export len, int *valid, t_evar *tmp)
+{
+	int		j;
+	t_evar	new;
+	int		k;
+	int		i;
+
+	i = 0;
+	j = 0;
+	k = 1;
+	while (i < len.env_len && g_line->env_var[j].name)
+	{
+		new = name_or_value(args[k]);
+		if (!args[k] || !ft_strchr(args[k], '=') ||
+			CMP(new.name, g_line->env_var[j].name))
+		{
+			tmp[i] =
+				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
+			i++;
+		}
+		else
+			k++;
+		free(new.name);
+		j++;
+	}
+	export_new_vars(args, i, tmp, 1);
+	set_name_only(len.env_len, valid, len.new_env_len, tmp);
 }

@@ -105,5 +105,7 @@ int			valid_arg(int ac, char **av, int index);
 int			bc_export_bk(t_cmd *data);
 t_evar		*find_env_p(char *s);
 void		invalid_arg(char **av, int i);
+void		export_new_vars(char **args, int i, t_evar *tmp);
+void		export_old_vars(char **args, t_export len, int *valid, t_evar *tmp);
 
 #endif

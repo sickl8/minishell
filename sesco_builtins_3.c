@@ -66,7 +66,6 @@ int		*check_errors_of_args(char **args, int len, int i, int j)
 			g_program_return = 1;
 			bash_error();
 		}
-		// if it doesn't have equal on it consider it as invalid
 		if (!check_var_name(args[i], j))
 			valid_args[i - 1] = 1;
 		else if (args[i][j] == '\0')
@@ -113,10 +112,6 @@ int		bc_cd(t_cmd *data)
 		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)
 		{
 			g_program_return = 1;
-			// g_bash_errno = E_ERRNO;
-			// ft_strncpy(g_bash_error, data->args[1], -1);
-			// g_bash_commandid = BC_CD;
-			// bash_error();
 			return (1);
 		}
 	}

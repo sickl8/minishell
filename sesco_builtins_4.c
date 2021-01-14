@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-int		go_to(t_cmd *data)
+int			go_to(t_cmd *data)
 {
 	t_evar	var;
 
@@ -59,7 +59,7 @@ int		go_to(t_cmd *data)
 	return (0);
 }
 
-t_evar	name_or_value(char *arg)
+t_evar		name_or_value(char *arg)
 {
 	t_evar	ret;
 
@@ -77,7 +77,6 @@ t_evar	name_or_value(char *arg)
 		}
 		else
 			ret.value = ret.name + ft_strlen(ret.name);
-		
 	}
 	return (ret);
 }
@@ -90,21 +89,18 @@ t_export	calc_lengths(int *valid, int len)
 	i = 0;
 	res.env_len = 0;
 	res.new_env_len = 0;
-	// count existed env variables
 	while (g_line->env_var[res.env_len].name)
 		res.env_len++;
-	// add the valid args
 	res.new_env_len = 0;
 	i = 0;
 	while (i < len)
 		if (valid[i++] != 1)
 			res.new_env_len++;
-	// remove from the existing ones
 	res.new_env_len += res.env_len;
 	return (res);
 }
 
-int		check_if_num(char *s)
+int			check_if_num(char *s)
 {
 	int		i;
 
@@ -128,7 +124,7 @@ int		check_if_num(char *s)
 	return (0);
 }
 
-int		bc_exit(char **argv)
+int			bc_exit(char **argv)
 {
 	int		argc;
 	int		exit_status;
@@ -157,5 +153,5 @@ int		bc_exit(char **argv)
 	exit_status = argc == 1 ? 0 : ft_atoi(argv[1]);
 	g_cmds_length == 1 ? cleanup(RETURN) : 0;
 	g_cmds_length == 1 ? exit(exit_status % 256) : 0;
-    return (0);
+	return (0);
 }
