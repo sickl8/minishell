@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 19:05:02 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:44:54 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 
 #include <stdio.h>
 
-size_t	_lenx(void *p, int sz, size_t term)
+size_t	lenx_(void *p, int sz, size_t term)
 {
 	return (ft_len(p, sz, term));
 }
 
-size_t	_len(void *p, int sz)
+size_t	len_(void *p, int sz)
 {
 	return (ft_len(p, sz, 0));
 }

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commandid.h                                        :+:      :+:    :+:   */
+/*   header_commandid.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 18:13:39 by isaadi            #+#    #+#             */
-/*   Updated: 2020/11/10 18:16:58 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:54:53 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDID_H
-# define COMMANDID_H
+#ifndef HEADER_COMMANDID_H
+# define HEADER_COMMANDID_H
 
 # define BC_DEF 0
 # define BC_ECHO 1

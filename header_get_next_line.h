@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   header_get_next_line.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 17:38:23 by isaadi            #+#    #+#             */
-/*   Updated: 2020/12/17 20:39:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:53:06 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef HEADER_GET_NEXT_LINE_H
+# define HEADER_GET_NEXT_LINE_H
 
 # include <stdlib.h>
 # include <unistd.h>

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 19:05:02 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:43:43 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 void	*mallok(void *adr, size_t bytes)
 {
 	void	**cast;
-	
+
 	cast = adr;
 	*cast = malloc(bytes);
 	return (*cast);

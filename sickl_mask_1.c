@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:34 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:46:22 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	env_var(size_t *ref)
 	*ref = i;
 }
 
-void	rplc_env_var()
+void	rplc_env_var(void)
 {
 	size_t	tlen;
 	size_t	i;

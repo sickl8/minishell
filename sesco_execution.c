@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:01:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:27:30 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@
 #include "header_errors.h"
 
 #include <stdio.h>
-
-/*
-** Find the command in $PATH
-*/
 
 char	*find_in_single_path(char *tofind, char **paths, int i)
 {
@@ -68,7 +64,7 @@ char	*find_in_path(char *tofind)
 	char			*ret;
 
 	path = find_env("PATH");
-	if (!(paths = ft_split(path.value, ':'))) // paths is automatically freed on any NULL malloc return
+	if (!(paths = ft_split(path.value, ':')))
 		cleanup(EXIT);
 	ret = NULL;
 	i = 0;
@@ -80,13 +76,6 @@ char	*find_in_path(char *tofind)
 	free_path(paths);
 	return (ret);
 }
-
-/*
-** here we check if it's a path or just a command
-** path -> [/]
-** command -> [no slash]
-** also it redirects pipes
-*/
 
 void	execute_cmd_continue(t_cmd *data, int bk[2])
 {

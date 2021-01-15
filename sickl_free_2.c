@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:22 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:36:48 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_buf_and_mask(t_bm s)
 	free(s.msk);
 }
 
-void	free_tmp()
+void	free_tmp(void)
 {
 	int	i;
 	int	j;
@@ -67,13 +67,13 @@ int		cleanup(int ex)
 	free(g_bash_error);
 	free(g_line->rd.buf);
 	free(g_line->rd.msk);
-	free(g_line->env.buf);////
-	free(g_line->env.msk);////
+	free(g_line->env.buf);
+	free(g_line->env.msk);
 	if (g_line->env_var)
 		free_envar();
-	if (g_line->scol)///////
+	if (g_line->scol)
 		free_scol();
-	if (g_line->pipe)///////
+	if (g_line->pipe)
 		free_pipe();
 	if (g_bw.buf[0])
 		free_g_bw();

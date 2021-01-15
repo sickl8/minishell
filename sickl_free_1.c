@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:19 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:35:47 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 
 #include <stdio.h>
 
-void	free_g_bw()
+void	free_g_bw(void)
 {
 	int	i;
 
@@ -42,7 +42,7 @@ void	free_g_bw()
 	free(g_bw.buf_i[0]);
 }
 
-void	free_pipe()
+void	free_pipe(void)
 {
 	int	i;
 	int	j;
@@ -61,7 +61,7 @@ void	free_pipe()
 	free(g_line->pipe);
 }
 
-void	free_scol()
+void	free_scol(void)
 {
 	int	i;
 
@@ -89,7 +89,7 @@ void	free_envar(void)
 	free(g_line->env_var);
 }
 
-void	free_it()
+void	free_it(void)
 {
 	int		i;
 

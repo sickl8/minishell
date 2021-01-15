@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:26:21 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,10 @@ int			go_to(t_cmd *data)
 	var = data->args[1] && CMP(data->args[1], "--") ? find_env("OLDPWD") :
 	find_env("HOME");
 	if (!var.name)
-	{
-		// A(g_program_return, 1) && A(g_bash_errno, E_BUILTIN);
-		// ft_strncpy(g_bash_error, var.value, -1);
-		// g_builtin_errno = data->args[1] ? EB_CD_ONT : EB_CD_HNT;
-		// g_bash_commandid = BC_CD;
-		// bash_error();
 		return (1);
-	}
-	var.value_len = !(var.value = ft_strdup(var.value)) ?
-	cleanup(EXIT) : var.value_len;
+	!(var.value = ft_strdup(var.value)) ? cleanup(EXIT) : 0;
 	if (change_dir(var.value, getcwd(NULL, 0)) < 0)
-	{
-		// A(g_program_return, 1) && A(g_bash_errno, E_ERRNO);
-		// ft_strncpy(g_bash_error, var.value, -1);
-		// g_bash_commandid = BC_CD;
-		// bash_error();
-		// free(var.value);
 		return (1);
-	}
 	free(var.value);
 	return (0);
 }
@@ -130,11 +115,8 @@ int			bc_exit(char **argv)
 	int		exit_status;
 
 	g_cmds_length == 1 ? OPRINTS("exit\n") : 0;
-	argc = 0;
-	while (argv[argc])
-		argc++;
-	g_bash_commandid = BC_EXIT;
-	g_bash_errno = E_BUILTIN;
+	argc = (int)ft_len(argv, sizeof(*argv), 0);
+	assign(&g_bash_commandid, BC_EXIT, 4) && assign(&g_bash_errno, E_BUILTN, 4);
 	if (argc > 1 && check_if_num(argv[1]))
 	{
 		g_program_return = 255;

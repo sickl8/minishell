@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:50:27 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 int		change_dir(char *s, char *cwd)
 {
 	t_cmd	d;
-	char	op[sizeof "OLDPWD=" + ft_strlen(cwd ? cwd : "")];
+	char	op[sizeof("OLDPWD=") + ft_strlen(cwd ? cwd : "")];
 	char	*p;
 	int		ret;
 
@@ -50,7 +50,7 @@ int		change_dir(char *s, char *cwd)
 		cleanup(EXIT);
 	}
 	ft_strcpy(op, "OLDPWD=");
-	ft_strcpy(op + sizeof "OLDPWD=" - 1, cwd);
+	ft_strcpy(op + sizeof("OLDPWD=") - 1, cwd);
 	d.args = (char*[]){ (char*)"export", op, p, NULL};
 	bc_export(&d);
 	eerf(s) && eerf(cwd) && eerf(p);
@@ -102,7 +102,7 @@ size_t	ft_struct_len(void *p, void *member, size_t end, int size[2])
 			(szm == 2 && ((short*)(p + offset))[0] == (short)end) ||
 			(szm == 4 && ((int*)(p + offset))[0] == (int)end) ||
 			(szm == 8 && ((long*)(p + offset))[0] == (long)end))
-				break ;
+			break ;
 		p += sz;
 		ret++;
 	}

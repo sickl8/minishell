@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:52:43 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:38:37 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,6 @@ void	ft_strcpy(char *dst, char *src)
 	dst[i] = '\0';
 }
 
-/*
-** Adding a slash [/] to the end of a path
-** if there's none
-*/
-
 char	*fix_path(char **paths, int i)
 {
 	size_t	len;
@@ -79,10 +74,6 @@ char	*fix_path(char **paths, int i)
 	return (paths[i]);
 }
 
-/*
-** this function frees double pointer
-*/
-
 void	free_path(char **paths)
 {
 	int		i;
@@ -92,12 +83,6 @@ void	free_path(char **paths)
 		free(paths[i++]);
 	free(paths);
 }
-
-/*
-** This function counts how many cmds
-** are exist and also allocates enough
-** memory to the holding array
-*/
 
 int		*count_cmds(t_cmd *data)
 {

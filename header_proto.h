@@ -6,12 +6,12 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:36:28 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:59:51 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PROTO_H
-# define PROTO_H
+#ifndef HEADER_PROTO_H
+# define HEADER_PROTO_H
 
 # include "header_typedef.h"
 
@@ -24,7 +24,7 @@ int			cleanup(int ex);
 void		init_read();
 void		split_wmask(t_bm *rd, t_bm **wr, char c);
 void		free_and_set_to_null(void *adr);
-int			bwrite(int fd, void* buffer, size_t len);
+int			bwrite(int fd, void *buffer, size_t len);
 int			bflush(int fd);
 char		**ft_msplit_whitespace(t_bm line);
 t_bm		next_word(t_bm rd);
@@ -32,7 +32,6 @@ size_t		true_len(t_bm p);
 void		free_buf_and_mask(t_bm s);
 t_bm		previous_word(t_bm rd, t_bm ref);
 void		loop_in_data();
-// void		_bash_error(const char *, int);
 void		bash_error();
 void		free_path(char **paths);
 int			*count_cmds(t_cmd *data);
@@ -67,10 +66,8 @@ int			eerf(void *p);
 int			bc_cd_fork(t_cmd *data);
 int			go_to_fork(t_cmd *data);
 size_t		ft_len(void *p, int	size, size_t end);
-void    	*failing_error(t_cmd *data);
-int 	   	print_all_envs(void);
-// int			*get_g_program_return(const char *fn);
-void		*malloc_wraper_c(size_t i, int line, const char *func, const char *file);
+void		*failing_error(t_cmd *data);
+int			print_all_envs(void);
 void		*mallok(void *adr, size_t bytes);
 int			bashsyn(char x);
 int			cmp(char *x, char *y);
@@ -91,8 +88,8 @@ int			str_is_rr(t_bm bm);
 int			str_is_rrr(t_bm bm);
 int			str_is_redir(t_bm bm);
 char		*stgcpy(char *dest, char *src);
-size_t		_lenx(void *p, int sz, size_t term);
-size_t		_len(void *p, int sz);
+size_t		lenx_(void *p, int sz, size_t term);
+size_t		len_(void *p, int sz);
 void		set_zero(t_evar *tmp, int end);
 void		set_name_only(int start, int *valid, int len, t_evar *tmp);
 int			assign_valid_args_bk(int argc, char **argv, t_evar *tmp);
@@ -107,8 +104,8 @@ t_evar		*find_env_p(char *s);
 void		invalid_arg(char **av, int i);
 void		export_new_vars(char **args, int i, t_evar *tmp, int j);
 void		export_old_vars(char **args, t_export len, int *valid, t_evar *tmp);
-void 		exec(t_fnl **tracer, int i, int x);
-void 		bash_error(void);
+void		exec(t_fnl **tracer, int i, int x);
+void		bash_error(void);
 int			check_s_bashsyn(t_bm p);
 int			check_s_redir(t_bm p);
 int			check_syntax(void);

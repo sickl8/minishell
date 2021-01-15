@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   typedef.h                                          :+:      :+:    :+:   */
+/*   header_typedef.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:33:39 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/13 16:35:42 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 17:11:39 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TYPEDEF_H
-# define TYPEDEF_H
+#ifndef HEADER_TYPEDEF_H
+# define HEADER_TYPEDEF_H
 
 # include <stdlib.h>
-# include <time.h>
-
-typedef long		ssize_t;
+# include <_ssize_t.h>
 
 typedef struct	s_rdr
 {

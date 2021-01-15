@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:09:47 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	parent_stuff(t_cmd *data)
 		assign(&g_parent, 1, 4) && bc_cd(data);
 	else if (!CMP(data->find, "export"))
 		assign(&g_parent, 1, 4) &&
-		(!data->args[1] ? print_all_envs() : bc_export_bk(data));
+		(!data->args[1] ? 0 : bc_export_bk(data));
 	else if (!CMP(data->find, "unset"))
 		assign(&g_parent, 1, 4) && bc_unset(data);
 	else if (!CMP(data->find, "exit"))

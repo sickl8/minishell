@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 16:50:52 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,12 @@ void	assign_old_args(int x, t_evar *tmp)
 	j = 0;
 	while (g_line->env_var[++i].name)
 	{
-		// if (EPV() && !find_tmp_env(g_line->env_var[i].name, x, tmp))
-		// {
-		// 	EPV(x + j + i, "%d\n");
-			tmp[x + j + i] = g_line->env_var[i];
-			if ((tmp[x + j + i].name &&
-			!(tmp[x + j + i].name = ft_strdup(tmp[x + j + i].name))) ||
-			(tmp[x + j + i].value &&
-			!(tmp[x + j + i].value = ft_strdup(tmp[x + j + i].value)
-			)))
-				free_tmp_ava(tmp) && cleanup(EXIT);
-		// }
-		// else
-		// 	j--;
+		tmp[x + j + i] = g_line->env_var[i];
+		if ((tmp[x + j + i].name &&
+		!(tmp[x + j + i].name = ft_strdup(tmp[x + j + i].name))) ||
+		(tmp[x + j + i].value &&
+		!(tmp[x + j + i].value = ft_strdup(tmp[x + j + i].value))))
+			free_tmp_ava(tmp) && cleanup(EXIT);
 	}
 	tmp[x + j + i] = g_line->env_var[i];
 	if (!(tmp[x + j + i].value = ft_strdup("")))
