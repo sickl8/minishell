@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:22 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:36:48 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 18:04:26 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		cleanup(int ex)
 		free_scol();
 	if (g_line->pipe)
 		free_pipe();
-	if (g_bw.buf[0])
+	if (g_bw.buf && g_bw.buf[0])
 		free_g_bw();
 	if (g_line->redir)
 		free_redir();

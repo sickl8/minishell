@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:59:51 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 18:09:49 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_evar		find_env_in_line(size_t *ref);
 int			cleanup(int ex);
 void		init_read();
 void		split_wmask(t_bm *rd, t_bm **wr, char c);
-void		free_and_set_to_null(void *adr);
+int			free_and_set_to_null(void *adr);
 int			bwrite(int fd, void *buffer, size_t len);
 int			bflush(int fd);
 char		**ft_msplit_whitespace(t_bm line);
@@ -154,7 +154,6 @@ void		free_scol(void);
 void		free_envar(void);
 int			cleanup(int ex);
 void		free_it(void);
-void		free_and_set_to_null(void *adr);
 void		fastn(void);
 void		free_buf_and_mask(t_bm s);
 void		free_tmp(void);
@@ -177,5 +176,6 @@ void		init(t_line *ref, char **envp);
 void		capture_signals(int ac, char **av);
 void		handle_signal_int(int sig);
 void		handle_signal_quit(int sig);
+void		exec_from_av(int ac, char **av);
 
 #endif

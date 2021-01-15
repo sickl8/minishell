@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:11 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:34:26 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 18:09:00 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,14 @@
 
 #include <stdio.h>
 
-void	free_and_set_to_null(void *adr)
+int		free_and_set_to_null(void *adr)
 {
 	void	**cast;
 
 	cast = (void**)adr;
 	free(*cast);
 	*cast = NULL;
+	return (1);
 }
 
 void	fastn(void)

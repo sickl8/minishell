@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:46:52 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 18:10:27 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,23 @@ t_bm	previous_word(t_bm rd, t_bm ref)
 	!BASHSYN(rd.msk[-1]))
 		rd.cnt += 1 + 0 * ((size_t)rd.buf-- + (size_t)rd.msk--);
 	return (rd);
+}
+
+void	exec_from_av(int ac, char **av)
+{
+	(void)ac;
+	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
+	if (ac == 2)
+	{
+		EPRINT("minishell: -c: option requires an argument\n");
+		cleanup(2);
+	}
+	g_line->rd.buf = ft_strdup(av[2]);
+	if (!g_line->rd.buf)
+		cleanup(EXIT);
+	if (format_string())
+		bash_error();
+	free_and_set_to_null(&g_line->rd.buf);
+	cleanup(0);
+	exit(g_program_return);
 }

@@ -31,4 +31,5 @@ fclean: clean
 re: fclean $(NAME)
 
 ref: fclean
-	gcc -fsanitize=address -g -I$(INCLUDEF) $(WWW) $(SRC) -o $(NAME)
+	cd libft && make
+	gcc -fsanitize=address -g -I$(INCLUDEF) $(WWW) $(SRC) libft/libft.a -o $(NAME)

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:16:31 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/15 18:08:43 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		format_string(void)
 		cleanup(EXIT);
 	set_mask();
 	if (g_bash_errno || !initial_error_check())
-		return (eerf(g_line->rd.msk) * 0 + g_bash_errno);
+		return (free_and_set_to_null(&g_line->rd.msk) * 0 + g_bash_errno);
 	split_wmask(&g_line->rd, &g_line->it, ';');
 	free_buf_and_mask(g_line->rd);
 	exec(NULL, 0, -1);
@@ -104,6 +104,8 @@ int		main(int ac, char **av, char **envp)
 	backup_stdin(&stdin_bak);
 	while (1)
 	{
+		if (ac > 1 && !CMP(av[1], "-c"))
+			exec_from_av(ac, av);
 		init_read();
 		line.rd_ret = get_next_line(&line.rd.buf);
 		if (line.rd_ret < 0)
