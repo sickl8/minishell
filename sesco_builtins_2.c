@@ -113,9 +113,12 @@ int		bc_echo(t_cmd *data)
 	}
 	while (data->args[i] && data->args[i + 1])
 	{
-		OPRINT(data->args[i]);
+		if (CMP(data->args[i], "-n"))
+		{
+			OPRINT(data->args[i]);
+			OPRINTS(" ");
+		}
 		i++;
-		OPRINTS(" ");
 	}
 	if (data->args[i])
 		OPRINT(data->args[i]);
