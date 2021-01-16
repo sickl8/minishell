@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/15 16:26:21 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 17:16:37 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,25 +88,30 @@ t_export	calc_lengths(int *valid, int len)
 int			check_if_num(char *s)
 {
 	int		i;
+	int		sign;
 
 	i = 0;
 	while (s[i] && (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13)))
 		i++;
+	sign = 1;
 	if (!ISNUM(s[i]) && s[i] != '+' && s[i] != '-')
 		return (1);
+	else if (s[i] == '-')
+		sign = -1;
 	if (!ISNUM(s[i]))
 		i++;
 	if (!ISNUM(s[i]))
 		return (1);
+	while (s[i] && s[i] == '0')
+		i++;
+	assign(&s, (t_ull)(s + i), sizeof(s)) && assign(&i, 0, sizeof(i));
 	while (s[i] && ISNUM(s[i]))
 		i++;
-	while (s[i])
-	{
+	i--;
+	while (s[++i])
 		if (!(s[i] && (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13))))
 			return (1);
-		i++;
-	}
-	return (0);
+	return (continue_check_num(s, sign));
 }
 
 int			bc_exit(char **argv)

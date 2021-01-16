@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 19:15:02 by isaadi            #+#    #+#             */
-/*   Updated: 2019/10/18 16:28:57 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 17:05:54 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#define LM __LONG_MAX__
+
+typedef unsigned long	t_ul;
 
 int		ft_atoi(const char *str)
 {
@@ -26,12 +30,8 @@ int		ft_atoi(const char *str)
 		sign = (str[i++] == '-' ? -1 : 1);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if ((unsigned long)__LONG_MAX__ < (unsigned long)nbr * 10 + str[i] - 48
-				&& sign == 1)
-			return (-1);
-		else if ((unsigned long)__LONG_MAX__ < (unsigned long)nbr * 10 + str[i]
-				- 48 && sign == -1)
-			return (0);
+		if ((t_ul)LM < (t_ul)nbr * 10 + str[i] - 48 && sign == 1)
+			return ((sign == -1) * sign);
 		nbr = nbr * 10 + str[i++] - 48;
 	}
 	return (nbr * sign);

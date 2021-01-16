@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 18:08:43 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 16:32:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,11 @@ void	init_read(void)
 {
 	t_evar	home;
 	t_evar	user;
-	t_evar	return_status;
 
 	home = find_env("HOME");
-	return_status = find_env("?");
 	g_pwd.name = "PWD";
-	g_pwd.value = getcwd(NULL, 0);
+	!(g_pwd.value = getcwd(NULL, 0)) ? cleanup(EXIT) : 0;
+	set_pwd();
 	g_pwd.value_len = ft_strlen(g_pwd.value);
 	user = find_env("USER");
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
@@ -89,7 +88,7 @@ void	init_read(void)
 		BPRINT(g_pwd.value);
 	BPRINTS(ESC_RESET "$ ");
 	bflush(STDOUT_FILENO);
-	free(g_pwd.value);
+	free_and_set_to_null(&g_pwd.value);
 	free(g_line->rd.buf);
 	g_line->rd.buf = NULL;
 }

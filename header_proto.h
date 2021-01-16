@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 18:09:49 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 17:08:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int			bc_cd_fork(t_cmd *data);
 int			go_to_fork(t_cmd *data);
 size_t		ft_len(void *p, int	size, size_t end);
 void		*failing_error(t_cmd *data);
-int			print_all_envs(void);
+int			print_all_envs(t_cmd *data);
 void		*mallok(void *adr, size_t bytes);
 int			bashsyn(char x);
 int			cmp(char *x, char *y);
@@ -177,5 +177,7 @@ void		capture_signals(int ac, char **av);
 void		handle_signal_int(int sig);
 void		handle_signal_quit(int sig);
 void		exec_from_av(int ac, char **av);
+void		set_pwd(void);
+int			continue_check_num(char *s, int sign);
 
 #endif

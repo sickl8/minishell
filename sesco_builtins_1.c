@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/15 16:11:08 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 14:47:21 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		builtin(t_cmd *data, int cmd)
 	else if (cmd == BC_EXIT)
 		ret = 0;
 	else if (cmd == BC_EXPORT)
-		ret = print_all_envs();
+		ret = print_all_envs(data);
 	else if (cmd == BC_PWD)
 		ret = bc_pwd(data);
 	else if (cmd == BC_UNSET)

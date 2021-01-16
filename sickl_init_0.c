@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:33:06 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:41:04 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 16:33:12 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,6 @@ void	init_globals(t_line *ref)
 	g_bash_errno = 0;
 	g_bash_commandid = 0;
 	g_bash_error = NULL;
+	g_pwd.value = NULL;
+	g_pwd.name = NULL;
 }

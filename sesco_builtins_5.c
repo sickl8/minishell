@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/15 16:29:00 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 16:39:29 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,13 @@ void	print_env_list(t_evar *env_copy, int env_len)
 	}
 }
 
-int		print_all_envs(void)
+int		print_all_envs(t_cmd *data)
 {
 	t_evar		*env_copy;
 	int			env_len;
 
+	if (data->args[1])
+		return (0);
 	env_len = 0;
 	while (g_line->env_var[env_len].name)
 		env_len++;

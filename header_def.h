@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 17:05:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 16:39:13 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@
 # include "header_bufferedio.h"
 # include "header_colors.h"
 # include "header_commandid.h"
+
+# define PV(x, y) printf("%s = " y, #x, x)
 
 #endif

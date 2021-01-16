@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 18:10:27 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 16:38:20 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ t_bm	previous_word(t_bm rd, t_bm ref)
 void	exec_from_av(int ac, char **av)
 {
 	(void)ac;
+	set_pwd();
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	if (ac == 2)
 	{
@@ -115,4 +116,21 @@ void	exec_from_av(int ac, char **av)
 	free_and_set_to_null(&g_line->rd.buf);
 	cleanup(0);
 	exit(g_program_return);
+}
+
+void	set_pwd(void)
+{
+	t_cmd	data;
+	char	*pwd;
+	char	*join;
+
+	if (!(pwd = getcwd(NULL, 0)))
+		cleanup(EXIT);
+	join = ft_strjoin("PWD=", pwd);
+	if (!join)
+		eerf(pwd) && cleanup(EXIT);
+	g_cmds_length = 1;
+	data.args = (char*[]){ "export", join, NULL};
+	bc_export_bk(&data);
+	g_cmds_length = 0;
 }
