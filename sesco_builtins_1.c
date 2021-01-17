@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-void	unset_var(char **args, t_export len, t_evar *tmp)
+void	unset_var(char **args, t_evar *tmp)
 {
 	int		j;
 	int		i;
@@ -38,13 +38,13 @@ void	unset_var(char **args, t_export len, t_evar *tmp)
 	j = 0;
 	i = 0;
 	k = 1;
-	while (i < len.env_len && g_line->env_var[j].name)
+	while (g_line->env_var[j].name)
 	{
-		if (!args[k] || CMP(args[k], g_line->env_var[j].name))
+		if (!args[k] || !find_env(args[k]).name)
 		{
 			tmp[i] =
 				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
-			tmp[i].name_len = g_line->env_var[j].name_only;
+			tmp[i].name_only = g_line->env_var[j].name_only;
 			i++;
 		}
 		else
@@ -60,6 +60,7 @@ int		bc_unset(t_cmd *data)
 	int			*valid_args;
 	t_export	lengths;
 	t_evar		*tmp;
+	char		**tmp_args;
 
 	args_len = count_args(data->args);
 	valid_args = check_errors_of_unset(data->args, args_len, 1, 0);
@@ -68,7 +69,9 @@ int		bc_unset(t_cmd *data)
 	{
 		if (!(tmp = malloc(sizeof(t_evar) * (lengths.env_len + 1))))
 			cleanup(EXIT);
-		unset_var(data->args, lengths, tmp);
+		tmp_args = assign_valid_args(data->args, valid_args, args_len);
+		unset_var(tmp_args, tmp);
+		free(tmp_args);
 		free(valid_args);
 		free_envar();
 		g_line->env_var = tmp;
