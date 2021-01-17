@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/15 16:30:46 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 16:42:55 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ int		go_to_fork(t_cmd *data)
 	!(var.value = ft_strdup(var.value)) ? cleanup(EXIT) : 0;
 	if (chdir(var.value) < 0)
 	{
-		assign(&g_program_return, 1, 4) && assign(&g_bash_errno, E_ERRNO, 4);
+		assign(&g_program_return, 1, 4) && assign(&g_bash_errno, E_BUILTIN, 4);
 		ft_strncpy(g_bash_error, var.value, -1);
 		g_bash_commandid = BC_CD;
+		g_builtin_errno = -1;
 		bash_error();
 		return (eerf(var.value) * 0 + 1);
 	}
@@ -62,9 +63,10 @@ int		bc_cd_fork(t_cmd *data)
 	{
 		if (chdir(data->args[1]) < 0)
 		{
-			g_bash_errno = E_ERRNO;
-			ft_strncpy(g_bash_error, data->args[1], -1);
+			g_bash_errno = E_BUILTIN;
 			g_bash_commandid = BC_CD;
+			g_builtin_errno = -1;
+			ft_strncpy(g_bash_error, data->args[1], -1);
 			bash_error();
 			return (1);
 		}

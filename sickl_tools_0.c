@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/15 19:29:51 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 15:48:13 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ size_t	ft_struct_len(void *p, void *member, size_t end, int size[2])
 	return (ret);
 }
 
-void	invalid_arg(char **av, int i)
+void	invalid_arg(char **av, int i, int *rt)
 {
 	char	*eq;
 
@@ -123,6 +123,7 @@ void	invalid_arg(char **av, int i)
 		g_bash_commandid = BC_EXPORT;
 		STRCPY(g_bash_error, av[i] ? av[i] : "");
 		g_program_return = 1;
+		*rt = 1;
 		bash_error();
 	}
 	if (eq)
@@ -134,10 +135,12 @@ int		bc_export_bk(t_cmd *data)
 	int		argc;
 	char	**argv;
 	t_evar	*tmp;
+	int		ret;
 
+	ret = 0;
 	argv = &(data->args[1]);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
-	argv = sanitize_av(argc, argv);
+	argv = sanitize_av(argc, argv, &ret);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
 	if (g_cmds_length == 1)
 	{

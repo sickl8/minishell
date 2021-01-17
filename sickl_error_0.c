@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:26:57 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 16:38:37 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@ void	e_builtin(void)
 	EPRINTS(": ");
 	if (g_builtin_errno != EB_CD_HNT && g_builtin_errno != EB_CD_EXIT_TMA)
 	{
-		EPRINTS("`");
+		// EPRINTS("`");
 		EPRINT(g_bash_error);
-		EPRINTS("'");
+		// EPRINTS("'");
 		EPRINTS(": ");
 	}
-	EPRINT(g_builtin_error[g_builtin_errno]);
+	if (g_builtin_errno != -1)
+		EPRINT(g_builtin_error[g_builtin_errno]);
+	else
+		EPRINT(strerror(errno));
 }
 
 void	e_errno(void)

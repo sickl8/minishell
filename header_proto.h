@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/16 17:08:42 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 15:49:25 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,12 @@ int			assign_valid_args_bk(int argc, char **argv, t_evar *tmp);
 int			free_tmp_ava(t_evar *tmp);
 char		*reset_evar(t_evar *var);
 t_evar		get_evar(char *s);
-char		**sanitize_av(int ac, char **av);
+char		**sanitize_av(int ac, char **av, int *ret);
 void		assign_old_args(int x, t_evar *tmp);
 int			valid_arg(int ac, char **av, int index);
 int			bc_export_bk(t_cmd *data);
 t_evar		*find_env_p(char *s);
-void		invalid_arg(char **av, int i);
+void		invalid_arg(char **av, int i, int *rt);
 void		export_new_vars(char **args, int i, t_evar *tmp, int j);
 void		export_old_vars(char **args, t_export len, int *valid, t_evar *tmp);
 void		exec(t_fnl **tracer, int i, int x);

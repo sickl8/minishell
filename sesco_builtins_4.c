@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/16 17:16:37 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 18:16:11 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int			check_if_num(char *s)
 	int		sign;
 
 	i = 0;
-	while (s[i] && (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13)))
+	while (s[i] && (s[i] == ' '/* || (s[i] >= 9 && s[i] <= 13)*/))
 		i++;
 	sign = 1;
 	if (!ISNUM(s[i]) && s[i] != '+' && s[i] != '-')
@@ -109,7 +109,7 @@ int			check_if_num(char *s)
 		i++;
 	i--;
 	while (s[++i])
-		if (!(s[i] && (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13))))
+		if (!(s[i] && (s[i] == ' ' /*|| (s[i] >= 9 && s[i] <= 13)*/)))
 			return (1);
 	return (continue_check_num(s, sign));
 }
@@ -119,7 +119,7 @@ int			bc_exit(char **argv)
 	int		argc;
 	int		exit_status;
 
-	g_cmds_length == 1 ? OPRINTS("exit\n") : 0;
+	//g_cmds_length == 1 ? OPRINTS("exit\n") : 0;
 	argc = (int)ft_len(argv, sizeof(*argv), 0);
 	assign(&g_bash_commandid, BC_EXIT, 4) && assign(&g_bash_errno, E_BUILTN, 4);
 	if (argc > 1 && check_if_num(argv[1]))

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/16 17:56:25 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/16 18:00:56 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,19 @@ int			continue_check_num(char *s, int sign)
 	char	*l;
 	size_t	len;
 	size_t	nlen;
+	char	c;
 
 	l = sign > 0 ? "9223372036854775807" : "9223372036854775808";
 	len = ft_strlen(s);
 	nlen = 0;
 	while (s[nlen] && s[nlen])
 		nlen++;
+	c = s[nlen];
 	s[nlen] = '\0';
 	if (nlen > 19 || (nlen == 19 && CMP(s, l) > 0))
+	{
+		s[nlen] = c;
 		return (1);
+	}
 	return (0);
 }

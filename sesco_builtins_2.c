@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:08:48 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/14 19:35:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 16:51:55 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,10 @@ int		bc_echo(t_cmd *data)
 
 	pn = 1;
 	i = 1;
+	printf("from echo\n");
+	for (int x = 0; data->args[x]; x++)
+		printf("arg[%d]=|%s|, ", x, data->args[x]);
+	printf("\n");
 	if (data->args[i] && !CMP(data->args[i], "-n"))
 	{
 		pn = 0;
