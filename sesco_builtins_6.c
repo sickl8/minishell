@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 18:51:48 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/17 16:42:55 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 18:34:21 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int		bc_cd_fork(t_cmd *data)
 {
 	if (data->args[1] && CMP(data->args[1], "-") && CMP(data->args[1], "--"))
 	{
-		if (chdir(data->args[1]) < 0)
+		if (chdir(!CMP(data->args[1], "") ? "." : data->args[1]) < 0)
 		{
 			g_bash_errno = E_BUILTIN;
 			g_bash_commandid = BC_CD;

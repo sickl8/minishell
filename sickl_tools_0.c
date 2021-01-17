@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/17 15:48:13 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/17 18:32:07 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		change_dir(char *s, char *cwd)
 	char	*p;
 	int		ret;
 
+	s = !CMP(s, "") ? "." : s;
 	if (!cwd)
 		cleanup(EXIT);
 	ret = chdir(s);
