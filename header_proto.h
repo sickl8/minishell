@@ -181,5 +181,6 @@ void		set_pwd(void);
 int			continue_check_num(char *s, int sign);
 int			*check_errors_of_unset(char **args, int len, int i, int j);
 char		**assign_valid_args(char **args, int *valid, int len);
+int			check_echo_option(t_cmd *data);
 
 #endif

@@ -99,29 +99,6 @@ int		bc_env(void)
 	return (0);
 }
 
-int		check_echo_option(t_cmd *data)
-{
-	int		i;
-	int		j;
-
-	i = 1;
-	while (data->args[i])
-	{
-		j = 1;
-		if (data->args[i][j - 1] == '-' && data->args[i][j] == 'n')
-		{
-			while (data->args[i][j] == 'n')
-				j++;
-			if (data->args[i][j] != '\0')
-				break ;
-		}
-		else
-			break ;
-		i++;
-	}
-	return (i);
-}
-
 int		bc_echo(t_cmd *data)
 {
 	int		i;

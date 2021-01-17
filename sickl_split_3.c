@@ -37,7 +37,7 @@ void	exec(t_fnl **tracer, int i, int x)
 	{
 		g_line->rd = g_line->it[x];
 		rplc_env_var();
-		printf("buf=|%s|\nmsk=|%s|\n", g_line->env.buf, g_line->env.msk);
+		// printf("buf=|%s|\nmsk=|%s|\n", g_line->env.buf, g_line->env.msk);
 		split_wmask(&g_line->env, &g_line->scol, ';');
 		if (!(MALLOC(&(g_line->pipe), 8 * g_line->env.cnt + 8)))
 			cleanup(EXIT);

@@ -75,3 +75,26 @@ int		bc_cd_fork(t_cmd *data)
 		return (go_to_fork(data));
 	return (0);
 }
+
+int		check_echo_option(t_cmd *data)
+{
+	int		i;
+	int		j;
+
+	i = 1;
+	while (data->args[i])
+	{
+		j = 1;
+		if (data->args[i][j - 1] == '-' && data->args[i][j] == 'n')
+		{
+			while (data->args[i][j] == 'n')
+				j++;
+			if (data->args[i][j] != '\0')
+				break ;
+		}
+		else
+			break ;
+		i++;
+	}
+	return (i);
+}
