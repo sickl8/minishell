@@ -99,34 +99,45 @@ int		bc_env(void)
 	return (0);
 }
 
+int		check_echo_option(t_cmd *data)
+{
+	int		i;
+	int		j;
+
+	i = 1;
+	while (data->args[i])
+	{
+		j = 1;
+		if (data->args[i][j - 1] == '-' && data->args[i][j] == 'n')
+		{
+			while (data->args[i][j] == 'n')
+				j++;
+			if (data->args[i][j] != '\0')
+				break ;
+		}
+		else
+			break ;
+		i++;
+	}
+	return (i);
+}
+
 int		bc_echo(t_cmd *data)
 {
 	int		i;
 	int		pn;
 
-	pn = 1;
-	i = 1;
-	printf("from echo\n");
-	for (int x = 0; data->args[x]; x++)
-		printf("arg[%d]=|%s|, ", x, data->args[x]);
-	printf("\n");
-	if (data->args[i] && !CMP(data->args[i], "-n"))
-	{
-		pn = 0;
-		i++;
-	}
+	i = check_echo_option(data);
+	pn = i;
 	while (data->args[i] && data->args[i + 1])
 	{
-		if (CMP(data->args[i], "-n"))
-		{
-			OPRINT(data->args[i]);
-			OPRINTS(" ");
-		}
+		OPRINT(data->args[i]);
+		OPRINTS(" ");
 		i++;
 	}
 	if (data->args[i])
 		OPRINT(data->args[i]);
-	if (pn)
+	if (pn == 1)
 		OPRINT("\n");
 	return (0);
 }
