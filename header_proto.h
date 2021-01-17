@@ -179,5 +179,6 @@ void		handle_signal_quit(int sig);
 void		exec_from_av(int ac, char **av);
 void		set_pwd(void);
 int			continue_check_num(char *s, int sign);
+int			*check_errors_of_unset(char **args, int len, int i, int j);
 
 #endif

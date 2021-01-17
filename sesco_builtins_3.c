@@ -46,6 +46,33 @@ int		check_var_name(char *name, int end)
 	return (1);
 }
 
+int		*check_errors_of_unset(char **args, int len, int i, int j)
+{
+	int		*valid_args;
+
+	if (!(valid_args = ft_calloc(len, sizeof(int))))
+		 cleanup(EXIT);
+	while (i < len + 1)
+	{
+		j = ft_strlen(args[i]);
+		if (!check_var_name(args[i], j))
+		{
+			g_bash_errno = E_BUILTIN;
+			g_builtin_errno = EB_UNSET_EXPORT_NVI;
+			g_bash_commandid = BC_UNSET;
+			STRCPY(g_bash_error, args[i] ? args[i] : "");
+			g_program_return = 1;
+			bash_error();
+		}
+		if (!check_var_name(args[i], j))
+			valid_args[i - 1] = 1;
+		else if (args[i][j] == '\0')
+			valid_args[i - 1] = 2;
+		i++;
+	}
+	return (valid_args);
+}
+
 int		*check_errors_of_args(char **args, int len, int i, int j)
 {
 	int		*valid_args;
