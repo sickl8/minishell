@@ -29,18 +29,47 @@
 
 #include <stdio.h>
 
+int		*find_index_of_unset_var(char **args, int len, int i)
+{
+	int		*indexes;
+	int		j;
+
+	while (args[len + 1])
+		len++;
+	if (!(indexes = ft_calloc(len + 1, sizeof(int))))
+		cleanup(EXIT);
+	while (i < len)
+	{
+		j = 0;
+		while (g_line->env_var[j].name)
+		{
+			if (!CMP(args[i + 1], g_line->env_var[j].name))
+			{
+				indexes[i] = j;
+				break ;
+			}
+			j++;
+		}
+		indexes[i] == 0 && j != 0 ? indexes[i] = -1 : 0;
+		i++;
+	}
+	return (indexes);
+}
+
 void	unset_var(char **args, t_evar *tmp)
 {
 	int		j;
 	int		i;
 	int		k;
+	int		*indexes;
 
 	j = 0;
 	i = 0;
-	k = 1;
+	k = 0;
+	indexes = find_index_of_unset_var(args, 0, 0);
 	while (g_line->env_var[j].name)
 	{
-		if (!args[k] || !find_env(args[k]).name)
+		if (indexes[k] != j)
 		{
 			tmp[i] =
 				ft_realloc(g_line->env_var[j].name, g_line->env_var[j].value);
@@ -51,6 +80,7 @@ void	unset_var(char **args, t_evar *tmp)
 			k++;
 		j++;
 	}
+	free(indexes);
 	tmp[i] = ft_realloc(NULL, NULL);
 }
 
