@@ -38,9 +38,9 @@ void	e_builtin(void)
 	EPRINTS(": ");
 	if (g_builtin_errno != EB_CD_HNT && g_builtin_errno != EB_CD_EXIT_TMA)
 	{
-		// EPRINTS("`");
+		g_bash_commandid == BC_UNSET ? EPRINTS("`") : 0;
 		EPRINT(g_bash_error);
-		// EPRINTS("'");
+		g_bash_commandid == BC_UNSET ? EPRINTS("'") : 0;
 		EPRINTS(": ");
 	}
 	if (g_builtin_errno != -1)
