@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:26:57 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/17 16:38:37 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 16:10:24 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,7 @@ void	bash_error(void)
 		e_errno();
 	else if (g_bash_errno == E_BUILTIN)
 		e_builtin();
+	else if (g_bash_errno == E_WARNING)
+		e_warning();
 	EPRINTS("\n");
 }

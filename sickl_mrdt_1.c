@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 13:01:14 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 16:18:57 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,46 @@ int			case_cmp(char *s1, char *s2)
 void	init_shlvl(void)
 {
 	t_evar	*var;
-	
+	t_cmd	data;
+	int		shlvl;
+
 	var = find_env_p("SHLVL");
 	if (var)
 	{
+		shlvl = ft_atoi(var->value ? var->value : "0") + 1;
+		if (shlvl < 0)
+			shlvl = 0;
+		else if (shlvl == 1000)
+			shlvl = -1;
+		else if (shlvl > 1000)
+			shlvl = shlvl_error(shlvl);
 		free_and_set_to_null(&var->value);
-		if (!(var->value = ft_itoa(1)))
-			0;
+		if (!(var->value = (shlvl != -1 ? ft_itoa(shlvl) : ft_strdup(""))))
+			cleanup(EXIT);
 	}
 	else
 	{
-		0;
+		data.args = (char*[]){ "export", "SHLVL=1", NULL };
+		g_cmds_length = 1;
+		bc_export_bk(&data);
+		g_cmds_length = 0;
 	}
+}
+
+int		shlvl_error(int shlvl)
+{
+	char	*num;
+	size_t	len;
+
+	g_bash_errno = E_WARNING;
+	ft_strncpy(g_bash_error, "shell level (", sizeof("shell level (") - 1);
+	if (!(num = ft_itoa(shlvl)))
+		cleanup(EXIT);	
+	ft_strncpy(g_bash_error + sizeof("shell level (") - 1, num, ft_strlen(num));
+	ft_strncpy(g_bash_error + sizeof("shell level (") - 1 + ft_strlen(num),
+	") too high, resetting to 1", sizeof(") too high, resetting to 1") - 1);
+	len = sizeof("shell level (") - 1 + ft_strlen(num) + 
+	sizeof(") too high, resetting to 1") - 1;
+	g_bash_error[len] = '\0';
+	bash_error();
 }

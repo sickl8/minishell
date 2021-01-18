@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:33:06 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 12:03:22 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 16:12:47 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	reset_prompt(int jmp)
 
 void	init(t_line *ref, char **envp)
 {
-	t_evar	var;
 	static char	*names[9] = { "minishell", "echo", "cd", "pwd", "export",
 	"unset", "env", "exit", NULL };
 	static char *b_errors[N_B_ERROR];
