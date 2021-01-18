@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:01:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/15 16:27:30 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:27:12 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*find_in_single_path(char *tofind, char **paths, int i)
 	{
 		while ((file = readdir(dir)) && ret == NULL)
 		{
-			if (!CMP(tofind, ft_strtolower(file->d_name)))
+			if (!CASE_CMP(tofind, file->d_name))
 			{
 				paths[i] = fix_path(paths, i);
 				if (!(ret = ft_strjoin(paths[i], file->d_name)))

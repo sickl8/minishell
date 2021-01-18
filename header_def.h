@@ -6,13 +6,14 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/16 16:39:13 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:34:45 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HEADER_DEF_H
 # define HEADER_DEF_H
 
+# define CASE_CMP case_cmp
 # define WRITE2BUF ft_strncpy
 # define MALLOC mallok
 # define BPRINT bprint

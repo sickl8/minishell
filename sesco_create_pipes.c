@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/15 16:09:47 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:26:04 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int		open_pipes_and_execute(t_cmd *data, int *pfd)
 			failing_error(data);
 			return (1);
 		}
-		data->find = data->find ? ft_strtolower(data->find) : NULL;
+		// data->find = data->find ? ft_strtolower(data->find) : NULL;
 		if (g_pid == 0)
 			execute_cmd(data, pfd, j);
 		close(pfd[j - 1]);

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/17 18:32:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:24:31 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,12 @@ int		change_dir(char *s, char *cwd)
 		cleanup(EXIT);
 	ret = chdir(s);
 	if (!(s = getcwd(NULL, 0)))
-	{
-		free(cwd);
-		cleanup(EXIT);
-	}
+		eerf(cwd) && cleanup(EXIT);
 	if (!(p = ft_strjoin("PWD=", s)))
-	{
-		eerf(cwd) && eerf(s);
-		cleanup(EXIT);
-	}
+		eerf(cwd) && eerf(s) && cleanup(EXIT);
 	ft_strcpy(op, "OLDPWD=");
-	ft_strcpy(op + sizeof("OLDPWD=") - 1, cwd);
-	d.args = (char*[]){ (char*)"export", op, p, NULL};
+	ft_strcpy(op + sizeof("OLDPWD=") - 1, find_env("PWD").value);
+	d.args = (char*[]){ (char*)"export", p, ret < 0 ? NULL : op, NULL};
 	bc_export(&d);
 	eerf(s) && eerf(cwd) && eerf(p);
 	return (ret);

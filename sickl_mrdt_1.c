@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/16 18:00:56 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:33:52 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,15 @@ int			continue_check_num(char *s, int sign)
 		return (1);
 	}
 	return (0);
+}
+
+int			case_cmp(char *s1, char *s2)
+{
+	while (*s1 && (*s1 == *s2 || (ft_isalpha(*s1) && ft_isalpha(*s2) &&
+	ft_tolower(*s1) == ft_tolower(*s2))))
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
 }

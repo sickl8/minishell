@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/17 15:49:25 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:27:39 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,5 +182,6 @@ int			continue_check_num(char *s, int sign);
 int			*check_errors_of_unset(char **args, int len, int i, int j);
 char		**assign_valid_args(char **args, int *valid, int len);
 int			check_echo_option(t_cmd *data);
+int			case_cmp(char *s1, char *s2);
 
 #endif
