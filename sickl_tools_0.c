@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/18 11:24:31 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:49:29 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void	invalid_arg(char **av, int i, int *rt)
 		*eq = '\0';
 	if (!env_var_comp(av[i]))
 	{
+		if (eq)
+			*eq = '=';
 		g_bash_errno = E_BUILTIN;
 		g_builtin_errno = EB_UNSET_EXPORT_NVI;
 		g_bash_commandid = BC_EXPORT;
