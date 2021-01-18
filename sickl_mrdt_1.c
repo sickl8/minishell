@@ -66,17 +66,17 @@ int			case_cmp(char *s1, char *s2)
 
 void	init_shlvl(void)
 {
-	t_evar	*var;
+	// t_evar	*var;
 	
-	var = find_env_p("SHLVL");
-	if (var)
-	{
-		free_and_set_to_null(&var->value);
-		if (!(var->value = ft_itoa(1)))
-			0;
-	}
-	else
-	{
-		0;
-	}
+	// var = find_env_p("SHLVL");
+	// if (var)
+	// {
+	// 	free_and_set_to_null(&var->value);
+	// 	if (!(var->value = ft_itoa(1)))
+	// 		0;
+	// }
+	// else
+	// {
+	// 	0;
+	// }
 }

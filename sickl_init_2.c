@@ -55,7 +55,7 @@ void	reset_prompt(int jmp)
 
 void	init(t_line *ref, char **envp)
 {
-	t_evar	var;
+	// t_evar	var;
 	static char	*names[9] = { "minishell", "echo", "cd", "pwd", "export",
 	"unset", "env", "exit", NULL };
 	static char *b_errors[N_B_ERROR];

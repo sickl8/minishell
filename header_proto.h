@@ -183,5 +183,6 @@ int			*check_errors_of_unset(char **args, int len, int i, int j);
 char		**assign_valid_args(char **args, int *valid, int len);
 int			check_echo_option(t_cmd *data);
 int			case_cmp(char *s1, char *s2);
+void		init_shlvl(void);
 
 #endif
