@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 11:33:52 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 13:01:14 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,21 @@ int			case_cmp(char *s1, char *s2)
 		s2++;
 	}
 	return (*s1 - *s2);
+}
+
+void	init_shlvl(void)
+{
+	t_evar	*var;
+	
+	var = find_env_p("SHLVL");
+	if (var)
+	{
+		free_and_set_to_null(&var->value);
+		if (!(var->value = ft_itoa(1)))
+			0;
+	}
+	else
+	{
+		0;
+	}
 }
