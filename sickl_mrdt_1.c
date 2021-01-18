@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 17:20:48 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 18:16:48 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	init_shlvl(void)
 	if (var)
 	{
 		shlvl = ft_atoi(var->value ? var->value : "0") + 1;
-		// printf("shlvl = %d\n", shlvl);
 		if (shlvl < 0)
 			shlvl = 0;
 		else if (shlvl == 1000)
@@ -87,10 +86,9 @@ void	init_shlvl(void)
 	}
 	else
 	{
-		data.args = (char*[]){ "export", "SHLVL=1", NULL };
-		g_cmds_length = 1;
-		bc_export_bk(&data);
-		g_cmds_length = 0;
+		data.args = (char*[]){"export", STRCPY(g_bash_error, "SHLVL=1"), NULL};
+		AS(&GCL, 1, 4) && 1 + 0 * bc_export_bk(&data) && AS(&GCL, 0, 4);
+		ft_memset(g_bash_error, 0, ARG_MAX + 2);
 	}
 }
 
@@ -112,3 +110,4 @@ int		shlvl_error(int shlvl)
 	bash_error();
 	return (1);
 }
+

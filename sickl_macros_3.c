@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 19:05:02 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:44:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 17:50:18 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@ int		str_is_redir(t_bm bm)
 
 char	*stgcpy(char *dest, char *src)
 {
-	return (ft_strncpy(dest, src, -1));
+	return (ft_strcpy(dest, src));
 }

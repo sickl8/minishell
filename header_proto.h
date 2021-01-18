@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 17:12:01 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 17:49:24 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int			*count_cmds(t_cmd *data);
 void		execute_cmd(t_cmd *data, int *pfd, int j);
 void		make_a_redirection(t_rdr *redir);
 char		*fix_path(char **paths, int i);
-void		ft_strcpy(char *dst, char *src);
+char		*ft_strcpy(char *dst, char *src);
 int			bc_pwd(t_cmd *data);
 int			bc_echo(t_cmd *data);
 int			bc_env(void);

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:52:43 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/15 16:38:37 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 17:48:57 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		count_args(char **args)
 	return (i - 1);
 }
 
-void	ft_strcpy(char *dst, char *src)
+char	*ft_strcpy(char *dst, char *src)
 {
 	int		i;
 
@@ -50,6 +50,7 @@ void	ft_strcpy(char *dst, char *src)
 		i++;
 	}
 	dst[i] = '\0';
+	return (dst);
 }
 
 char	*fix_path(char **paths, int i)
