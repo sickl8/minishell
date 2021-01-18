@@ -77,6 +77,35 @@ char	*find_in_path(char *tofind)
 	return (ret);
 }
 
+void	print_execution_errors(char *cmd, int bk[2])
+{
+	struct stat f_info;
+
+	if(stat(cmd, &f_info) < 0)
+	{
+		g_bash_errno = E_ERRNO;
+		g_bash_commandid = BC_DEF;
+		ft_strncpy(g_bash_error, cmd, -1);
+		bash_error();
+		exit(127);
+	}
+	if (S_ISREG(f_info.st_mode))
+	{
+		if ((f_info.st_mode & S_IRUSR) && (f_info.st_mode & S_IXUSR))
+			exit(0);
+		errno == 8 && (f_info.st_mode & S_IXUSR) ? errno = 13 : 0;
+	}
+	S_ISDIR(f_info.st_mode) ? errno = 21 : 0;
+	dup2(bk[0], 0);
+	close(bk[0]);
+	dup2(bk[1], 1);
+	close(bk[1]);
+	g_bash_errno = E_ERRNO;
+	ft_strncpy(g_bash_error, cmd, -1);
+	bash_error();
+	exit(errno == 8 || errno == 13 || errno == 21 ? 126 : g_bash_errno);
+}
+
 void	execute_cmd_continue(t_cmd *data, int bk[2])
 {
 	data->path2exec = data->find;
@@ -96,14 +125,7 @@ void	execute_cmd_continue(t_cmd *data, int bk[2])
 		}
 	}
 	execve(data->path2exec, data->args, g_line->envp);
-	dup2(bk[0], 0);
-	close(bk[0]);
-	dup2(bk[1], 1);
-	close(bk[1]);
-	g_bash_errno = E_ERRNO;
-	ft_strncpy(g_bash_error, data->path2exec, -1);
-	bash_error();
-	exit(errno == 8 ? 126 : g_bash_errno);
+	print_execution_errors(data->path2exec, bk);
 }
 
 void	execute_cmd(t_cmd *data, int *pfd, int j)

@@ -57,7 +57,7 @@ void	e_errno(void)
 	EPRINTS(": ");
 	EPRINT(g_bash_error);
 	EPRINTS(": ");
-	EPRINT(strerror(errno));
+	EPRINT(errno != 21 ? strerror(errno) : "is a directory");
 }
 
 void	e_command(void)
