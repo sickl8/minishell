@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 16:58:36 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 17:12:01 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,5 +185,6 @@ int			check_echo_option(t_cmd *data);
 int			case_cmp(char *s1, char *s2);
 void		e_warning(void);
 void		init_shlvl(void);
+int			shlvl_error(int shlvl);
 
 #endif

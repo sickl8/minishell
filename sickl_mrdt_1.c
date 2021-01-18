@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 16:58:27 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 17:20:48 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	init_shlvl(void)
 	if (var)
 	{
 		shlvl = ft_atoi(var->value ? var->value : "0") + 1;
+		// printf("shlvl = %d\n", shlvl);
 		if (shlvl < 0)
 			shlvl = 0;
 		else if (shlvl == 1000)
@@ -109,4 +110,5 @@ int		shlvl_error(int shlvl)
 	sizeof(") too high, resetting to 1") - 1;
 	g_bash_error[len] = '\0';
 	bash_error();
+	return (1);
 }

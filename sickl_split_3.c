@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:34:11 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/17 16:49:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 17:19:28 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,15 @@ int		check_syntax(void)
 	while (p.msk)
 	{
 		if (STR_IS_REDIR(p) && check_s_redir(p))
+		{
+			g_program_return = E_SYNTAX;
 			return (1);
+		}
 		else if (!STR_IS_REDIR(p) && BASHSYN(p.msk[0]) && check_s_bashsyn(p))
+		{
+			g_program_return = E_SYNTAX;
 			return (1);
+		}
 		p.buf += p.cnt;
 		p.msk += p.cnt;
 		p = next_word(p);
