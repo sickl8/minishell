@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 17:56:34 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 18:50:13 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ void	set_pwd(void)
 	g_cmds_length = 1;
 	data.args = (char*[]){ "export", join, NULL};
 	bc_export_bk(&data);
+	free(pwd);
+	free(join);
 	g_cmds_length = 0;
 }
 
