@@ -74,19 +74,19 @@ void	put_exit_status(void)
 	int		status;
 	int		w_ret;
 
+	g_sig = 1;
+	waitpid(g_pid ,&status, 0);
+	g_sig = 0;
+	kill(0, 20);
 	w_ret = 1;
 	while (w_ret != -1)
+		w_ret = wait(NULL);
+	if (!g_parent)
 	{
-		g_sig = 1;
-		w_ret = wait(&status);
-		g_sig = 0;
-		if (!g_parent)
-		{
-			if (g_program_return != 1 && WIFEXITED(status))
-				g_program_return = WEXITSTATUS(status);
-			else if (g_program_return != 1 && WIFSIGNALED(status))
-				g_program_return = WTERMSIG(status) + 128;
-		}
+		if (g_program_return != 1 && WIFEXITED(status))
+			g_program_return = WEXITSTATUS(status);
+		else if (g_program_return != 1 && WIFSIGNALED(status))
+			g_program_return = WTERMSIG(status) + 128;
 	}
 }
 
