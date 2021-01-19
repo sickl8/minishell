@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 16:43:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 18:30:53 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,5 +188,6 @@ void		init_shlvl(void);
 int			shlvl_error(int shlvl);
 char		*find_in_path(char *tofind);
 char		detect_escape(char esc, char c);
+char		*spl_mst(char *msk, char *buf, char c, size_t len);
 
 #endif

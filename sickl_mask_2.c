@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:37 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 16:43:26 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 18:30:39 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,19 @@ void	continue_rplc_env_var(void)
 	size_t	i;
 	size_t	j;
 	t_evar	env;
-	char	escape;
+	char	e;
 
 	i = -1;
 	j = 0;
-	escape = NONLIT;
+	e = NONLIT;
 	while (g_line->rd.buf[++i])
 	{
-		escape = detect_escape(escape, g_line->rd.msk[i]);
+		e = detect_escape(e, g_line->rd.msk[i]);
 		if (g_line->rd.msk[i] == '$')
 		{
 			env = find_env_in_line(&i);
 			ft_strncpy(&g_line->env.buf[j], env.value, env.value_len);
-			ft_memset(&g_line->env.msk[j], escape, env.value_len);
+			spl_mst(&g_line->env.msk[j], &g_line->env.buf[j], e, env.value_len);
 			j += env.value_len;
 		}
 		else

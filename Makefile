@@ -7,7 +7,7 @@ sickl_macros_0.c sickl_macros_1.c sickl_macros_2.c sickl_macros_3.c \
 sickl_macros_4.c sickl_mask_0.c sickl_mask_1.c sickl_mask_2.c sickl_split_0.c \
 sickl_split_1.c sickl_split_2.c sickl_split_3.c sickl_tools_0.c \
 sickl_tools_1.c sickl_tools_2.c sickl_mrdt_0.c sesco_builtins_6.c \
-sickl_mrdt_1.c sickl_error_1.c
+sickl_mrdt_1.c sickl_error_1.c sickl_mrdt_2.c
 
 WWW = -Wall -Wextra -Werror
 

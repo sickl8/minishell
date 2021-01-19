@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/17 16:27:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 18:24:32 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int		valid_arg(int ac, char **av, int index)
 			free_and_set_to_null(&(evarp->value));
 			evarp->name_only = 0;
 			!(evarp->value = DUP(var.value)) ? eerf(g_ez) && cleanup(EXIT) : 0;
+			evarp->value_len = ft_strlen(evarp->value);
 		}
 		return (0 * !(av[index] = reset_evar(&var)));
 	}
