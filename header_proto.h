@@ -186,5 +186,6 @@ int			case_cmp(char *s1, char *s2);
 void		e_warning(void);
 void		init_shlvl(void);
 int			shlvl_error(int shlvl);
+char		*find_in_path(char *tofind);
 
 #endif

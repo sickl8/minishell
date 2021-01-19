@@ -83,11 +83,13 @@ int		bc_export(t_cmd *data)
 int		bc_env(void)
 {
 	int		i;
+	char	*value;
 
 	i = 0;
+	value = find_in_path("env");
 	while (g_line->env_var[i].name)
 	{
-		if (!g_line->env_var[i].name_only)
+		if (!g_line->env_var[i].name_only && CMP(g_line->env_var[i].name, "_"))
 		{
 			OPRINT(g_line->env_var[i].name);
 			OPRINTS("=");
@@ -96,6 +98,10 @@ int		bc_env(void)
 		}
 		i++;
 	}
+	OPRINT("_=");
+	OPRINT(value);
+	OPRINT("\n");
+	free(value);
 	return (0);
 }
 
