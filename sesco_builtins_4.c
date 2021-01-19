@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 18:22:33 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/16 18:16:11 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 14:48:05 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int			check_if_num(char *s)
 	int		sign;
 
 	i = 0;
-	while (s[i] && (s[i] == ' '/* || (s[i] >= 9 && s[i] <= 13)*/))
+	while (s[i] && (s[i] == 32 || s[i] == 9 || s[i] == 12 || s[i] == 13))
 		i++;
 	sign = 1;
 	if (!ISNUM(s[i]) && s[i] != '+' && s[i] != '-')
@@ -109,7 +109,7 @@ int			check_if_num(char *s)
 		i++;
 	i--;
 	while (s[++i])
-		if (!(s[i] && (s[i] == ' ' /*|| (s[i] >= 9 && s[i] <= 13)*/)))
+		if (!(s[i] && (s[i] == 32 || s[i] == '\t')))
 			return (1);
 	return (continue_check_num(s, sign));
 }

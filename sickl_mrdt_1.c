@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 18:16:48 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/18 18:34:24 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	init_shlvl(void)
 		free_and_set_to_null(&var->value);
 		if (!(var->value = (shlvl != -1 ? ft_itoa(shlvl) : ft_strdup(""))))
 			cleanup(EXIT);
+		AS(&var->value_len, SLEN(var->value), 8) && AS(&var->name_only, 0, 4);
 	}
 	else
 	{
