@@ -134,21 +134,25 @@ int		bc_echo(t_cmd *data)
 	int		i;
 	int		pn;
 	size_t	buf_len;
-	char	*buf;
 
 	i = check_echo_option(data);
 	pn = i;
 	buf_len = 0;
-	while (data->args[i])
+	while (data->args[i] && data->args[i + 1])
 	{
-		buf_len = ft_strlen(data->args[i]) + 1;
+		BPRINT(data->args[i]);
+		BPRINT(" ");
+		//buf_len = ft_strlen(data->args[i]) + 1;
 		i++;
 	}
-	buf = full_buf_string(data, buf_len, pn);
-	OPRINT(buf);
-	free(buf);
+	//buf = full_buf_string(data, buf_len, pn);
+	//OPRINT(buf);
+	if (data->args[i])
+		BPRINT(data->args[i]);
+	//free(buf);
 	if (pn == 1)
-		OPRINT("\n");
+		BPRINT("\n");
+	bflush(STDOUT_FILENO);
 	return (0);
 }
 
