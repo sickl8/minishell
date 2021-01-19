@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:02:38 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 15:15:26 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 16:01:03 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,12 @@ size_t	count_words_redir(t_bm *rd)
 
 	ret = 0;
 	p = next_word(*rd);
-	printf("word=%.*s\n", (int)p.cnt, p.buf);
 	while (p.msk)
 	{
 		ret++;
 		p.msk += p.cnt;
 		p.buf += p.cnt;
 		p = next_word(p);
-		printf("word=%.*s\n", (int)p.cnt, p.buf);
 	}
 	return (ret);
 }
