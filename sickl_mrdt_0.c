@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 15:57:55 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 17:22:56 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	exec_from_av(int ac, char **av)
 		cleanup(EXIT);
 	if (format_string())
 		bash_error();
+	printf("GPR = %d\n", g_program_return);
 	free_and_set_to_null(&g_line->rd.buf);
 	cleanup(0);
 	exit(g_program_return);
@@ -135,3 +136,4 @@ void	set_pwd(void)
 	bc_export_bk(&data);
 	g_cmds_length = 0;
 }
+

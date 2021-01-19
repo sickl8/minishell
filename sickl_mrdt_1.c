@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 18:34:24 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/19 17:13:07 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,3 +112,27 @@ int		shlvl_error(int shlvl)
 	return (1);
 }
 
+char	detect_escape(char esc, char c)
+{
+	char	ret;
+
+	ret = esc;
+	if (esc == NONLIT)
+	{
+		if (c == '\'')
+			ret = LITERAL;
+		else if (c == '"')
+			ret = SEMILIT;
+	}
+	else if (esc == SEMILIT)
+	{
+		if (c == '"')
+			ret	= NONLIT;
+	}
+	else if (esc == LITERAL)
+	{
+		if (c == '\'')
+			ret = NONLIT;	
+	}
+	return (ret);
+}
