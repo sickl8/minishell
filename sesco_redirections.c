@@ -29,6 +29,10 @@
 
 #include <stdio.h>
 
+/*
+** O_WRONLY: 1
+*/
+
 void	open_redir_files(t_rdr *redir, int fd[2])
 {
 	int		i;
@@ -39,9 +43,9 @@ void	open_redir_files(t_rdr *redir, int fd[2])
 		if (redir[i].type == RRR || redir[i].type == RR)
 		{
 			if (redir[i].type == RRR)
-				fd[1] = open(redir[i].file_name, O_WRONLY | O_APPEND | O_CREAT, PERM);
-			 else if (redir[i].type == RR)
-				fd[1] = open(redir[i].file_name, O_WRONLY | O_TRUNC | O_CREAT, PERM);
+				fd[1] = open(redir[i].file_name, 1 | O_APPEND | O_CREAT, PERM);
+			else if (redir[i].type == RR)
+				fd[1] = open(redir[i].file_name, 1 | O_TRUNC | O_CREAT, PERM);
 		}
 		else if (redir[i].type == RL)
 			fd[0] = open(redir[i].file_name, O_RDONLY);

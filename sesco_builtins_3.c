@@ -51,7 +51,7 @@ int		*check_errors_of_unset(char **args, int len, int i, int j)
 	int		*valid_args;
 
 	if (!(valid_args = ft_calloc(len, sizeof(int))))
-		 cleanup(EXIT);
+		cleanup(EXIT);
 	while (i < len + 1)
 	{
 		j = ft_strlen(args[i]);

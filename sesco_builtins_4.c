@@ -119,7 +119,6 @@ int			bc_exit(char **argv)
 	int		argc;
 	int		exit_status;
 
-	//g_cmds_length == 1 ? OPRINTS("exit\n") : 0;
 	argc = (int)ft_len(argv, sizeof(*argv), 0);
 	assign(&g_bash_commandid, BC_EXIT, 4) && assign(&g_bash_errno, E_BUILTN, 4);
 	if (argc > 1 && check_if_num(argv[1]))

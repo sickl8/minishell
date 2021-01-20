@@ -105,30 +105,6 @@ int		bc_env(void)
 	return (0);
 }
 
-char	*full_buf_string(t_cmd *data, size_t buf_len, int i)
-{
-	char	*buf;
-	char	*tmp;
-	size_t	current_len;
-
-	if (!(buf = malloc(sizeof(char) * buf_len)))
-		cleanup(EXIT);
-	tmp = buf;
-	while (data->args[i])
-	{
-		current_len = ft_strlen(data->args[i]);
-		ft_strncpy(tmp, data->args[i], current_len);
-		tmp += current_len;
-		*tmp = ' ';
-		tmp++;
-		i++;
-	}
-	if (tmp != buf)
-		tmp--;
-	*tmp = '\0';
-	return (buf);
-}
-
 int		bc_echo(t_cmd *data)
 {
 	int		i;
@@ -142,14 +118,10 @@ int		bc_echo(t_cmd *data)
 	{
 		BPRINT(data->args[i]);
 		BPRINT(" ");
-		//buf_len = ft_strlen(data->args[i]) + 1;
 		i++;
 	}
-	//buf = full_buf_string(data, buf_len, pn);
-	//OPRINT(buf);
 	if (data->args[i])
 		BPRINT(data->args[i]);
-	//free(buf);
 	if (pn == 1)
 		BPRINT("\n");
 	bflush(STDOUT_FILENO);

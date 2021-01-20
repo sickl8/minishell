@@ -75,7 +75,7 @@ void	put_exit_status(void)
 	int		w_ret;
 
 	g_sig = 1;
-	waitpid(g_pid ,&status, 0);
+	waitpid(g_pid, &status, 0);
 	g_sig = 0;
 	kill(0, 20);
 	w_ret = 1;
@@ -125,7 +125,6 @@ int		open_pipes_and_execute(t_cmd *data, int *pfd)
 			failing_error(data);
 			return (1);
 		}
-		// data->find = data->find ? ft_strtolower(data->find) : NULL;
 		if (g_pid == 0)
 			execute_cmd(data, pfd, j);
 		close(pfd[j - 1]);
