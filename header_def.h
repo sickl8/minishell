@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 18:33:40 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 18:50:37 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define SLEN ft_strlen
 # define GCL g_cmds_length
+# define GPR g_program_return
 # define AS assign
 # define CASE_CMP case_cmp
 # define WRITE2BUF ft_strncpy

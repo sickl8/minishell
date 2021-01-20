@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 14:23:54 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:57:36 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 16:51:13 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,7 @@ extern int		g_cmds_length;
 extern t_evar	g_pwd;
 extern int		g_parent;
 extern void		*g_ez;
+extern char		g_mlt;
+extern int		g_dashc;
 
 #endif

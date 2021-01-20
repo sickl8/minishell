@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:33:06 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 17:36:59 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:35:18 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	reset_prompt(int jmp)
 	if (g_sig == 0)
 		OPRINTS("\b\b  \b\b");
 	jmp ? OPRINTS("\n") : 0;
-	if (g_sig == 0)
+	if (g_sig == 0 && !g_dashc)
 		init_read();
 }
 

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 18:30:53 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 18:57:28 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "header_typedef.h"
 
+void		e_multiline(void);
 void		backslash(size_t *ref, char lit_type);
 void		handle_error(int ex);
 void		backup_stdin(int *bk);

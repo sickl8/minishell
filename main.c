@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 18:23:09 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:23:26 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int		format_string(void)
 	char	*tmp;
 
 	g_bash_errno = 0;
-	if ((tmp = ft_strchr(g_line->rd.buf, '\n')) != NULL)
+	if ((tmp = ft_strrchr(g_line->rd.buf, '\n')) != NULL &&
+	tmp == g_line->rd.buf + ft_strlen(g_line->rd.buf) - 1)
 		*tmp = '\0';
 	g_line->rd_len = ft_strlen(g_line->rd.buf);
 	if (!(MALLOC(&(g_line->rd.msk), g_line->rd_len + 1)))

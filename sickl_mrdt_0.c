@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 18:50:13 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:00:27 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_bm	previous_word(t_bm rd, t_bm ref)
 void	exec_from_av(int ac, char **av)
 {
 	(void)ac;
+	g_dashc = 1;
 	set_pwd();
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
 	if (ac == 2)

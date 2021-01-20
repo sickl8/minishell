@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:02:38 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:48:42 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:29:01 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int		count_quote(char c)
 	return (ret);
 }
 
+#define H printf("%s:%d\n", __FILE__, __LINE__)
+
 int		check_multiline(void)
 {
 	char	*p;
@@ -58,7 +60,21 @@ int		check_multiline(void)
 	if (count_quote('\'') % 2 || count_quote('"') % 2 || (g_line->rd_len > 0 &&
 	g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
 	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
-		return (1 + 0 * (g_bash_errno = E_MULTILINE));
+	{
+		g_bash_errno = E_MULTILINE;
+		g_program_return = 2;
+		if (count_quote('\'') % 2)
+			g_mlt = '\'';
+		else if (count_quote('"') % 2)
+			g_mlt = '"';
+		else if (g_line->rd_len > 0 &&
+		g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
+		g_line->rd.msk[g_line->rd_len - 1] == '\\' && g_dashc && !(GPR = 0))
+			return (0 * (g_bash_errno = 0));
+		else if (p && !*p)
+			g_mlt = '|';
+		return (1);
+	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:26:57 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/18 16:10:24 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 18:53:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	bash_error(void)
 	if (g_bash_errno == E_SYNTAX)
 		e_syntax();
 	else if (g_bash_errno == E_MULTILINE)
-		EPRINTS("minishell: multiline is not supported");
+		e_multiline();
 	else if (g_bash_errno == E_COMMAND)
 		e_command();
 	else if (g_bash_errno == E_ERRNO)

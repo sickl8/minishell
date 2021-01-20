@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 18:31:10 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:29:40 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,16 @@ char	*spl_mst(char *msk, char *buf, char c, size_t len)
 		i++;
 	}
 	return (msk);
+}
+
+void	e_multiline(void)
+{
+	if (g_mlt == '|')
+		EPRINTS("minishell: multiline not supported");
+	else
+	{
+		EPRINTS("minishell: unexpected EOF while looking for matching `");
+		EPRINTC(g_mlt);
+		EPRINTC('\'');
+	}
 }

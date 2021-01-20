@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:27:28 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:46:38 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:28:18 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ void	squote(size_t *ref)
 	if (g_line->rd.buf[i])
 		g_line->rd.msk[i] = '\'';
 	else
-	{
-		g_bash_errno = E_MULTILINE;
 		i--;
-	}
 	*ref = i;
 }
 
@@ -82,10 +79,7 @@ void	dquote(size_t *ref)
 	if (g_line->rd.buf[i])
 		g_line->rd.msk[i] = '"';
 	else
-	{
-		g_bash_errno = E_MULTILINE;
 		i--;
-	}
 	*ref = i;
 }
 
@@ -96,8 +90,6 @@ void	backslash(size_t *ref, char lit_type)
 	{
 		if (g_line->rd.buf[*ref + 1])
 			g_line->rd.msk[++(*ref)] = LITERAL;
-		else
-			g_bash_errno = E_MULTILINE;
 	}
 	else if (lit_type == SEMILIT)
 	{
@@ -111,8 +103,6 @@ void	backslash(size_t *ref, char lit_type)
 				assign(&(g_line->rd.msk[*ref - 1]), SEMILIT, 1) &&
 				assign(&(g_line->rd.msk[*ref]), SEMILIT, 1);
 		}
-		else
-			g_bash_errno = E_MULTILINE;
 	}
 }
 
