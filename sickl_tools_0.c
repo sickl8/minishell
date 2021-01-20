@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/18 18:15:24 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/20 15:16:58 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 int		change_dir(char *s, char *cwd)
 {
 	t_cmd	d;
-	char	op[sizeof("OLDPWD=") + ft_strlen(cwd ? cwd : "")];
+	char	op[8 + SLEN(find_env("PWD").value ? find_env("PWD").value : "")];
 	char	*p;
 	int		ret;
 
