@@ -53,6 +53,7 @@ int		*find_index_of_unset_var(char **args, int len, int i)
 		indexes[i] == 0 && j != 0 ? indexes[i] = -1 : 0;
 		i++;
 	}
+	indexes[i] = -1;
 	return (indexes);
 }
 
