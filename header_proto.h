@@ -191,5 +191,6 @@ char		*find_in_path(char *tofind);
 char		detect_escape(char esc, char c);
 char		*spl_mst(char *msk, char *buf, char c, size_t len);
 char		**env_var_copy(char *path2exec);
+void		malloc_pid_buffer(t_cmd *data);
 
 #endif

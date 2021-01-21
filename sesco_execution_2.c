@@ -65,3 +65,19 @@ char	**env_var_copy(char *path2exec)
 	the_copy[i] = NULL;
 	return (the_copy);
 }
+
+void	malloc_pid_buffer(t_cmd *data)
+{
+	int		len;
+
+	len = 0;
+	g_pid_group = NULL;
+	while (data)
+	{
+		data = data->next;
+		len++;
+	}
+	if (!(g_pid_group = malloc(sizeof(pid_t) * (len + 1))))
+		cleanup(EXIT);
+	g_pid_group[len] = -2;
+}

@@ -72,15 +72,18 @@ int		*open_pipes(t_cmd *data)
 void	put_exit_status(void)
 {
 	int		status;
-	int		w_ret;
+	int		i;
 
 	g_sig = 1;
 	waitpid(g_pid, &status, 0);
 	g_sig = 0;
-	kill(0, 20);
-	w_ret = 1;
-	while (w_ret != -1)
-		w_ret = wait(NULL);
+	i = 0;
+	while (g_pid_group[i + 1] != -2)
+	{
+		kill(g_pid_group[i], SIGKILL);
+		waitpid(g_pid_group[i], NULL, 0);
+		i++;
+	}
 	if (!g_parent)
 	{
 		if (g_program_return != 1 && WIFEXITED(status))
@@ -88,6 +91,7 @@ void	put_exit_status(void)
 		else if (g_program_return != 1 && WIFSIGNALED(status))
 			g_program_return = WTERMSIG(status) + 128;
 	}
+	free(g_pid_group);
 }
 
 void	parent_stuff(t_cmd *data)
@@ -114,18 +118,17 @@ void	parent_stuff(t_cmd *data)
 int		open_pipes_and_execute(t_cmd *data, int *pfd)
 {
 	int		j;
+	int		i;
 
 	j = 1;
+	i = 0;
 	while (data)
 	{
 		g_parent = 0;
 		g_pid = fork();
+		g_pid_group[i] = g_pid;
 		if (g_pid == -1)
-		{
-			free(pfd);
-			failing_error(data);
-			return (1);
-		}
+			return (eerf(pfd) && eerf(g_pid_group) && !failing_error(data));
 		if (g_pid == 0)
 			execute_cmd(data, pfd, j);
 		close(pfd[j - 1]);
@@ -133,6 +136,7 @@ int		open_pipes_and_execute(t_cmd *data, int *pfd)
 		if (data->find)
 			parent_stuff(data);
 		j += 2;
+		i++;
 		data = data->next;
 	}
 	put_exit_status();
@@ -151,6 +155,7 @@ void	loop_in_data(void)
 	while (tmp)
 	{
 		data = tmp->cmd_and_args;
+		malloc_pid_buffer(data);
 		if ((pfd = open_pipes(data)))
 			if (open_pipes_and_execute(data, pfd))
 				return ;
