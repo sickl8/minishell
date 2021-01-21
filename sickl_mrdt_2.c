@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/20 19:29:40 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:35:42 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,71 @@ void	e_multiline(void)
 		EPRINTC(g_mlt);
 		EPRINTC('\'');
 	}
+}
+
+void	init_sort_evar(void)
+{
+	t_evar	*term;
+	t_evar	*path;
+	t_evar	*pwd;
+	t_evar	*shlvl;
+
+	term = find_env_p("TERM");
+	path = find_env_p("PATH");
+	pwd = find_env_p("PWD");
+	shlvl = find_env_p("SHLVL");
+	continue_init_sort_evar(term, path, pwd, shlvl);
+}
+
+t_evar	*get_by_cardinal_pos(t_evar **tab, int pos)
+{
+	int		i;
+	int		j;
+	int		tar[4];
+
+	i = -1;
+	while (++i < 4)
+		tar[i] = 0;
+	i = -1;
+	while (tab[++i])
+	{
+		j = i;
+		while (tab[++j])
+		{
+			if (pos)
+				(void)0;
+		}
+	}
+	return (tab[0]);
+}
+
+void	continue_init_sort_evar
+(t_evar *term, t_evar *path, t_evar *pwd, t_evar *shlvl)
+{
+	t_evar	**tab;
+	int		i;
+	t_evar	*smallest;
+
+	tab = (t_evar*[]){return_non_null(term, path, pwd, shlvl),
+	return_non_null(path, pwd, shlvl, NULL),
+	return_non_null(pwd, shlvl, NULL, NULL),
+	return_non_null(shlvl, NULL, NULL, NULL),
+	NULL};
+	i = 0;
+	while (tab[i])
+	{
+		smallest = get_by_cardinal_pos(tab, i + 1);
+		i++;
+	}
+}
+
+t_evar	*return_non_null(t_evar *term, t_evar *path, t_evar *pwd, t_evar *shlvl)
+{
+	if (term)
+		return (term);
+	if (path)
+		return (path);
+	if (pwd)
+		return (pwd);
+	return (shlvl);
 }

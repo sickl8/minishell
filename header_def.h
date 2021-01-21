@@ -6,13 +6,14 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:06:51 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/20 18:50:37 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:26:31 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HEADER_DEF_H
 # define HEADER_DEF_H
 
+# define YLL "9223372036854775809"
 # define SLEN ft_strlen
 # define GCL g_cmds_length
 # define GPR g_program_return

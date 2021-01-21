@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 17:13:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:33:55 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ int			case_cmp(char *s1, char *s2)
 	return (*s1 - *s2);
 }
 
+int		eval(char *con)
+{
+	return (!(!con));
+}
+
 void	init_shlvl(void)
 {
 	t_evar	*var;
@@ -74,8 +79,8 @@ void	init_shlvl(void)
 	if (var)
 	{
 		shlvl = ft_atoi(var->value ? var->value : "0") + 1;
-		if (shlvl < 0)
-			shlvl = 0;
+		if (shlvl <= 0)
+			shlvl = 0 + 1 * eval(ft_strstr(var->value ? var->value : "0", YLL));
 		else if (shlvl == 1000)
 			shlvl = -1;
 		else if (shlvl > 1000)

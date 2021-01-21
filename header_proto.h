@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:59:55 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/21 19:27:24 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:35:21 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include "header_typedef.h"
 
+t_evar		*return_non_null
+(t_evar *term, t_evar *path, t_evar *pwd, t_evar *shlvl);
+void		continue_init_sort_evar
+(t_evar *term, t_evar *path, t_evar *pwd, t_evar *shlvl);
 void		init_sort_evar(void);
 int			get_next_line(char **line);
 void		e_multiline(void);
