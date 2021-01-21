@@ -136,7 +136,7 @@ int			bc_exit(char **argv)
 		bash_error();
 		return (1);
 	}
-	exit_status = argc == 1 ? 0 : ft_atoi(argv[1]);
+	exit_status = argc == 1 ? g_program_return : ft_atoi(argv[1]);
 	g_cmds_length == 1 ? cleanup(RETURN) : 0;
 	g_cmds_length == 1 ? exit(exit_status % 256) : 0;
 	return (0);

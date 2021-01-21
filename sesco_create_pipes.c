@@ -92,7 +92,8 @@ void	put_exit_status(void)
 
 void	parent_stuff(t_cmd *data)
 {
-	g_program_return = 0;
+	if (CMP(data->find, "exit"))
+		g_program_return = 0;
 	if (!CMP(data->find, "cd") && g_cmds_length == 1)
 		assign(&g_parent, 1, 4) && bc_cd(data);
 	else if (!CMP(data->find, "export"))
