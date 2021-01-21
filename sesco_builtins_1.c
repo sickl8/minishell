@@ -115,11 +115,7 @@ int		bc_unset(t_cmd *data)
 int		builtin(t_cmd *data, int cmd)
 {
 	int		ret;
-	char	*line;
-
-	ret = 1;
-	while (ret > 0)
-		ret = get_next_line(&line) + 0 * eerf(line);
+	
 	ret = 0;
 	if (cmd == BC_CD)
 		ret = bc_cd_fork(data);
