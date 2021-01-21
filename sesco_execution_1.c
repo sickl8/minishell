@@ -56,7 +56,7 @@ char	*find_in_single_path(char *tofind, char **paths, int i)
 	return (ret);
 }
 
-char	*find_in_path(char *tofind)
+char	*find_in_path(char *tofind, int *bk)
 {
 	t_evar			path;
 	char			**paths;
@@ -64,15 +64,23 @@ char	*find_in_path(char *tofind)
 	char			*ret;
 
 	path = find_env("PATH");
+	if (bk && !CMP(path.value, "") && (errno = 2))
+	{
+		dup2(bk[0], 0);
+		close(bk[0]);
+		dup2(bk[1], 1);
+		close(bk[1]);
+		g_bash_errno = E_ERRNO;
+		ft_strncpy(g_bash_error, tofind, -1);
+		bash_error();
+		exit(127);
+	}
 	if (!(paths = ft_split(path.value, ':')))
 		cleanup(EXIT);
 	ret = NULL;
-	i = 0;
-	while (paths[i] && ret == NULL)
-	{
+	i = -1;
+	while (paths[++i] && ret == NULL)
 		ret = find_in_single_path(tofind, paths, i);
-		i++;
-	}
 	free_path(paths);
 	return (ret);
 }
@@ -111,7 +119,7 @@ void	execute_cmd_continue(t_cmd *data, int bk[2])
 	data->path2exec = data->find;
 	if (!ft_strchr(data->find, '/'))
 	{
-		data->path2exec = find_in_path(data->find);
+		data->path2exec = find_in_path(data->find, bk);
 		if (!data->path2exec)
 		{
 			dup2(bk[0], 0);

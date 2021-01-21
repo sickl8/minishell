@@ -188,7 +188,7 @@ int			case_cmp(char *s1, char *s2);
 void		e_warning(void);
 void		init_shlvl(void);
 int			shlvl_error(int shlvl);
-char		*find_in_path(char *tofind);
+char		*find_in_path(char *tofind, int *bk);
 char		detect_escape(char esc, char c);
 char		*spl_mst(char *msk, char *buf, char c, size_t len);
 char		**env_var_copy(char *path2exec);
