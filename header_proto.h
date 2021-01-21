@@ -15,6 +15,7 @@
 
 # include "header_typedef.h"
 
+int			get_next_line(char **line);
 void		e_multiline(void);
 void		backslash(size_t *ref, char lit_type);
 void		handle_error(int ex);
