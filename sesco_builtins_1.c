@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:07:13 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/16 14:47:21 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 18:48:55 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,7 @@ int		bc_unset(t_cmd *data)
 int		builtin(t_cmd *data, int cmd)
 {
 	int		ret;
-	char	*line;
 
-	ret = 1;
-	while (ret > 0)
-		ret = get_next_line(&line) + 0 * eerf(line);
 	ret = 0;
 	if (cmd == BC_CD)
 		ret = bc_cd_fork(data);

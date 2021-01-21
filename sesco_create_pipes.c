@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:55:12 by aamzouar          #+#    #+#             */
-/*   Updated: 2021/01/18 11:26:04 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:28:12 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,6 @@ void	put_exit_status(void)
 
 void	parent_stuff(t_cmd *data)
 {
-	int		ret;
-	char	*line;
-
-	ret = 1;
-	while (ret > 0)
-		ret = get_next_line(&line) + 0 * eerf(line);
 	if (CMP(data->find, "exit"))
 		g_program_return = 0;
 	if (!CMP(data->find, "cd") && g_cmds_length == 1)
