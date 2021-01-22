@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/20 19:23:26 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/21 11:50:18 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	init_read(void)
 	free_and_set_to_null(&g_pwd.value);
 	free(g_line->rd.buf);
 	g_line->rd.buf = NULL;
+	init_sort_evar();
 }
 
 int		main(int ac, char **av, char **envp)

@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 19:05:02 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/15 16:43:54 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/22 15:06:41 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ ssize_t	eprints(char *s)
 
 ssize_t	eprint(char *s)
 {
-	return (oprints(s));
+	return (eprints(s));
 }
 
 ssize_t	eprintc(char c)
