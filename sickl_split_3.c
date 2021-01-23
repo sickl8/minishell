@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:34:11 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/19 18:24:46 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:49:47 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,12 @@ int		check_s_bashsyn(t_bm p)
 		if (!tmp.msk)
 			ft_strncpy(g_bash_error, p.msk, 1);
 		else
-			ft_strncpy(g_bash_error, tmp.msk, 1);
+		{
+			if (BASHSYN(p.msk[0]) && previous_word(tmp, g_line->rd).msk)
+				ft_strncpy(g_bash_error, p.msk, 1);
+			else
+				ft_strncpy(g_bash_error, tmp.msk, 1);
+		}
 		return (1);
 	}
 	return (0);
