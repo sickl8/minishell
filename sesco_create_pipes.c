@@ -41,6 +41,8 @@ void	put_exit_status(int last)
 
 	g_sig = 1;
 	waitpid(g_pid, &status, 0);
+	while (wait(NULL) != -1)
+		;
 	g_sig = 0;
 	if (!g_parent && last)
 	{
