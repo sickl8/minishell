@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:33:39 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/16 17:15:52 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:11:32 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define HEADER_TYPEDEF_H
 
 # include <stdlib.h>
-# include <_ssize_t.h>
+# include <sys/types.h>
 
 typedef unsigned long long	t_ull;
 

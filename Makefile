@@ -13,13 +13,12 @@ WWW = -Wall -Wextra -Werror
 
 NAME = minishell
 
-INCLUDEF = /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/
 
 all: $(NAME)
 
 $(NAME):
 	cd libft && make
-	gcc -I$(INCLUDEF) $(WWW) $(SRC) libft/libft.a -o $(NAME)
+	gcc $(WWW) $(SRC) libft/libft.a -o $(NAME)
 
 clean:
 	cd libft && make clean
@@ -33,4 +32,4 @@ re: fclean $(NAME)
 
 ref: fclean
 	cd libft && make
-	gcc -fsanitize=address -g -I$(INCLUDEF) $(WWW) $(SRC) libft/libft.a -o $(NAME)
+	gcc -fsanitize=address -g $(WWW) $(SRC) libft/libft.a -o $(NAME)

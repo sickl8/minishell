@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:33:06 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/21 11:50:07 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:19:49 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,4 @@ void	init(t_line *ref, char **envp)
 	init_envp(envp);
 	init_env();
 	init_shlvl();
-	init_sort_evar();
 }

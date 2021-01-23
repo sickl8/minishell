@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 12:53:04 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/21 11:50:18 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:19:15 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int		format_string(void)
 	if (!(MALLOC(&(g_line->rd.msk), g_line->rd_len + 1)))
 		cleanup(EXIT);
 	set_mask();
-	// printf("buf=|%s|\nmsk=|%s|\n", g_line->rd.buf, g_line->rd.msk);
 	if (g_bash_errno || !initial_error_check())
 		return (free_and_set_to_null(&g_line->rd.msk) * 0 + g_bash_errno);
 	split_wmask(&g_line->rd, &g_line->it, ';');
@@ -93,7 +92,6 @@ void	init_read(void)
 	free_and_set_to_null(&g_pwd.value);
 	free(g_line->rd.buf);
 	g_line->rd.buf = NULL;
-	init_sort_evar();
 }
 
 int		main(int ac, char **av, char **envp)

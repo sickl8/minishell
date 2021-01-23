@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:56:48 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/21 19:33:55 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:27:10 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 
 #include <stdio.h>
 
-int			continue_check_num(char *s, int sign)
+int		continue_check_num(char *s, int sign)
 {
 	char	*l;
 	size_t	len;
@@ -53,7 +53,7 @@ int			continue_check_num(char *s, int sign)
 	return (0);
 }
 
-int			case_cmp(char *s1, char *s2)
+int		case_cmp(char *s1, char *s2)
 {
 	while (*s1 && (*s1 == *s2 || (ft_isalpha(*s1) && ft_isalpha(*s2) &&
 	ft_tolower(*s1) == ft_tolower(*s2))))
@@ -62,11 +62,6 @@ int			case_cmp(char *s1, char *s2)
 		s2++;
 	}
 	return (*s1 - *s2);
-}
-
-int		eval(char *con)
-{
-	return (!(!con));
 }
 
 void	init_shlvl(void)
@@ -104,14 +99,13 @@ int		shlvl_error(int shlvl)
 	size_t	len;
 
 	g_bash_errno = E_WARNING;
-	ft_strncpy(g_bash_error, "shell level (", sizeof("shell level (") - 1);
+	ft_strncpy(g_bash_error, "shell level (", 14 - 1);
 	if (!(num = ft_itoa(shlvl)))
-		cleanup(EXIT);	
-	ft_strncpy(g_bash_error + sizeof("shell level (") - 1, num, ft_strlen(num));
-	ft_strncpy(g_bash_error + sizeof("shell level (") - 1 + ft_strlen(num),
-	") too high, resetting to 1", sizeof(") too high, resetting to 1") - 1);
-	len = sizeof("shell level (") - 1 + ft_strlen(num) + 
-	sizeof(") too high, resetting to 1") - 1;
+		cleanup(EXIT);
+	ft_strncpy(g_bash_error + 14 - 1, num, ft_strlen(num));
+	ft_strncpy
+(g_bash_error + 14 - 1 + SLEN(num), ") too high, resetting to 1", 27 - 1);
+	len = 14 - 1 + ft_strlen(num) + 27 - 1;
 	g_bash_error[len] = '\0';
 	bash_error();
 	return (1);
@@ -132,12 +126,12 @@ char	detect_escape(char esc, char c)
 	else if (esc == SEMILIT)
 	{
 		if (c == '"')
-			ret	= NONLIT;
+			ret = NONLIT;
 	}
 	else if (esc == LITERAL)
 	{
 		if (c == '\'')
-			ret = NONLIT;	
+			ret = NONLIT;
 	}
 	return (ret);
 }

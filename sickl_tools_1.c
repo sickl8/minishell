@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 15:23:01 by sickl8            #+#    #+#             */
-/*   Updated: 2021/01/19 18:24:32 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:16:23 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ char	**sanitize_av(int ac, char **av, int *rt, t_cmd *data)
 	while (av[++i])
 	{
 		!(tmp = valid_arg(ac, av, i)) ? invalid_arg(av, i, rt, data) : 0;
-		// printf("av[i] = %s, tmp = %d\n", av[i], tmp);
 		cnt += tmp;
 	}
 	if (!(ret = malloc((cnt + 1) * sizeof(*ret))))
@@ -75,10 +74,6 @@ char	**sanitize_av(int ac, char **av, int *rt, t_cmd *data)
 	while (av[++i])
 		if (valid_arg(ac, av, i))
 			ret[cnt++] = av[i];
-	// for (int x = 0; ret[x]; x++)
-	// {
-	// 	printf("ret[%d] = |%s|\n", x, ret[x]);
-	// }
 	return (ret);
 }
 

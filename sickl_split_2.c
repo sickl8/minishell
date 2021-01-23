@@ -6,7 +6,7 @@
 /*   By: isaadi <isaadi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 15:02:38 by isaadi            #+#    #+#             */
-/*   Updated: 2021/01/20 19:29:01 by isaadi           ###   ########.fr       */
+/*   Updated: 2021/01/23 19:17:45 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int		count_quote(char c)
 	return (ret);
 }
 
-#define H printf("%s:%d\n", __FILE__, __LINE__)
-
 int		check_multiline(void)
 {
 	char	*p;
@@ -61,8 +59,7 @@ int		check_multiline(void)
 	g_line->rd.buf[g_line->rd_len - 1] == '\\' &&
 	g_line->rd.msk[g_line->rd_len - 1] == '\\') || (p && !*p))
 	{
-		g_bash_errno = E_MULTILINE;
-		g_program_return = 2;
+		assign(&g_bash_errno, 3, 4) && assign(&g_program_return, 2, 4);
 		if (count_quote('\'') % 2)
 			g_mlt = '\'';
 		else if (count_quote('"') % 2)
