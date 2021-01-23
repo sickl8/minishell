@@ -36,6 +36,5 @@ int		g_parent;
 void	*g_ez;
 char	g_mlt;
 int		g_dashc;
-pid_t	*g_pid_group;
 
 #endif

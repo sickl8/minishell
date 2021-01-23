@@ -104,7 +104,7 @@ size_t	ft_struct_len(void *p, void *member, size_t end, int size[2])
 	return (ret);
 }
 
-void	invalid_arg(char **av, int i, int *rt)
+void	invalid_arg(char **av, int i, int *rt, t_cmd *data)
 {
 	char	*eq;
 
@@ -119,7 +119,7 @@ void	invalid_arg(char **av, int i, int *rt)
 		g_builtin_errno = EB_UNSET_EXPORT_NVI;
 		g_bash_commandid = BC_EXPORT;
 		STRCPY(g_bash_error, av[i] ? av[i] : "");
-		g_program_return = 1;
+		!data->next ? g_program_return = 1 : 0;
 		*rt = 1;
 		bash_error();
 	}
@@ -137,7 +137,7 @@ int		bc_export_bk(t_cmd *data)
 	ret = 0;
 	argv = &(data->args[1]);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
-	argv = sanitize_av(argc, argv, &ret);
+	argv = sanitize_av(argc, argv, &ret, data);
 	argc = ft_len(argv, sizeof(*argv), (size_t)NULL);
 	if (g_cmds_length == 1)
 	{

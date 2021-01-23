@@ -114,7 +114,7 @@ int			check_if_num(char *s)
 	return (continue_check_num(s, sign));
 }
 
-int			bc_exit(char **argv)
+int			bc_exit(char **argv, t_cmd *data)
 {
 	int		argc;
 	int		exit_status;
@@ -123,7 +123,7 @@ int			bc_exit(char **argv)
 	assign(&g_bash_commandid, BC_EXIT, 4) && assign(&g_bash_errno, E_BUILTN, 4);
 	if (argc > 1 && check_if_num(argv[1]))
 	{
-		g_program_return = 255;
+		!data->next ? g_program_return = 255 : 0;
 		g_builtin_errno = EB_EXIT_NAR;
 		ft_strcpy(g_bash_error, argv[1]);
 		bash_error();
@@ -131,7 +131,7 @@ int			bc_exit(char **argv)
 	}
 	else if (argc > 2)
 	{
-		g_program_return = 1;
+		!data->next ? g_program_return = 1 : 0;
 		g_builtin_errno = EB_CD_EXIT_TMA;
 		bash_error();
 		return (1);

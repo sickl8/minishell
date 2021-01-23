@@ -66,18 +66,58 @@ char	**env_var_copy(char *path2exec)
 	return (the_copy);
 }
 
-void	malloc_pid_buffer(t_cmd *data)
+void	parent_stuff(t_cmd *data)
 {
-	int		len;
+	if (CMP(data->find, "exit"))
+		g_program_return = 0;
+	if (!CMP(data->find, "cd") && g_cmds_length == 1)
+		assign(&g_parent, 1, 4) && bc_cd(data);
+	else if (!CMP(data->find, "export"))
+		assign(&g_parent, 1, 4) &&
+		(!data->args[1] ? 0 : bc_export_bk(data));
+	else if (!CMP(data->find, "unset"))
+		assign(&g_parent, 1, 4) && bc_unset(data);
+	else if (!CMP(data->find, "exit"))
+		assign(&g_parent, 1, 4) && bc_exit(data->args, data);
+}
 
-	len = 0;
-	g_pid_group = NULL;
+void	execute_builtins_continue(t_cmd *data, int *pfd, int cmd, int j)
+{
+	int		bk[2];
+
+	bk[0] = dup(0);
+	bk[1] = dup(1);
+	dup2(pfd[j - 1], 0);
+	close(pfd[j - 1]);
+	dup2(pfd[j], 1);
+	close(pfd[j]);
+	make_a_redirection(data->redir);
+	builtin(data, cmd);
+	exit(0);
+}
+
+int		execute_builtins(t_cmd *data, int *pfd)
+{
+	int		j;
+	int		cmd;
+
+	j = 1;
 	while (data)
 	{
+		if (data->find && (cmd = is_builtin(data->find)))
+		{
+			g_parent = 0;
+			g_pid = fork();
+			if (g_pid == -1)
+				return (eerf(pfd) && !failing_error(data));
+			if (g_pid == 0)
+				execute_builtins_continue(data, pfd, cmd, j);
+			close(pfd[j - 1]);
+			close(pfd[j]);
+			parent_stuff(data);
+		}
+		j += 2;
 		data = data->next;
-		len++;
 	}
-	if (!(g_pid_group = malloc(sizeof(pid_t) * (len + 1))))
-		cleanup(EXIT);
-	g_pid_group[len] = -2;
+	return (0);
 }

@@ -56,7 +56,7 @@ char	*find_in_single_path(char *tofind, char **paths, int i)
 	return (ret);
 }
 
-char	*find_in_path(char *tofind, int *bk)
+char	*find_paths(char *tofind, int *bk)
 {
 	t_evar			path;
 	char			**paths;
@@ -119,7 +119,7 @@ void	execute_cmd_continue(t_cmd *data, int bk[2])
 	data->path2exec = data->find;
 	if (!ft_strchr(data->find, '/'))
 	{
-		data->path2exec = find_in_path(data->find, bk);
+		data->path2exec = find_paths(data->find, bk);
 		if (!data->path2exec)
 		{
 			dup2(bk[0], 0);
@@ -138,7 +138,6 @@ void	execute_cmd_continue(t_cmd *data, int bk[2])
 
 void	execute_cmd(t_cmd *data, int *pfd, int j)
 {
-	int		cmd;
 	int		bk[2];
 
 	bk[0] = dup(0);
@@ -149,11 +148,6 @@ void	execute_cmd(t_cmd *data, int *pfd, int j)
 	close(pfd[j]);
 	make_a_redirection(data->redir);
 	if (data->find)
-	{
-		if ((cmd = is_builtin(data->find)))
-			builtin(data, cmd);
-		else
-			execute_cmd_continue(data, bk);
-	}
+		execute_cmd_continue(data, bk);
 	exit(0);
 }

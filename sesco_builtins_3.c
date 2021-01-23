@@ -46,9 +46,10 @@ int		check_var_name(char *name, int end)
 	return (1);
 }
 
-int		*check_errors_of_unset(char **args, int len, int i, int j)
+int		*check_errors_of_unset(char **args, int len, int i, t_cmd *data)
 {
 	int		*valid_args;
+	int		j;
 
 	if (!(valid_args = ft_calloc(len, sizeof(int))))
 		cleanup(EXIT);
@@ -61,7 +62,7 @@ int		*check_errors_of_unset(char **args, int len, int i, int j)
 			g_builtin_errno = EB_UNSET_EXPORT_NVI;
 			g_bash_commandid = BC_UNSET;
 			STRCPY(g_bash_error, args[i] ? args[i] : "");
-			g_program_return = 1;
+			!data->next ? g_program_return = 1 : 0;
 			bash_error();
 		}
 		if (!check_var_name(args[i], j))
@@ -138,7 +139,7 @@ int		bc_cd(t_cmd *data)
 	{
 		if (change_dir(data->args[1], getcwd(NULL, 0)) < 0)
 		{
-			g_program_return = 1;
+			!data->next ? g_program_return = 1 : 0;
 			return (1);
 		}
 	}

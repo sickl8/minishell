@@ -86,7 +86,7 @@ int		bc_env(void)
 	char	*value;
 
 	i = 0;
-	value = find_in_path("env", NULL);
+	value = find_paths("env", NULL);
 	while (g_line->env_var[i].name)
 	{
 		if (!g_line->env_var[i].name_only && CMP(g_line->env_var[i].name, "_"))

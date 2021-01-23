@@ -94,7 +94,7 @@ int		bc_unset(t_cmd *data)
 	char		**tmp_args;
 
 	args_len = count_args(data->args);
-	valid_args = check_errors_of_unset(data->args, args_len, 1, 0);
+	valid_args = check_errors_of_unset(data->args, args_len, 1, data);
 	lengths = calc_lengths(valid_args, args_len);
 	if (g_cmds_length == 1 && data->args[1])
 	{
@@ -112,10 +112,10 @@ int		bc_unset(t_cmd *data)
 	return (0);
 }
 
-int		builtin(t_cmd *data, int cmd)
+void	builtin(t_cmd *data, int cmd)
 {
 	int		ret;
-	
+
 	ret = 0;
 	if (cmd == BC_CD)
 		ret = bc_cd_fork(data);
@@ -131,9 +131,6 @@ int		builtin(t_cmd *data, int cmd)
 		ret = bc_pwd(data);
 	else if (cmd == BC_UNSET)
 		ret = 0;
-	if (!ret)
-		exit(0);
-	return (ret);
 }
 
 int		is_builtin(char *str)
@@ -141,7 +138,7 @@ int		is_builtin(char *str)
 	int		i;
 
 	i = 0;
-	while (g_bash_command[++i])
+	while (str && g_bash_command[++i])
 	{
 		if (!CMP(str, g_bash_command[i]))
 			return (i);

@@ -51,7 +51,7 @@ int		compare_evars(char *s1, char *s2)
 	return (ret);
 }
 
-char	**sanitize_av(int ac, char **av, int *rt)
+char	**sanitize_av(int ac, char **av, int *rt, t_cmd *data)
 {
 	char	**ret;
 	int		cnt;
@@ -63,7 +63,7 @@ char	**sanitize_av(int ac, char **av, int *rt)
 	i = -1;
 	while (av[++i])
 	{
-		!(tmp = valid_arg(ac, av, i)) ? invalid_arg(av, i, rt) : 0;
+		!(tmp = valid_arg(ac, av, i)) ? invalid_arg(av, i, rt, data) : 0;
 		// printf("av[i] = %s, tmp = %d\n", av[i], tmp);
 		cnt += tmp;
 	}
