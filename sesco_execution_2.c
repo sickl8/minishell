@@ -84,13 +84,19 @@ void	parent_stuff(t_cmd *data)
 void	execute_builtins_continue(t_cmd *data, int *pfd, int cmd, int j)
 {
 	int		bk[2];
+	int		i;
 
 	bk[0] = dup(0);
 	bk[1] = dup(1);
 	dup2(pfd[j - 1], 0);
-	close(pfd[j - 1]);
 	dup2(pfd[j], 1);
-	close(pfd[j]);
+	i = 0;
+	while (i < (g_cmds_length * 2))
+	{
+		close(pfd[i]);
+		close(pfd[i + 1]);
+		i += 2;
+	}
 	make_a_redirection(data->redir);
 	builtin(data, cmd);
 	exit(0);

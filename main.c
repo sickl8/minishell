@@ -71,10 +71,10 @@ void	init_read(void)
 	t_evar	home;
 	t_evar	user;
 
+	set_pwd();
 	home = find_env("HOME");
 	g_pwd.name = "PWD";
 	!(g_pwd.value = getcwd(NULL, 0)) ? cleanup(EXIT) : 0;
-	set_pwd();
 	g_pwd.value_len = ft_strlen(g_pwd.value);
 	user = find_env("USER");
 	ft_memset(g_bash_error, '\0', ARG_MAX + 2);
